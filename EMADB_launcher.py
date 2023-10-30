@@ -1,4 +1,3 @@
-import sys
 import os
 import re
 import art
@@ -47,7 +46,7 @@ if cnf.check_CD_version == True:
 
 # activate chromedriver
 #------------------------------------------------------------------------------
-WD_toolkit = WebDriverToolkit(modules_path)
+WD_toolkit = WebDriverToolkit(modules_path, GlobVar.download_path)
 webdriver = WD_toolkit.initialize_webdriver()
 
 # [LOAD AND PREPARE DATA]
@@ -58,13 +57,13 @@ webdriver = WD_toolkit.initialize_webdriver()
 
 # activate chromedriver
 #------------------------------------------------------------------------------
-filepath = os.path.join(GlobVar.data_path, 'drugs_dataset.csv')                
-df_drugs = pd.read_csv(filepath, sep= ';', encoding='utf-8')
+filepath = os.path.join(GlobVar.data_path, 'drugs_list.txt')  
+with open(filepath, 'r') as file:
+    drug_list = [x.lower().strip() for x in file.readlines()]             
 
 # get list of drugs and group them by initial letter
 #------------------------------------------------------------------------------
-drug_names = [x.lower() for x in df_drugs['active molecule'].to_list()]
-unique_drug_names = sorted(list(set(drug_names)))
+unique_drug_names = sorted(list(set(drug_list)))
 grouped_drugs = defaultdict(list)
 for drug in unique_drug_names:    
     grouped_drugs[drug[0]].append(drug)
@@ -74,15 +73,19 @@ grouped_drugs = dict(grouped_drugs)
 #------------------------------------------------------------------------------
 webscraper = EMAScraper(webdriver)
 disclaimer_xpath = '//*[@id="container"]/div[4]/form/input[1]'
-webscraper.autoclick(20, disclaimer_xpath)
+webscraper.autoclick(30, disclaimer_xpath)
 
-# click on letter page
+# click on letter page (based on first letter of names group) and then iterate over
+# all drugs in that page (from the list). download excel reports and rename them automatically
 #------------------------------------------------------------------------------
-for letter, drugs in grouped_drugs.items():      
+for letter, drugs in grouped_drugs.items():          
     letter_xpath = f'//a[@onclick="showProductTable(\'{letter.lower()}\')"]'
     webscraper.autoclick(20, letter_xpath)
     for d in drugs:
-        webscraper.drug_finder(20, d)  
-
+        placeholder = webscraper.drug_finder(30, d) 
+        excel_ph = webscraper.excel_downloader(30, GlobVar.download_path) 
+        DAP_path = os.path.join(GlobVar.download_path, 'DAP.xlsx')
+        rename_path = os.path.join(GlobVar.download_path, f'{d}.xlsx')
+        os.rename(DAP_path, rename_path) 
 
 

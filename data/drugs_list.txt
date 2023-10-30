@@ -1,4 +1,3 @@
-active molecule
 abasaglar
 ebixa
 cabometyx
