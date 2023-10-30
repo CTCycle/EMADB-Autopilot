@@ -81,12 +81,10 @@ class EMAScraper:
         wait = WebDriverWait(self.driver, wait_time)
         XPATH = '//*[@id="uberBar_dashboardpageoptions_image"]'       
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
-        item.click()
-        wait = WebDriverWait(self.driver, wait_time)
+        item.click()        
         XPATH = '//*[@id="idPageExportToExcel"]/table/tbody/tr/td[2]'
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
-        item.click() 
-        wait = WebDriverWait(self.driver, wait_time)  
+        item.click()        
         XPATH = '//*[@id="idDashboardExportToExcelMenu"]/table/tbody/tr[1]/td[1]/a[2]/table/tbody/tr/td[2]'
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
         item.click()         
@@ -95,7 +93,7 @@ class EMAScraper:
             if 'DAP.xlsx' in current_files:
                 break
             else:
-                time.sleep(0.2)
+                time.sleep(0.5)
                 continue            
         
         self.driver.switch_to.window(self.driver.window_handles[1])     
