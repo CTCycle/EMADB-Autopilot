@@ -69,8 +69,8 @@ for letter, drugs in grouped_drugs.items():
     for d in drugs:        
         print(f'Collecting data for drug: {d}')
         try:
-            placeholder = webscraper.drug_finder(30, d)             
-            excel_ph = webscraper.excel_downloader(30, GlobVar.data_path)            
+            placeholder = webscraper.drug_finder(10, d)             
+            excel_ph = webscraper.excel_downloader(10, GlobVar.data_path)            
             DAP_path = os.path.join(GlobVar.data_path, 'DAP.xlsx')
             rename_path = os.path.join(GlobVar.data_path, f'{d}.xlsx')
             os.rename(DAP_path, rename_path)             
