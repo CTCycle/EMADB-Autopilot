@@ -1,6 +1,7 @@
-Gestodene
-Gestodene/etinilestradiolo
-Desogestrel
-Drospirenone
-Drospirenone/etinilestradiolo
-Dienogest
+drospirenone/etinilestradiolo
+drospirenone
+dienogest
+desogestrel
+amoxicillin
+gestodene/etinilestradiolo
+gestodene

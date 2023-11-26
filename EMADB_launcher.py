@@ -36,7 +36,15 @@ webdriver = WD_toolkit.initialize_webdriver()
 # Also, create a clean version of the exploded dataset to work on
 #==============================================================================
 
-# activate chromedriver
+# check if files downloaded in the past are still present, then remove them
+#------------------------------------------------------------------------------
+xlsx_files = [x for x in os.listdir(GlobVar.data_path) if x.endswith('.xlsx')]
+for filename in xlsx_files:
+    file_path = os.path.join(GlobVar.data_path, filename)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+
+# load drug names
 #------------------------------------------------------------------------------
 filepath = os.path.join(GlobVar.data_path, 'drugs_list.txt')  
 with open(filepath, 'r') as file:
@@ -53,11 +61,12 @@ grouped_drugs = dict(grouped_drugs)
 # click on letter page (based on first letter of names group) and then iterate over
 # all drugs in that page (from the list). download excel reports and rename them automatically
 #------------------------------------------------------------------------------
-webscraper = EMAScraper(webdriver)
-for letter, drugs in grouped_drugs.items():         
+webscraper = EMAScraper(webdriver)   
+for letter, drugs in grouped_drugs.items():    
+    webdriver.get(webscraper.data_URL)       
     letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"   
-    webscraper.autoclick(20, letter_css, mode='CSS')
-    for d in drugs:
+    webscraper.autoclick(10, letter_css, mode='CSS')
+    for d in drugs:        
         print(f'Collecting data for drug: {d}')
         try:
             placeholder = webscraper.drug_finder(30, d)             
@@ -67,6 +76,12 @@ for letter, drugs in grouped_drugs.items():
             os.rename(DAP_path, rename_path)             
         except:
             print(f'An error has been encountered while fetching {d} data. Skipping this drug...')
+
+
+
+print('''
+All drugs data has been fetched!
+''')
 
 
 
