@@ -49,7 +49,7 @@ class EMAScraper:
         self.driver = driver
         self.data_URL = 'https://www.adrreports.eu/en/search_subst.html'
         self.alphabet = []
-        self.driver.get(self.data_URL)      
+          
                
     #==========================================================================
     def autoclick(self, wait_time, string, mode='XPATH'):  
