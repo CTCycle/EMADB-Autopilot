@@ -1,12 +1,12 @@
 import os
 import time
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import re
+
 
 
 
@@ -14,33 +14,27 @@ import re
 #==============================================================================
 #==============================================================================
 #==============================================================================
-class WebDriverToolkit:
+class WebDriverToolkit:    
     
-    """
-    Initializes a webdriver instance with Chrome options set to disable images loading.
-    
-    Keyword arguments:
-    
-    wd_path (str): The file path to the Chrome webdriver executable
-    
-    Returns:
-        
-    None 
-    
-    """
-    def __init__(self, driver_path, download_path):
-        self.path = os.path.join(driver_path, 'chromedriver.exe')       
+    def __init__(self, driver_path, download_path, headless=True):
+        self.driver_path = os.path.join(driver_path, 'chromedriver.exe') 
+        self.download_path = download_path      
         self.option = webdriver.ChromeOptions()
-        self.service = Service(executable_path=self.path)
+        if headless==True:
+            self.option.add_argument('--headless')
+        self.service = Service(executable_path=self.driver_path)
         self.chrome_prefs = {'download.default_directory' : download_path}
         self.option.experimental_options['prefs'] = self.chrome_prefs
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
         self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
 
-    def initialize_webdriver(self):
-        driver = webdriver.Chrome(service=self.service, options=self.option) 
+    def initialize_webdriver(self):       
+        self.path = ChromeDriverManager().install()
+        self.service = Service(executable_path=self.path)
+        driver = webdriver.Chrome(service=self.service, options=self.option)
+        print('The latest ChromeDriver version is now installed in the .wdm folder in user/home')                  
         
-        return driver
+        return driver 
    
 
 
@@ -53,16 +47,19 @@ class EMAScraper:
 
     def __init__(self, driver):         
         self.driver = driver
-        self.data_URL = 'https://www.adrreports.eu/en/search.html'
-        self.driver.get(self.data_URL)
+        self.data_URL = 'https://www.adrreports.eu/en/search_subst.html'
+        self.alphabet = []
+        self.driver.get(self.data_URL)      
                
     #==========================================================================
-    def autoclick(self, wait_time, xpath):  
-        wait = WebDriverWait(self.driver, wait_time)        
-        item = wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
-        item.click()        
-
-        return item
+    def autoclick(self, wait_time, string, mode='XPATH'):  
+        wait = WebDriverWait(self.driver, wait_time)     
+        if mode=='XPATH':
+            item = wait.until(EC.visibility_of_element_located((By.XPATH, string)))
+            item.click()
+        elif mode=='CSS':
+            item = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, string)))
+            item.click()    
     
     #==========================================================================
     def drug_finder(self, wait_time, name):  
@@ -94,8 +91,7 @@ class EMAScraper:
                 break
             else:
                 time.sleep(0.5)
-                continue            
-        
+                continue        
         self.driver.switch_to.window(self.driver.window_handles[1])     
         self.driver.close()        
         self.driver.switch_to.window(self.driver.window_handles[0])

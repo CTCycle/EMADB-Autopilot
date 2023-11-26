@@ -1,9 +1,6 @@
 import os
-import re
 import art
 from collections import defaultdict
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
 
 # set warnings
 #------------------------------------------------------------------------------
@@ -25,28 +22,13 @@ print(ascii_art)
 #==============================================================================
 # ...
 #==============================================================================
-print('''
-Activating chromedriver. Check version for compatibility with the program
-      
-''')
 
-# check if chromedriver is present
+# activate chromedriver and scraper
 #------------------------------------------------------------------------------
 modules_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules')
-if cnf.check_CD_version == True:
-    chromedriver_check = False    
-    for file_name in os.listdir(modules_path):            
-        if 'chromedriver' in file_name:
-            chromedriver_check = True
-    if chromedriver_check == False:
-        version = os.popen('google-chrome --version').read() 
-        version_number = re.search(r'\d+', version).group(0)
-        driver_path = ChromeDriverManager(version=version, chrome_type=ChromeType.GOOGLE).install()
-
-# activate chromedriver
-#------------------------------------------------------------------------------
-WD_toolkit = WebDriverToolkit(modules_path, GlobVar.download_path)
+WD_toolkit = WebDriverToolkit(modules_path, GlobVar.data_path, headless=cnf.headless)
 webdriver = WD_toolkit.initialize_webdriver()
+
 
 # [LOAD AND PREPARE DATA]
 #==============================================================================
@@ -68,26 +50,23 @@ for drug in unique_drug_names:
     grouped_drugs[drug[0]].append(drug)
 grouped_drugs = dict(grouped_drugs)
 
-# open disclaimer page and click on accept
-#------------------------------------------------------------------------------
-webscraper = EMAScraper(webdriver)
-disclaimer_xpath = '//*[@id="container"]/div[4]/form/input[1]'
-webscraper.autoclick(30, disclaimer_xpath)
-
 # click on letter page (based on first letter of names group) and then iterate over
 # all drugs in that page (from the list). download excel reports and rename them automatically
 #------------------------------------------------------------------------------
-for letter, drugs in grouped_drugs.items():          
-    letter_xpath = f'//a[@onclick="showProductTable(\'{letter.lower()}\')"]'
-    webscraper.autoclick(20, letter_xpath)
+webscraper = EMAScraper(webdriver)
+for letter, drugs in grouped_drugs.items():         
+    letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"   
+    webscraper.autoclick(20, letter_css, mode='CSS')
     for d in drugs:
+        print(f'Collecting data for drug: {d}')
         try:
-            placeholder = webscraper.drug_finder(30, d) 
-            excel_ph = webscraper.excel_downloader(30, GlobVar.download_path) 
-            DAP_path = os.path.join(GlobVar.download_path, 'DAP.xlsx')
-            rename_path = os.path.join(GlobVar.download_path, f'{d}.xlsx')
-            os.rename(DAP_path, rename_path) 
+            placeholder = webscraper.drug_finder(30, d)             
+            excel_ph = webscraper.excel_downloader(30, GlobVar.data_path)            
+            DAP_path = os.path.join(GlobVar.data_path, 'DAP.xlsx')
+            rename_path = os.path.join(GlobVar.data_path, f'{d}.xlsx')
+            os.rename(DAP_path, rename_path)             
         except:
             print(f'An error has been encountered while fetching {d} data. Skipping this drug...')
+
 
 
