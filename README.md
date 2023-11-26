@@ -18,5 +18,4 @@ This application has been developed and tested using the following dependencies 
 
 These dependencies are specified in the provided `requirements.txt` file to ensure full compatibility with the application. 
 
-### Chromedriver 
-Work in progress
+
