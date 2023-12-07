@@ -6,7 +6,12 @@ This project is aimed at developing a script to autonomously navigate the EMA da
 This automated system will navigate to https://www.adrreports.eu/en/search.html and look for target drugs (from the source .csv file containing a list of drug names), to then extract data reports in the form of excel files. The script is based on chromedriver, meaning that it will simulate a user interacting with a browser to navigate the online database. 
 
 ## How to use
-Run the main file EMADB_launcher.py to start the automated browser. The drugs_dataset.csv file in the dataset folder must contain the list of drug names which interactions needed to be checked. Once the scraper has finished its job, you will find the download excel files in the default download folder (as per chrome browser configuration)
+Run the main file EMADBAP.py to start the automated browser. The drugs_dataset.csv file in the dataset folder will be used as reference to get target drug names, which interactions need to be checked. Once the webscraper module has finished to run, you will find the download excel files in the default download folder (as per chrome browser configuration)
+
+### Configurations
+The configurations.py file allows to change the script configuration. The following parameters are available:
+
+- `headless:` use chromedriver in headless mode (no visible GUI)
 
 ### Requirements
 This application has been developed and tested using the following dependencies (Python 3.10.12):
