@@ -7,12 +7,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-
-
-# define the class for inspection of the input folder and generation of files list.
+# [WEBDRIVER]
 #==============================================================================
-#==============================================================================
+# Web driver toolkit
 #==============================================================================
 class WebDriverToolkit:    
     
@@ -28,20 +25,29 @@ class WebDriverToolkit:
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
         self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
 
-    def initialize_webdriver(self):       
+    #--------------------------------------------------------------------------
+    def initialize_webdriver(self): 
+
+        '''
+        This method downloads and installs the Chrome WebDriver executable if needed, 
+        creates a WebDriver service, and initializes a Chrome WebDriver instance
+        with the specified options.
+
+        Returns:
+            driver: A Chrome WebDriver instance.
+        '''   
         self.path = ChromeDriverManager().install()
         self.service = Service(executable_path=self.path)
-        driver = webdriver.Chrome(service=self.service, options=self.option)
-        print('The latest ChromeDriver version is now installed in the .wdm folder in user/home')                  
+        driver = webdriver.Chrome(service=self.service, options=self.option)                   
         
         return driver 
    
 
 
     
-# define the class for inspection of the input folder and generation of files list
+# [SCRAPER]
 #==============================================================================
-#==============================================================================
+# Series of method to scrape data from ema websites
 #==============================================================================
 class EMAScraper: 
 
@@ -51,8 +57,20 @@ class EMAScraper:
         self.alphabet = []
           
                
-    #==========================================================================
+    #--------------------------------------------------------------------------
     def autoclick(self, wait_time, string, mode='XPATH'):  
+
+        '''
+        Automatically click an element based on a provided XPath or CSS selector.
+
+        Keyword Arguments:
+            wait_time (int): The maximum time (in seconds) to wait for the element to appear.
+            string (str): The XPath or CSS selector string to locate the element.
+            mode (str, optional): The mode of selection, either 'XPATH' (default) or 'CSS'.
+
+        Returns:
+            None
+        '''
         wait = WebDriverWait(self.driver, wait_time)     
         if mode=='XPATH':
             item = wait.until(EC.visibility_of_element_located((By.XPATH, string)))
@@ -61,8 +79,20 @@ class EMAScraper:
             item = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, string)))
             item.click()    
     
-    #==========================================================================
-    def drug_finder(self, wait_time, name):  
+    #--------------------------------------------------------------------------
+    def drug_finder(self, wait_time, name):
+
+        '''
+        Find and click on a drug link by searching for its name.
+
+        Keyword Arguments:
+            wait_time (int): The maximum time (in seconds) to wait for the drug link to appear.
+            name (str): The name of the drug to search for.
+
+        Returns:
+            item: The WebElement representing the drug link that was clicked.
+
+        '''  
         wait = WebDriverWait(self.driver, wait_time)
         cap_name = name.upper()               
         item = wait.until(EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, cap_name)))
@@ -73,8 +103,21 @@ class EMAScraper:
 
         return item   
     
-    #==========================================================================
-    def excel_downloader(self, wait_time, download_path):  
+    #--------------------------------------------------------------------------
+    def excel_downloader(self, wait_time, download_path):
+
+        '''
+        Download an Excel file from a web page and wait for the file to appear 
+        in the specified download path.
+
+        Keyword Arguments:
+            wait_time (int): The maximum time (in seconds) to wait for elements to appear and for the download to complete.
+            download_path (str): The path where the downloaded file should be saved.
+
+        Returns:
+            item: The WebElement representing the last clicked item.
+
+        '''  
         wait = WebDriverWait(self.driver, wait_time)
         XPATH = '//*[@id="uberBar_dashboardpageoptions_image"]'       
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
