@@ -23,4 +23,8 @@ This application has been developed and tested using the following dependencies 
 
 These dependencies are specified in the provided `requirements.txt` file to ensure full compatibility with the application. 
 
+## License
+This project is licensed under the terms of the MIT license. See the LICENSE file for details.
 
+## Disclaimer
+...

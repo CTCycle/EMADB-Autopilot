@@ -9,18 +9,19 @@ warnings.simplefilter(action='ignore', category = Warning)
 
 # import modules and classes
 #------------------------------------------------------------------------------
-from modules.components.scraper_classes import WebDriverToolkit, EMAScraper
+from modules.components.scraper_assets import WebDriverToolkit, EMAScraper
 import modules.global_variables as GlobVar
-import modules.configurations as cnf
+import configurations as cnf
 
 # welcome message
 #------------------------------------------------------------------------------
 ascii_art = art.text2art('EMA AutoPilot')
 print(ascii_art)
 
-# [ACTIVATE CHROMEDRIVER VERSION]
+# [LOAD AND PREPARE DATA]
 #==============================================================================
-# ...
+# Load patient dataset and dictionaries from .csv files in the dataset folder.
+# Also, create a clean version of the exploded dataset to work on
 #==============================================================================
 
 # activate chromedriver and scraper
@@ -28,13 +29,6 @@ print(ascii_art)
 modules_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules')
 WD_toolkit = WebDriverToolkit(modules_path, GlobVar.data_path, headless=cnf.headless)
 webdriver = WD_toolkit.initialize_webdriver()
-
-
-# [LOAD AND PREPARE DATA]
-#==============================================================================
-# Load patient dataset and dictionaries from .csv files in the dataset folder.
-# Also, create a clean version of the exploded dataset to work on
-#==============================================================================
 
 # check if files downloaded in the past are still present, then remove them
 #------------------------------------------------------------------------------
@@ -77,11 +71,6 @@ for letter, drugs in grouped_drugs.items():
         except:
             print(f'An error has been encountered while fetching {d} data. Skipping this drug...')
 
-
-
-print('''
-All drugs data has been fetched!
-''')
 
 
 
