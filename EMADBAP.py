@@ -1,5 +1,4 @@
 import os
-import art
 from collections import defaultdict
 
 # set warnings
@@ -9,14 +8,9 @@ warnings.simplefilter(action='ignore', category = Warning)
 
 # import modules and classes
 #------------------------------------------------------------------------------
-from modules.components.scraper_assets import WebDriverToolkit, EMAScraper
-import modules.global_variables as GlobVar
+from utils.scraper_assets import WebDriverToolkit, EMAScraper
+import utils.global_paths as globpt
 import configurations as cnf
-
-# welcome message
-#------------------------------------------------------------------------------
-ascii_art = art.text2art('EMA AutoPilot')
-print(ascii_art)
 
 # [LOAD AND PREPARE DATA]
 #==============================================================================
@@ -27,20 +21,20 @@ print(ascii_art)
 # activate chromedriver and scraper
 #------------------------------------------------------------------------------
 modules_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules')
-WD_toolkit = WebDriverToolkit(modules_path, GlobVar.data_path, headless=cnf.headless)
+WD_toolkit = WebDriverToolkit(modules_path, globpt.data_path, headless=cnf.headless)
 webdriver = WD_toolkit.initialize_webdriver()
 
 # check if files downloaded in the past are still present, then remove them
 #------------------------------------------------------------------------------
-xlsx_files = [x for x in os.listdir(GlobVar.data_path) if x.endswith('.xlsx')]
+xlsx_files = [x for x in os.listdir(globpt.data_path) if x.endswith('.xlsx')]
 for filename in xlsx_files:
-    file_path = os.path.join(GlobVar.data_path, filename)
+    file_path = os.path.join(globpt.data_path, filename)
     if os.path.isfile(file_path):
         os.remove(file_path)
 
 # load drug names
 #------------------------------------------------------------------------------
-filepath = os.path.join(GlobVar.data_path, 'drugs_list.txt')  
+filepath = os.path.join(globpt.data_path, 'drugs_list.txt')  
 with open(filepath, 'r') as file:
     drug_list = [x.lower().strip() for x in file.readlines()]             
 
@@ -64,9 +58,9 @@ for letter, drugs in grouped_drugs.items():
         print(f'Collecting data for drug: {d}')
         try:
             placeholder = webscraper.drug_finder(10, d)             
-            excel_ph = webscraper.excel_downloader(10, GlobVar.data_path)            
-            DAP_path = os.path.join(GlobVar.data_path, 'DAP.xlsx')
-            rename_path = os.path.join(GlobVar.data_path, f'{d}.xlsx')
+            excel_ph = webscraper.excel_downloader(10, globpt.data_path)            
+            DAP_path = os.path.join(globpt.data_path, 'DAP.xlsx')
+            rename_path = os.path.join(globpt.data_path, f'{d}.xlsx')
             os.rename(DAP_path, rename_path)             
         except:
             print(f'An error has been encountered while fetching {d} data. Skipping this drug...')
