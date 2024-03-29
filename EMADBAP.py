@@ -8,7 +8,7 @@ warnings.simplefilter(action='ignore', category = Warning)
 
 # import modules and classes
 #------------------------------------------------------------------------------
-from utils.scraper_assets import WebDriverToolkit, EMAScraper
+from utils.scraping import WebDriverToolkit, EMAScraper
 import utils.global_paths as globpt
 import configurations as cnf
 
