@@ -10,17 +10,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # [WEBDRIVER]
 #==============================================================================
-# Web driver toolkit
-#==============================================================================
 class WebDriverToolkit:    
     
-    def __init__(self, driver_path, download_path, headless=True):
-        self.driver_path = os.path.join(driver_path, 'chromedriver.exe') 
+    def __init__(self, download_path, headless=True):        
         self.download_path = download_path      
         self.option = webdriver.ChromeOptions()
         if headless==True:
-            self.option.add_argument('--headless')
-        self.service = Service(executable_path=self.driver_path)
+            self.option.add_argument('--headless')        
         self.chrome_prefs = {'download.default_directory' : download_path}
         self.option.experimental_options['prefs'] = self.chrome_prefs
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
@@ -45,15 +41,12 @@ class WebDriverToolkit:
     
 # [SCRAPER]
 #==============================================================================
-# Series of method to scrape data from ema websites
-#==============================================================================
 class EMAScraper: 
 
     def __init__(self, driver):         
         self.driver = driver
         self.data_URL = 'https://www.adrreports.eu/en/search_subst.html'
-        self.alphabet = []
-          
+        self.alphabet = []          
                
     #--------------------------------------------------------------------------
     def autoclick(self, wait_time, string, mode='XPATH'):  
