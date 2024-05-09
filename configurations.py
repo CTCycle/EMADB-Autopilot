@@ -1,4 +1,4 @@
 # webdriver settings
 #------------------------------------------------------------------------------
-HEADLESS=False
+HEADLESS = False
 

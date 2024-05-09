@@ -1,16 +1,16 @@
 @echo off
-rem Use this script to create a new environment called "DC_interact"
+rem Use this script to create a new environment called "EMA-DB"
 
-echo STEP 1: Creation of DC_interact environment
-call conda create -n DC_interact python=3.10 
+echo STEP 1: Creation of EMA-DB environment
+call conda create -n EMA-DB python=3.10 
 if errorlevel 1 (
     echo Failed to create the environment FEXT
     goto :eof
 )
 
-echo Environment DC_interact successfully created!
+echo Environment EMA-DB successfully created!
 rem If present, activate the environment
-call conda activate DC_interact
+call conda activate EMA-DB
 
 
 rem Install additional packages with pip

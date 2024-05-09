@@ -31,7 +31,7 @@ if __name__ == '__main__':
             os.remove(file_path)
 
     # load drug names    
-    filepath = os.path.join(DATA_PATH, 'drugs_list.txt')  
+    filepath = os.path.join(DATA_PATH, '*.txt')  
     with open(filepath, 'r') as file:
         drug_list = [x.lower().strip() for x in file.readlines()]             
 
