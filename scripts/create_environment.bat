@@ -4,7 +4,7 @@ rem Use this script to create a new environment called "EMA-DB"
 echo STEP 1: Creation of EMA-DB environment
 call conda create -n EMA-DB python=3.10 
 if errorlevel 1 (
-    echo Failed to create the environment FEXT
+    echo Failed to create the environment EMA-DB
     goto :eof
 )
 
