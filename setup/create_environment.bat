@@ -8,7 +8,6 @@ if errorlevel 1 (
     goto :eof
 )
 
-echo Environment EMA-DB successfully created!
 rem If present, activate the environment
 call conda activate EMA-DB
 
