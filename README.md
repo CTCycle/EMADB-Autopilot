@@ -14,7 +14,7 @@ The installation process is designed for simplicity, using .bat scripts to autom
 Run the main file EMADBAP.py to start the automated browser. The drugs_dataset.csv file in the dataset folder will be used as reference to get target drug names. Once the webscraper module has finished to run, you will find the download excel files in the default download folder (as per chrome browser configuration).
 
 ### 3.1 Configurations
-For customization, you can modify the main script parameters via the `main/configurations.py` file in the main folder. 
+For customization, you can modify the main script parameters via the `EMADB/config/configurations.py` file. 
 
 | Category                | Setting                | Description                                                    |
 |-------------------------|------------------------|----------------------------------------------------------------|
