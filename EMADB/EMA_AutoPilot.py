@@ -22,8 +22,7 @@ if __name__ == '__main__':
 
     # 2. [LOAD AND PREPARE DATA]
     #--------------------------------------------------------------------------
-    # check if files downloaded in the past are still present, then remove them
-    
+    # check if files downloaded in the past are still present, then remove them    
     xlsx_files = [x for x in os.listdir(DATA_PATH) if x.endswith('.xlsx')]
     for filename in xlsx_files:
         file_path = os.path.join(DATA_PATH, filename)
@@ -31,7 +30,7 @@ if __name__ == '__main__':
             os.remove(file_path)
 
     # load drug names    
-    filepath = os.path.join(DATA_PATH, '*.txt')  
+    filepath = os.path.join(DATA_PATH, 'drugs.txt')  
     with open(filepath, 'r') as file:
         drug_list = [x.lower().strip() for x in file.readlines()]             
 
