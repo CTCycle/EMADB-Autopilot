@@ -1,15 +1,15 @@
 @echo off
-rem Use this script to create a new environment called "EMA-DB"
+rem Use this script to create a new environment called "EMADB"
 
-echo STEP 1: Creation of EMA-DB environment
-call conda create -n EMA-DB python=3.10 
+echo STEP 1: Creation of EMADB environment
+call conda create -n EMADB python=3.10 -y
 if errorlevel 1 (
-    echo Failed to create the environment EMA-DB
+    echo Failed to create the environment EMADB
     goto :eof
 )
 
 rem If present, activate the environment
-call conda activate EMA-DB
+call conda activate EMADB
 
 
 rem Install additional packages with pip
