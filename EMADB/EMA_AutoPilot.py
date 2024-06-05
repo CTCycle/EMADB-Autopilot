@@ -13,7 +13,6 @@ import config.configurations as cnf
 # [RUN MAIN]
 if __name__ == '__main__':
 
-
     # 1. [INITIALIZE WEBDRIVER]
     #--------------------------------------------------------------------------
     # activate chromedriver and scraper        
