@@ -1,4 +1,4 @@
-# EMADB Autopilot
+# EMADB AutoPilot
 
 ## 1. Project Overview
 This project is aimed at developing a script to autonomously navigate the EMA database of EudraVigilance (European Database of suspected adverse drug reactions reports). EudraVigilance is a data processing network and management system for reporting and evaluating suspected adverse drug reactions (ADRs) during the development, and following the marketing authorization of medicinal products in the European Economic Area (EEA). The system supports the electronic exchange of suspected adverse drug reaction reports known as Individual Case Safety Reports (ICSRs) between the European Medicines Agency (EMA), National Competent Authorities (NCAs), Marketing Authorization Holders (MAHs), and sponsors of clinical trials in the EEA. 
@@ -13,10 +13,10 @@ The installation process is designed for simplicity, using .bat scripts to autom
 - **IMPORTANT:** run `scripts/package_setup.bat` if you move the project folder somewhere else after installation, or the app won't work!
 
 ## 3. How to use
-Run the main file EMADBAP.py to start the automated browser. The drugs_dataset.csv file in the dataset folder will be used as reference to get target drug names. Once the webscraper module has finished to run, you will find the download excel files in the default download folder (as per chrome browser configuration).
+Run the main file `EMADB/EMA_AutoPilot.py` to start the automated browser. The drugs_dataset.csv file in the dataset folder will be used as reference to get target drug names. Once the webscraper module has finished to run, you will find the download excel files in the default download folder (as per chrome browser configuration).
 
 ### 3.1 Configurations
-For customization, you can modify the main script parameters via the `EMADB/config/configurations.py` file. 
+For customization, you can modify the main script parameters via the `EMADB/commons/configurations.py` file. 
 
 | Category                | Setting                | Description                                                    |
 |-------------------------|------------------------|----------------------------------------------------------------|
