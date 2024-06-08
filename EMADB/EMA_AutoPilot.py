@@ -6,9 +6,9 @@ import warnings
 warnings.simplefilter(action='ignore', category = Warning)
 
 # [IMPORT CUSTOM MODULES]
-from utils.datascraper import WebDriverToolkit, EMAScraper
-from config.pathfinder import DATA_PATH
-import config.configurations as cnf
+from commons.utils.datascraper import WebDriverToolkit, EMAScraper
+from commons.pathfinder import DATA_PATH
+import commons.configurations as cnf
 
 # [RUN MAIN]
 if __name__ == '__main__':
