@@ -1,9 +1,11 @@
 @echo off
-rem Use this script to create a new environment called "EMADB"
+rem Use this script to install package dependencies in developer mode
 
 call conda activate EMADB && cd .. && pip install -e .
 if errorlevel 1 (
     echo Failed to install the package in editable mode
     goto :eof
 )
+
+
 
