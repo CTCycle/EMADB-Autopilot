@@ -1,4 +1,6 @@
 __pycache__
 
+*.log
+*.xlsx
 *.egg-info
 !.gitkeep
