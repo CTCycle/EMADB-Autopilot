@@ -1,0 +1,6 @@
+{   
+    "SEED" : 54,
+    "IGNORE_SSL_ERROR" : true,
+    "HEADLESS" : false,
+    "WAIT_TIME" : 10     
+}

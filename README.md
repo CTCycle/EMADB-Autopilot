@@ -8,22 +8,23 @@ This automated system will navigate to https://www.adrreports.eu/en/search.html 
 ## 2. Installation 
 The installation process is designed for simplicity, using .bat scripts to automatically create a virtual environment with all necessary dependencies. Please ensure that Anaconda or Miniconda is installed on your system before proceeding.
 
-- The `scripts/create_environment.bat` file, located in the scripts folder, offers a convenient one-click solution to set up your virtual environment.
+- The `setup/environment_setup.bat` file offers a convenient one-click solution to set up your virtual environment.
 - Once the environment has been created, run `scripts/package_setup.bat` to install the app package locally.
-- **IMPORTANT:** run `scripts/package_setup.bat` if you move the project folder somewhere else after installation, or the app won't work!
+- **IMPORTANT:** run `scripts/package_setup.bat` if the path to the project folder is changed for any reason after installation, or the app won't work! 
 
 ## 3. How to use
-Run the main file `EMADB/EMA_AutoPilot.py` to start the automated browser. The drugs_dataset.csv file in the dataset folder will be used as reference to get target drug names. Once the webscraper module has finished to run, you will find the download excel files in the default download folder (as per chrome browser configuration).
+Run the main file `EMAutoPilot.py` to start the automated browser. Use `resources/drugs.txt` to write down a list of drugs and the script will automatically fetch their related reports and place them in `resources/download`. 
 
 ### 3.1 Configurations
-For customization, you can modify the main script parameters via the `EMADB/commons/configurations.py` file. 
+For customization, you can modify the main configuration parameters using `configurations.json` in the root project folder. 
 
-| Category                | Setting                | Description                                                    |
-|-------------------------|------------------------|----------------------------------------------------------------|
-| **General settings**    | HEADLESS               | Use webdriver without GUI                                      |
-
+| Setting                | Description                                                    |
+|------------------------|----------------------------------------------------------------|
+| SEED                   | Random seed                                                    |
+| IGNORE_SSL_ERROR       | Ignore SSL error during connection                             |
+| HEADLESS               | Use webdriver without GUI                                      |
+| WAIT_TIME              | Waiting time before considering action failed                  |
 
 ## License
 This project is licensed under the terms of the MIT license. See the LICENSE file for details.
-
 
