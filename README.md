@@ -9,7 +9,6 @@ This automated system will navigate to https://www.adrreports.eu/en/search.html 
 The installation process is designed for simplicity, using .bat scripts to automatically create a virtual environment with all necessary dependencies. Please ensure that Anaconda or Miniconda is installed on your system before proceeding.
 
 - The `setup/environment_setup.bat` file offers a convenient one-click solution to set up your virtual environment.
-- Once the environment has been created, run `scripts/package_setup.bat` to install the app package locally.
 - **IMPORTANT:** run `scripts/package_setup.bat` if the path to the project folder is changed for any reason after installation, or the app won't work! 
 
 ## 3. How to use
