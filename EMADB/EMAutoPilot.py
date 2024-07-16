@@ -8,6 +8,7 @@ from EMADB.commons.utils.components import file_remover, drug_to_letter_aggregat
 
 
 # [RUN MAIN]
+###############################################################################
 if __name__ == '__main__':
 
     # 1. [INITIALIZE WEBDRIVER]

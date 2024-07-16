@@ -6,7 +6,7 @@ from EMADB.commons.logger import logger
 
 
 # check if files downloaded in the past are still present, then remove them
-#------------------------------------------------------------------------------ 
+###############################################################################
 def file_remover():
     xlsx_files = [x for x in os.listdir(DATA_PATH) if x.endswith('.xlsx')]
     for filename in xlsx_files:
@@ -14,7 +14,8 @@ def file_remover():
         if os.path.isfile(file_path):
             os.remove(file_path)
 
-#------------------------------------------------------------------------------ 
+# aggregate filenames with their corresponding initial letter
+###############################################################################
 def drug_to_letter_aggregator():     
     filepath = os.path.join(DATA_PATH, 'drugs.txt')  
     with open(filepath, 'r') as file:

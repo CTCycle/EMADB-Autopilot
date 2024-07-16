@@ -11,7 +11,6 @@ if errorlevel 1 (
 rem If present, activate the environment
 call conda activate EMADB
 
-
 rem Install additional packages with pip
 echo STEP 2: Install python libraries and packages
 call pip install numpy pandas tqdm selenium webdriver-manager beautifulsoup4 
@@ -28,6 +27,11 @@ if errorlevel 1 (
     echo Failed to install the package in editable mode
     goto :eof
 )
+
+rem Clean cache
+echo Cleaning conda and pip cache 
+call conda clean -all -y
+call pip cache purge
 
 rem Print the list of dependencies installed in the environment
 echo List of installed dependencies
