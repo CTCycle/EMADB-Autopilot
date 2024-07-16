@@ -10,8 +10,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH, DATA_PATH
 from EMADB.commons.logger import logger
 
+
 # [WEBDRIVER]
-#------------------------------------------------------------------------------
+###############################################################################
 class WebDriverToolkit:    
     
     def __init__(self):        
@@ -53,7 +54,7 @@ class WebDriverToolkit:
     
      
 # [SCRAPER]
-#------------------------------------------------------------------------------
+###############################################################################
 class EMAScraper: 
 
     def __init__(self, driver):         
