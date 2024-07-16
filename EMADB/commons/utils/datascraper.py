@@ -104,9 +104,7 @@ class EMAScraper:
         item.click()
         original_window = self.driver.current_window_handle
         WebDriverWait(self.driver, self.wait_time).until(EC.number_of_windows_to_be(2)) 
-        self.driver.switch_to.window(self.driver.window_handles[1])       
-
-        return item   
+        self.driver.switch_to.window(self.driver.window_handles[1])        
     
     #--------------------------------------------------------------------------
     def excel_downloader(self, download_path):
@@ -143,9 +141,7 @@ class EMAScraper:
         self.driver.switch_to.window(self.driver.window_handles[1])     
         self.driver.close()        
         self.driver.switch_to.window(self.driver.window_handles[0])
-
-        return item   
-    
+        
     #--------------------------------------------------------------------------
     def download_manager(self, grouped_drugs):  
 
@@ -156,8 +152,8 @@ class EMAScraper:
             for d in drugs:        
                 logger.info(f'Collecting data for drug: {d}')
                 try:
-                    placeholder = self.drug_finder(d)             
-                    excel_ph = self.excel_downloader(DOWNLOAD_PATH)            
+                    self.drug_finder(d)             
+                    self.excel_downloader(DOWNLOAD_PATH)            
                     DAP_path = os.path.join(DOWNLOAD_PATH, 'DAP.xlsx')
                     rename_path = os.path.join(DOWNLOAD_PATH, f'{d}.xlsx')
                     os.rename(DAP_path, rename_path) 
