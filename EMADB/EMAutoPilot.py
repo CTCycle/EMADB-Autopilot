@@ -14,8 +14,8 @@ if __name__ == '__main__':
     # 1. [INITIALIZE WEBDRIVER]
     #--------------------------------------------------------------------------
     # activate chromedriver and scraper        
-    WD_toolkit = WebDriverToolkit()
-    webdriver = WD_toolkit.initialize_webdriver()
+    toolkit = WebDriverToolkit()
+    webdriver = toolkit.initialize_webdriver()
 
     # 2. [LOAD AND PREPARE DATA]
     #--------------------------------------------------------------------------

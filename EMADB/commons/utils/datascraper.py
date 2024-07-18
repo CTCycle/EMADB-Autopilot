@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH, DATA_PATH
+from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH
 from EMADB.commons.logger import logger
 
 
@@ -15,18 +15,58 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class WebDriverToolkit:    
     
-    def __init__(self):        
+    def __init__(self, check_version=False):        
            
-        self.option = webdriver.ChromeOptions()        
+        self.option = webdriver.ChromeOptions()
+        # Check for headless mode
         if CONFIG["HEADLESS"]:
             self.option.add_argument('--headless')
-        if CONFIG["IGNORE_SSL_ERROR"]: 
+        # Check for SSL error ignore
+        if CONFIG["IGNORE_SSL_ERROR"]:
             self.option.add_argument('--ignore-ssl-errors=yes')
-            self.option.add_argument('--ignore-certificate-errors')       
-        self.chrome_prefs = {'download.default_directory' : DOWNLOAD_PATH}
-        self.option.experimental_options['prefs'] = self.chrome_prefs
+            self.option.add_argument('--ignore-certificate-errors')
+        # Set download directory       
+        self.chrome_prefs = {'download.default_directory': DOWNLOAD_PATH}        
+        # Disable images
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
         self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
+        self.option.experimental_options['prefs'] = self.chrome_prefs        
+        # Additional recommended options
+        self.option.add_argument('--disable-extensions')
+        self.option.add_argument('--disable-gpu')
+        self.option.add_argument('--no-sandbox')
+        self.option.add_argument('--disable-dev-shm-usage')
+        # performs additional checks if selected 
+        if check_version:
+            # Check for ChromeDriver installation
+            self.is_chromedriver_installed()
+            logger.error('ChromeDriver is not installed or not in the system path.')        
+            # Check Chrome version compatibility
+            self.check_chrome_version()
+            logger.error('Chrome version is not compatible with ChromeDriver.')
+
+    #--------------------------------------------------------------------------
+    def is_chromedriver_installed(self):
+        try:
+            driver = webdriver.Chrome(options=self.option)
+            driver.quit()
+            return True
+        except Exception as e:
+            logger.error(f"Error initializing ChromeDriver: {e}")
+            return False
+
+    #--------------------------------------------------------------------------
+    def check_chrome_version(self):
+        try:
+            driver = webdriver.Chrome(options=self.option)
+            version = driver.capabilities['browserVersion']
+            driver.quit()
+            logger.info(f"Detected Chrome version: {version}")
+            # You can add logic here to compare versions
+            return True
+        except Exception as e:
+            logger.error(f"Error detecting Chrome version: {e}")
+            return False
 
     #--------------------------------------------------------------------------
     def initialize_webdriver(self): 
@@ -40,15 +80,8 @@ class WebDriverToolkit:
             driver: A Chrome WebDriver instance.
 
         '''   
-        self.path = ChromeDriverManager().install()    
-        # Check if the WebDriver is already cached
-        if os.path.exists(self.path):
-            logger.debug(f'WebDriver is already cached in {self.path}')
-        else:
-            logger.debug(f'Downloading and installing WebDriver in {self.path}')
-        
-        self.service = Service(executable_path=self.path)
-        driver = webdriver.Chrome(service=self.service, options=self.option)                   
+        self.path = ChromeDriverManager().install()          
+        driver = webdriver.Chrome(options=self.option)                   
         
         return driver
     
@@ -165,7 +198,13 @@ class EMAScraper:
 
         
 
-
+# functions testing  
+# -----------------------------------------------------------------------------                 
+if __name__ == '__main_:':
+    
+    # activate chromedriver and scraper    
+    toolkit = WebDriverToolkit()
+    driver = toolkit.initialize_webdriver()
     
  
             

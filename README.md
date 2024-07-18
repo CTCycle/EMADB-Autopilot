@@ -12,7 +12,9 @@ The installation process is designed for simplicity, using .bat scripts to autom
 - **IMPORTANT:** run `scripts/package_setup.bat` if the path to the project folder is changed for any reason after installation, or the app won't work! 
 
 ## 3. How to use
-Run the main file `EMAutoPilot.py` to start the automated browser. Use `resources/drugs.txt` to write down a list of drugs and the script will automatically fetch their related reports and place them in `resources/download`. 
+Run the main file `EMAutoPilot.py` to start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! Should you get error messages from the webdriver, you may need to check you browser version and possibly update it. 
+
+Use `resources/drugs.txt` to write down a list of drugs and the script will automatically fetch their related reports and place them in `resources/download`. 
 
 ### 3.1 Configurations
 For customization, you can modify the main configuration parameters using `configurations.json` in the root project folder. 
