@@ -1,16 +1,16 @@
 import os
 from collections import defaultdict
 
-from EMADB.commons.constants import CONFIG, DATA_PATH
+from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH, DATA_PATH
 from EMADB.commons.logger import logger
 
 
 # check if files downloaded in the past are still present, then remove them
 ###############################################################################
 def file_remover():
-    xlsx_files = [x for x in os.listdir(DATA_PATH) if x.endswith('.xlsx')]
+    xlsx_files = [x for x in os.listdir(DOWNLOAD_PATH) if x.endswith('.xlsx')]
     for filename in xlsx_files:
-        file_path = os.path.join(DATA_PATH, filename)
+        file_path = os.path.join(DOWNLOAD_PATH, filename)
         if os.path.isfile(file_path):
             os.remove(file_path)
 
