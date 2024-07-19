@@ -138,44 +138,40 @@ class EMAScraper:
         item.click()
         original_window = self.driver.current_window_handle
         WebDriverWait(self.driver, self.wait_time).until(EC.number_of_windows_to_be(2)) 
-        self.driver.switch_to.window(self.driver.window_handles[1])        
-    
+        self.driver.switch_to.window(self.driver.window_handles[1])  
+
     #--------------------------------------------------------------------------
-    def excel_downloader(self, download_path):
+    def close_and_switch_window(self):
+        self.driver.switch_to.window(self.driver.window_handles[1])     
+        self.driver.close()        
+        self.driver.switch_to.window(self.driver.window_handles[0])    
 
-        '''
-        Download an Excel file from a web page and wait for the file to appear 
-        in the specified download path.
+    #--------------------------------------------------------------------------
+    def click_and_download(self, current_page=True):
 
-        Keyword Arguments:
-            wait_time (int): The maximum time (in seconds) to wait for elements to appear and for the download to complete.
-            download_path (str): The path where the downloaded file should be saved.
-
-        Returns:
-            item: The WebElement representing the last clicked item.
-
-        '''  
+        flag = 1 if current_page else 2
         wait = WebDriverWait(self.driver, self.wait_time)
         XPATH = '//*[@id="uberBar_dashboardpageoptions_image"]'       
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
         item.click()        
         XPATH = '//*[@id="idPageExportToExcel"]/table/tbody/tr/td[2]'
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
-        item.click()        
-        XPATH = '//*[@id="idDashboardExportToExcelMenu"]/table/tbody/tr[1]/td[1]/a[2]/table/tbody/tr/td[2]'
+        item.click()       
+        XPATH = f'//*[@id="idDashboardExportToExcelMenu"]/table/tbody/tr[1]/td[1]/a[{flag}]/table/tbody/tr/td[2]'
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
-        item.click()         
+        item.click()       
+
+    #--------------------------------------------------------------------------
+    def check_DAP_filenames(self):
         while True:
-            current_files = os.listdir(download_path)
-            if 'DAP.xlsx' in current_files:
+            current_files = os.listdir(DOWNLOAD_PATH)
+            DAP_files = [x for x in current_files if 'DAP' in x]
+            if len(DAP_files) > 0:
                 break
             else:
                 time.sleep(0.5)
-                continue        
-        self.driver.switch_to.window(self.driver.window_handles[1])     
-        self.driver.close()        
-        self.driver.switch_to.window(self.driver.window_handles[0])
-        
+                continue 
+
     #--------------------------------------------------------------------------
     def download_manager(self, grouped_drugs):  
 
@@ -187,16 +183,20 @@ class EMAScraper:
                 logger.info(f'Collecting data for drug: {d}')
                 try:
                     self.drug_finder(d)             
-                    self.excel_downloader(DOWNLOAD_PATH)            
+                    self.click_and_download(current_page=False)
+                    self.check_DAP_filenames()
+                    self.close_and_switch_window()                        
                     DAP_path = os.path.join(DOWNLOAD_PATH, 'DAP.xlsx')
                     rename_path = os.path.join(DOWNLOAD_PATH, f'{d}.xlsx')
                     os.rename(DAP_path, rename_path) 
                     logger.debug(f'Succesfully downloaded file {rename_path}')            
                 except:
                     logger.error(f'An error has been encountered while fetching {d} data. Skipping this drug.')
-                    
 
-        
+                    
+# TO DO!    
+# self.autoclick('//*[@id="dashboard_page_5_tab"]/tbody/tr/td[2]/div')   
+                          
 
 # functions testing  
 # -----------------------------------------------------------------------------                 
