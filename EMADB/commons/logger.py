@@ -5,12 +5,14 @@ from datetime import datetime
 
 from EMADB.commons.constants import LOGS_PATH
 
+
 # Generate timestamp for the log filename
+###############################################################################
 current_timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 log_filename = os.path.join(LOGS_PATH, f'EMADB_{current_timestamp}.log')
 
 # Define logger configuration
-#------------------------------------------------------------------------------
+###############################################################################
 LOG_CONFIG =  {
     'version': 1,
     'disable_existing_loggers': False,
@@ -44,7 +46,7 @@ LOG_CONFIG =  {
     },
 }
 
-# override logger configuration and load the latter
-#------------------------------------------------------------------------------
+# override logger configuration and load root logger
+###############################################################################
 logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger()
