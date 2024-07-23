@@ -2,7 +2,6 @@ import os
 import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -27,7 +26,7 @@ class WebDriverToolkit:
             self.option.add_argument('--ignore-certificate-errors')
         # Set download directory       
         self.chrome_prefs = {'download.default_directory': DOWNLOAD_PATH}        
-        # Disable images
+        # Disable images for smoother performances
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
         self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
         self.option.experimental_options['prefs'] = self.chrome_prefs        
@@ -36,7 +35,7 @@ class WebDriverToolkit:
         self.option.add_argument('--disable-gpu')
         self.option.add_argument('--no-sandbox')
         self.option.add_argument('--disable-dev-shm-usage')
-        # performs additional checks if selected 
+        
         if check_version:
             # Check for ChromeDriver installation
             self.is_chromedriver_installed()
@@ -47,34 +46,60 @@ class WebDriverToolkit:
 
     #--------------------------------------------------------------------------
     def is_chromedriver_installed(self):
+
+        '''
+        This method checks if the Chrome WebDriver is installed and can be initialized.
+        It attempts to create and quit a WebDriver instance and logs any error encountered.
+
+        Keywords arguments:
+            None
+
+        Returns:
+            bool: True if Chrome WebDriver is successfully initialized, otherwise False.
+
+    '''
         try:
             driver = webdriver.Chrome(options=self.option)
             driver.quit()
             return True
         except Exception as e:
-            logger.error(f"Error initializing ChromeDriver: {e}")
+            logger.error(f'Error initializing ChromeDriver: {e}')
             return False
 
     #--------------------------------------------------------------------------
     def check_chrome_version(self):
+
+        '''
+        Initializes a Chrome WebDriver instance to check the current version of Chrome installed.
+        It logs the detected version or any error encountered during the process.
+
+        Keywords arguments:
+            None
+
+        Returns:
+            bool: True if the Chrome version is successfully detected, otherwise False.
+
+        '''        
         try:
             driver = webdriver.Chrome(options=self.option)
             version = driver.capabilities['browserVersion']
             driver.quit()
-            logger.info(f"Detected Chrome version: {version}")
-            # You can add logic here to compare versions
+            logger.info(f'Detected Chrome version: {version}')            
             return True
         except Exception as e:
-            logger.error(f"Error detecting Chrome version: {e}")
+            logger.error(f'Error detecting Chrome version: {e}')
             return False
 
     #--------------------------------------------------------------------------
     def initialize_webdriver(self): 
 
         '''
-        This method downloads and installs the Chrome WebDriver executable if needed, 
+        Downloads and installs the Chrome WebDriver executable if needed, 
         creates a WebDriver service, and initializes a Chrome WebDriver instance
         with the specified options.
+
+        Keywords arguments:
+            None
 
         Returns:
             driver: A Chrome WebDriver instance.
