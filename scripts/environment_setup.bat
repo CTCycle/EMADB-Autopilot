@@ -13,7 +13,8 @@ call conda activate EMADB
 
 rem Install additional packages with pip
 echo STEP 2: Install python libraries and packages
-call pip install numpy pandas tqdm selenium webdriver-manager beautifulsoup4 
+call pip install numpy==1.26.4 pandas==2.1.4 openpyxl==3.1.5 tqdm==4.66.4
+call pip install selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
 if errorlevel 1 (
     echo Failed to install Python libraries.
     goto :eof
