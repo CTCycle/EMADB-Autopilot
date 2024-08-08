@@ -2,7 +2,7 @@
 rem Use this script to create a new environment called "EMADB"
 
 echo STEP 1: Creation of EMADB environment
-call conda create -n EMADB python=3.10 -y
+call conda create -n EMADB python=3.11 -y
 if errorlevel 1 (
     echo Failed to create the environment EMADB
     goto :eof

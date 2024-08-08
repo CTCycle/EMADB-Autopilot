@@ -6,18 +6,19 @@ This project is aimed at developing a script to autonomously navigate the EMA da
 This automated system will navigate to https://www.adrreports.eu/en/search.html and look for target drugs, which are found by looking at drugs name in a .txt file within the data folder (the file can have any name). Then, it downloads data reports in the form of excel files. The script is based on chromedriver, meaning that it will simulate a user interacting with a browser to navigate the online database. 
 
 ## 2. Installation 
-The installation process is designed for simplicity, using .bat scripts to automatically create a virtual environment with all necessary dependencies. Please ensure that Anaconda or Miniconda is installed on your system before proceeding.
+The installation process is designed for simplicity, using .bat scripts to automatically create a virtual environment with all necessary dependencies. Please ensure that Anaconda or Miniconda is properly installed on your system before proceeding.
 
-- The `setup/environment_setup.bat` file offers a convenient one-click solution to set up your virtual environment.
+- The `scripts/environment_setup.bat` file offers a convenient one-click solution to set up your virtual environment.
 - **IMPORTANT:** run `scripts/package_setup.bat` if the path to the project folder is changed for any reason after installation, or the app won't work! 
 
 ## 3. How to use
-Run the main file `EMAutoPilot.py` to start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! Should you get error messages from the webdriver, you may need to check you browser version and possibly update it. 
+Within the main project folder (EMABD) you will find other folders, each designated to specific tasks. Run the main file `EMAutoPilot.py` to start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
-Use `resources/drugs.txt` to write down a list of drugs and the script will automatically fetch their related reports and place them in `resources/download`. 
+### Resources
+This folder is used to organize the main data for the project, including downloaded files (saved in `resources/download`) and the app logs (`resources/logs`). The `resources/drugs.txt` file contains the names of the drugs you want to download the reports for.  
 
 ### 3.1 Configurations
-For customization, you can modify the main configuration parameters using `configurations.json` in the root project folder. 
+For customization, you can modify the main configuration parameters using `settings/configurations.json`  
 
 | Setting                | Description                                                    |
 |------------------------|----------------------------------------------------------------|
