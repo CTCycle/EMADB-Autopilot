@@ -17,20 +17,21 @@ class WebDriverToolkit:
     def __init__(self, check_version=False):        
            
         self.option = webdriver.ChromeOptions()
-        # Check for headless mode
+        
         if CONFIG["HEADLESS"]:
-            self.option.add_argument('--headless')
-        # Check for SSL error ignore
+            self.option.add_argument('--headless')       
         if CONFIG["IGNORE_SSL_ERROR"]:
             self.option.add_argument('--ignore-ssl-errors=yes')
             self.option.add_argument('--ignore-certificate-errors')
+
         # Set download directory       
         self.chrome_prefs = {'download.default_directory': DOWNLOAD_PATH}        
         # Disable images for smoother performances
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
         self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
-        self.option.experimental_options['prefs'] = self.chrome_prefs        
-        # Additional recommended options
+        self.option.experimental_options['prefs'] = self.chrome_prefs      
+
+        # Additional recommended options        
         self.option.add_argument('--disable-extensions')
         self.option.add_argument('--disable-gpu')
         self.option.add_argument('--no-sandbox')
