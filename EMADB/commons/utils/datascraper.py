@@ -16,26 +16,27 @@ class WebDriverToolkit:
     
     def __init__(self, check_version=False):        
            
-        self.option = webdriver.ChromeOptions()
+        self.options = webdriver.ChromeOptions()
         
         if CONFIG["HEADLESS"]:
-            self.option.add_argument('--headless')       
+            self.options.add_argument('--headless')       
         if CONFIG["IGNORE_SSL_ERROR"]:
-            self.option.add_argument('--ignore-ssl-errors=yes')
-            self.option.add_argument('--ignore-certificate-errors')
+            self.options.add_argument('--ignore-ssl-errors=yes')
+            self.options.add_argument('--ignore-certificate-errors')
 
         # Set download directory       
         self.chrome_prefs = {'download.default_directory': DOWNLOAD_PATH}        
         # Disable images for smoother performances
         self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
         self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
-        self.option.experimental_options['prefs'] = self.chrome_prefs      
+        self.options.experimental_options['prefs'] = self.chrome_prefs      
 
         # Additional recommended options        
-        self.option.add_argument('--disable-extensions')
-        self.option.add_argument('--disable-gpu')
-        self.option.add_argument('--no-sandbox')
-        self.option.add_argument('--disable-dev-shm-usage')
+        self.options.add_argument('--disable-extensions')
+        self.options.add_argument('--disable-gpu')
+        self.options.add_argument('--no-sandbox')
+        self.options.add_argument('--disable-dev-shm-usage')
+        self.options.add_argument("--disable-search-engine-choice-screen")
         
         if check_version:
             # Check for ChromeDriver installation
@@ -107,7 +108,7 @@ class WebDriverToolkit:
 
         '''   
         self.path = ChromeDriverManager().install()          
-        driver = webdriver.Chrome(options=self.option)                   
+        driver = webdriver.Chrome(options=self.options)                   
         
         return driver
     

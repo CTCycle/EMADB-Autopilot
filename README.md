@@ -18,7 +18,9 @@ Within the main project folder (EMABD) you will find other folders, each designa
 This folder is used to organize the main data for the project, including downloaded files (saved in `resources/download`) and the app logs (`resources/logs`). The `resources/drugs.txt` file contains the names of the drugs you want to download the reports for.  
 
 ### 3.1 Configurations
-For customization, you can modify the main configuration parameters using `settings/configurations.json`  
+For customization, you can modify the main configuration parameters using `settings/configurations.json` 
+
+#### General Configuration
 
 | Setting                | Description                                                    |
 |------------------------|----------------------------------------------------------------|
