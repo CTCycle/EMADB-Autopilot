@@ -61,7 +61,7 @@ class WebDriverToolkit:
 
     '''
         try:
-            driver = webdriver.Chrome(options=self.option)
+            driver = webdriver.Chrome(options=self.options)
             driver.quit()
             return True
         except Exception as e:
@@ -83,7 +83,7 @@ class WebDriverToolkit:
 
         '''        
         try:
-            driver = webdriver.Chrome(options=self.option)
+            driver = webdriver.Chrome(options=self.options)
             version = driver.capabilities['browserVersion']
             driver.quit()
             logger.info(f'Detected Chrome version: {version}')            
@@ -225,13 +225,7 @@ class EMAScraper:
 # self.autoclick('//*[@id="dashboard_page_5_tab"]/tbody/tr/td[2]/div')   
                           
 
-# functions testing  
-# -----------------------------------------------------------------------------                 
-if __name__ == '__main_:':
-    
-    # activate chromedriver and scraper    
-    toolkit = WebDriverToolkit()
-    driver = toolkit.initialize_webdriver()
+
     
  
             
