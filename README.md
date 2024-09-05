@@ -5,19 +5,19 @@ This project is aimed at developing a script to autonomously navigate the EMA da
 
 This automated system will navigate to https://www.adrreports.eu/en/search.html and look for target drugs, which are found by looking at drugs name in a .txt file within the data folder (the file can have any name). Then, it downloads data reports in the form of excel files. The script is based on chromedriver, meaning that it will simulate a user interacting with a browser to navigate the online database. 
 
-## 2. Installation 
+## 2. Installation
 The installation process is designed for simplicity, using .bat scripts to automatically create a virtual environment with all necessary dependencies. Please ensure that Anaconda or Miniconda is properly installed on your system before proceeding.
 
-- The `scripts/environment_setup.bat` file offers a convenient one-click solution to set up your virtual environment.
-- **IMPORTANT:** run `scripts/package_setup.bat` if the path to the project folder is changed for any reason after installation, or the app won't work! 
+- To set up the environment, run `scripts/environment_setup.bat`. This file offers a convenient one-click solution to set up your virtual environment.
+- **IMPORTANT:** if the path to the project folder is changed for any reason after installation, the app will cease to work. Run `scripts/package_setup.bat` or alternatively use `pip install -e . --use-pep517` from cmd when in the project folder (upon activating the conda environment).
 
 ## 3. How to use
 Within the main project folder (EMABD) you will find other folders, each designated to specific tasks. Run the main file `EMAutoPilot.py` to start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
-### Resources
+### 3.1 Resources
 This folder is used to organize the main data for the project, including downloaded files (saved in `resources/download`) and the app logs (`resources/logs`). The `resources/drugs.txt` file contains the names of the drugs you want to download the reports for.  
 
-### 3.1 Configurations
+### 4. Configurations
 For customization, you can modify the main configuration parameters using `settings/configurations.json` 
 
 #### General Configuration
@@ -29,6 +29,6 @@ For customization, you can modify the main configuration parameters using `setti
 | HEADLESS               | Use webdriver without GUI                                      |
 | WAIT_TIME              | Waiting time before considering action failed                  |
 
-## License
+## 5. License
 This project is licensed under the terms of the MIT license. See the LICENSE file for details.
 
