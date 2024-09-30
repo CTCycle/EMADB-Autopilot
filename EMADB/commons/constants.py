@@ -6,6 +6,6 @@ DATA_PATH = join(PROJECT_DIR, 'resources')
 DOWNLOAD_PATH = join(DATA_PATH, 'download')
 LOGS_PATH = join(DATA_PATH, 'logs')
 
-CONFIG_PATH = join(PROJECT_DIR, 'settings', 'configurations.json')
+CONFIG_PATH = join(PROJECT_DIR, 'settings', 'app_configurations.json')
 with open(CONFIG_PATH, 'r') as file:
     CONFIG = json.load(file)
