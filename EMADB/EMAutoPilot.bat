@@ -95,7 +95,7 @@ if /i "%skip_CUDA_check%"=="true" (
 :main_menu
 echo.
 echo =======================================
-echo           EMADB 
+echo          EMAutoPilot launcher
 echo =======================================
 echo 1. Run EMADB
 echo 2. EMADB setup
@@ -111,7 +111,7 @@ pause
 goto :main_menu
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Run data analysis
+:: Run main app
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
@@ -125,7 +125,7 @@ goto :main_menu
 :setup_menu
 cls
 echo =======================================
-echo           EMADB setup
+echo           EMAutoPilot setup
 echo =======================================
 echo 1. Install project dependencies
 echo 2. Remove logs
