@@ -6,19 +6,36 @@ This project is aimed at developing a script to autonomously navigate the EMA da
 This automated system will navigate to https://www.adrreports.eu/en/search.html and look for target drugs, which are found by looking at drugs name in a .txt file within the data folder (the file can have any name). Then, it downloads data reports in the form of excel files. The script is based on chromedriver, meaning that it will simulate a user interacting with a browser to navigate the online database. 
 
 ## 2. Installation
-The installation process is designed for simplicity, using .bat scripts to automatically create a virtual environment with all necessary dependencies. Please ensure that Anaconda or Miniconda is properly installed on your system before proceeding.
+The installation process on Windows has been designed for simplicity and ease of use. To begin, simply run `EMAutoPilot.bat`. On its first execution, the installation procedure will automatically start with minimal user input required. The script will check if either Anaconda or Miniconda is installed on your system. If neither is found, you will need to install it manually. You can download and install Miniconda by following the instructions here: (https://docs.anaconda.com/miniconda/).
 
-- To set up the environment, run `scripts/environment_setup.bat`. This file offers a convenient one-click solution to set up your virtual environment.
-- **IMPORTANT:** if the path to the project folder is changed for any reason after installation, the app will cease to work. Run `scripts/package_setup.bat` or alternatively use `pip install -e . --use-pep517` from cmd when in the project folder (upon activating the conda environment).
+After setting up Anaconda/Miniconda, the installation script will install all the necessary Python dependencies. This includes Keras 3 (with PyTorch support as the backend) and the required CUDA dependencies (CUDA 12.1) to enable GPU acceleration. If you'd prefer to handle the installation process separately, you can run the standalone installer by executing `setup/EMADB_installer.bat`. You can also use a custom python environment by modifying `settings/launcher_configurations.ini` and setting use_custom_environment as true, while specifying the name of your custom environment.
+
+**Important:** After installation, if the project folder is moved or its path is changed, the application will no longer function correctly. To fix this, you can either:
+
+- Open the main menu, select "EMADB setup," and choose "Install project packages"
+- Manually run the following commands in the terminal, ensuring the project folder is set as the current working directory (CWD):
+
+    `conda activate EMADB`
+
+    `pip install -e . --use-pep517` 
 
 ## 3. How to use
-Within the main project folder (EMABD) you will find other folders, each designated to specific tasks. Run the main file `EMAutoPilot.py` to start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
+On Windows, run `EMADB.bat` to launch the main navigation menu and browse through the various options. Alternatively, you can launch the main app file running `python EMADB/commons/main.py`. 
 
-### 3.1 Resources
+### 3.1 Navigation menu
+
+**1) Run EMAutoPilot:** run the main application and start the start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).. 
+
+**2) EMADB setup:** allows running some options command such as **install project packages** to run the developer model project installation, and **remove logs** to remove all logs saved in `resources/logs`. 
+
+**3) Exit and close:** exit the program immediately
+
+
+### 3.2 Resources
 This folder is used to organize the main data for the project, including downloaded files (saved in `resources/download`) and the app logs (`resources/logs`). The `resources/drugs.txt` file contains the names of the drugs you want to download the reports for.  
 
 ### 4. Configurations
-For customization, you can modify the main configuration parameters using `settings/configurations.json` 
+For customization, you can modify the main configuration parameters using `settings/app_configurations.json` 
 
 #### General Configuration
 
