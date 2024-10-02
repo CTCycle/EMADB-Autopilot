@@ -33,7 +33,7 @@ call pip install selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.
 :: Check if NVIDIA GPU is available using nvidia-smi
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Install utils packages in editable mode
-call cd .. && pip install -e . --use-pep517
+call cd .. && pip install -e . --use-pep517 && cd EMADB
 
 :: [CLEAN CACHE] 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

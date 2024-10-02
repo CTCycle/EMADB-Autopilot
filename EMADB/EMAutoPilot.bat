@@ -125,7 +125,7 @@ goto :main_menu
 :setup_menu
 cls
 echo =======================================
-echo           EMAutoPilot setup
+echo            EMADB setup
 echo =======================================
 echo 1. Install project dependencies
 echo 2. Remove logs
@@ -141,10 +141,13 @@ pause
 goto :setup_menu
 
 :eggs
-call conda activate %env_name% && cd .. && pip install -e . --use-pep517
+call conda activate %env_name% && cd .. && pip install -e . --use-pep517 && cd EMADB
+pause
 goto :setup_menu
 
 :logs
 cd /d "%~dp0..\EMADB\resources\logs"
 del *.log /q
+cd ..\..
+pause
 goto :setup_menu
