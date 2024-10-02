@@ -10,8 +10,7 @@ set settings_file=settings/launcher_configurations.ini
 for /f "tokens=1,2 delims==" %%a in (%settings_file%) do (
     set key=%%a
     set value=%%b
-    if not "!key:~0,1!"=="[" (        
-        if "!key!"=="skip_CUDA_check" set skip_CUDA_check=!value!
+    if not "!key:~0,1!"=="[" (                
         if "!key!"=="use_custom_environment" set use_custom_environment=!value!
         if "!key!"=="custom_env_name" set custom_env_name=!value!
     )
@@ -56,36 +55,18 @@ for /f "skip=2 tokens=1*" %%a in ('conda env list') do (
 :env_found
 if "%env_exists%"=="true" (
     echo Python environment '%env_name%' detected.
-    goto :cudacheck
+    goto :main_menu
 ) else (
     if /i "%env_name%"=="EMADB" (
         echo Running first-time installation for EMADB. Please wait until completion and do not close the console!
         call "%~dp0\..\setup\EMADB_installer.bat"
         set "custom_env_name=EMADB"
-        goto :cudacheck
+        goto :main_menu
     ) else (
         echo Selected custom environment '%custom_env_name%' does not exist.
         echo Please select a valid environment or set use_custom_environment=false.
         pause
         exit
-    )
-)
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Check if NVIDIA GPU is available using nvidia-smi
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:cudacheck
-if /i "%skip_CUDA_check%"=="true" (
-    goto :main_menu
-) else (
-    nvidia-smi >nul 2>&1
-    if %ERRORLEVEL%==0 (
-        echo NVIDIA GPU detected. Checking CUDA version...
-        nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader
-        goto :main_menu
-    ) else (
-        echo No NVIDIA GPU detected or NVIDIA drivers are not installed.
-        goto :main_menu
     )
 )
 
