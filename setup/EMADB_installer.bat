@@ -27,6 +27,7 @@ echo.
 echo Install python libraries and packages
 call pip install numpy==1.26.4 pandas==2.1.4 openpyxl==3.1.5 tqdm==4.66.4
 call pip install selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
+call pip install ipykernel==6.29.5
 
 :: [INSTALL PROJECT IN EDITABLE MODE] 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
