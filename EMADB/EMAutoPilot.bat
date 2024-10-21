@@ -76,9 +76,9 @@ if "%env_exists%"=="true" (
 :main_menu
 echo.
 echo =======================================
-echo          EMAutoPilot launcher
+echo               EMAutoPilot
 echo =======================================
-echo 1. Run EMADB
+echo 1. Start EMAutoPilot 
 echo 2. EMADB setup
 echo 3. Exit and close
 echo.
