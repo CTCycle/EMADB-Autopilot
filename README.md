@@ -41,7 +41,6 @@ For customization, you can modify the main configuration parameters using `setti
 
 | Setting                | Description                                                    |
 |------------------------|----------------------------------------------------------------|
-| SEED                   | Random seed                                                    |
 | IGNORE_SSL_ERROR       | Ignore SSL error during connection                             |
 | HEADLESS               | Use webdriver without GUI                                      |
 | WAIT_TIME              | Waiting time before considering action failed                  |

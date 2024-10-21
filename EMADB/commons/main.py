@@ -3,7 +3,8 @@ import warnings
 warnings.simplefilter(action='ignore', category=Warning)
 
 # [IMPORT CUSTOM MODULES]
-from EMADB.commons.utils.datascraper import WebDriverToolkit, EMAScraper
+from EMADB.commons.utils.driver import WebDriverToolkit
+from EMADB.commons.utils.scraper import EMAScraper
 from EMADB.commons.utils.components import file_remover, drug_to_letter_aggregator
 
 
