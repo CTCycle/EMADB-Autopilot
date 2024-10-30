@@ -4,7 +4,7 @@ warnings.simplefilter(action='ignore', category=Warning)
 
 # [IMPORT CUSTOM MODULES]
 from EMADB.commons.utils.driver import WebDriverToolkit
-from EMADB.commons.utils.scraper import EMAScraper
+from EMADB.commons.utils.autopilot import EMAWebPilot
 from EMADB.commons.utils.components import file_remover, drug_to_letter_aggregator
 
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # click on letter page (based on first letter of names group) and then iterate over
     # all drugs in that page (from the list). Download excel reports and rename them automatically    
-    webscraper = EMAScraper(webdriver)   
+    webscraper = EMAWebPilot(webdriver)   
     webscraper.download_manager(grouped_drugs)
 
 
