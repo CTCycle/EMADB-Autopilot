@@ -11,7 +11,7 @@ from EMADB.commons.logger import logger
     
 # [SCRAPER]
 ###############################################################################
-class EMAScraper: 
+class EMAWebPilot: 
 
     def __init__(self, driver):         
         self.driver = driver
