@@ -90,7 +90,7 @@ goto :main_menu
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
-call conda activate %env_name% && python .\commons\main.py
+call conda activate --prefix %env_path% && python .\commons\main.py
 pause
 goto :main_menu
 
