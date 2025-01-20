@@ -24,7 +24,7 @@ On Windows, run *start_on_windows.bat* to launch the main navigation menu and br
 
 **1) Run EMAutoPilot:** run the main application and start the start the automated browser. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
-**2) Setup and Maintenance:** allows running some options command such as *install project in editable mode* to run the developer model project installation, and *remove logs* to remove all logs saved in *resources/logs*.  
+**2) Setup and Maintenance:** execute optional commands such as *Install project into environment* to run the developer model project installation, *update project* to pull the last updates from github, and *remove logs* to remove all logs saved in *resources/logs*.  
 
 **3) Exit:** close the program immediately  
 
