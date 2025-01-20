@@ -5,6 +5,7 @@ for /f "delims=" %%i in ("%~dp0..") do set "project_folder=%%~fi"
 set "env_name=EMADB"
 set "project_name=EMADB"
 set "env_path=%project_folder%\setup\environment\%env_name%"
+set "app_path=%project_folder%\%project_name%"
 set "conda_path=%project_folder%\setup\miniconda"
 set "setup_path=%project_folder%\setup"
 
@@ -54,15 +55,14 @@ goto :dependencies
 :dependencies
 echo.
 echo Install python libraries and packages
-call pip install numpy==2.1.0 pandas==2.2.3 tqdm==4.66.4
-call pip install selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
+call pip install tqdm==4.67.1 selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
 
 :: [INSTALL PROJECT IN EDITABLE MODE] 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Install project in developer mode
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Install utils packages in editable mode
-call cd "%project_folder%" && pip install -e . --use-pep517 && cd "%setup_path%"
+call cd "%project_folder%" && pip install -e . --use-pep517
 
 :: [CLEAN CACHE] 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
