@@ -70,27 +70,49 @@ if %ERRORLEVEL% neq 0 (
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main_menu
 echo.
-echo =======================================
+echo ==========================================================================
 echo               EMAutoPilot
-echo =======================================
-echo 1. Start EMAutoPilot 
-echo 2. Setup and Maintenance
-echo 3. Exit
+echo ==========================================================================
+echo 1. Download EMA drugs adverse reactions report 
+echo 2. Find ATC codes for drugs
+echo 3. Look for drug-to-drug interactions (DDIs)
+echo 4. Setup and Maintenance
+echo 5. Exit
 echo.
-set /p choice="Select an option (1-3): "
+set /p choice="Select an option (1-5): "
 
-if "%choice%"=="1" goto :main
-if "%choice%"=="2" goto :setup_menu
-if "%choice%"=="3" goto exit
+if "%choice%"=="1" goto :autopilot
+if "%choice%"=="2" goto :ATC
+if "%choice%"=="3" goto :interactions
+if "%choice%"=="4" goto :setup_menu
+if "%choice%"=="5" goto exit
 echo Invalid option, try again.
 goto :main_menu
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Run main app
+:: Run download EMA reports
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:main
+:autopilot
 cls
-start cmd /k "call conda activate "%env_path%" && python "%app_path%"\commons\main.py"
+start cmd /k "call conda activate "%env_path%" && python "%app_path%"\services\download_EMA_reports.py"
+pause
+goto :main_menu
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Run download EMA reports
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:ATC
+cls
+start cmd /k "call conda activate "%env_path%" && python "%app_path%"\services\ATC_mapper.py"
+pause
+goto :main_menu
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Run download EMA reports
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:interactions
+cls
+start cmd /k "call conda activate "%env_path%" && python "%app_path%"\services\find_drugs_interactions.py"
 pause
 goto :main_menu
 
@@ -99,9 +121,9 @@ goto :main_menu
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :setup_menu
 cls
-echo =======================================
-echo         Setup and Maintenance
-echo =======================================
+echo ==========================================================================
+echo                         Setup  and Maintenance                          
+echo ==========================================================================
 echo 1. Install project in editable mode
 echo 2. Update project
 echo 3. Remove logs
