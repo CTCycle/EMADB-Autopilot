@@ -1,5 +1,5 @@
 {       
     "IGNORE_SSL_ERROR" : false,
     "HEADLESS" : false,
-    "WAIT_TIME" : 20    
+    "WAIT_TIME" : 30    
 }
