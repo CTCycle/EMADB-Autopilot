@@ -25,8 +25,8 @@ if %ERRORLEVEL% neq 0 (
 :check_env
 call conda activate %env_path% 2>nul
 if %ERRORLEVEL% neq 0 (
-    echo Python v3.11 environment "%env_name%" is being created
-    call conda create --prefix "%env_path%" python=3.11 -y
+    echo Python v3.12 environment "%env_name%" is being created
+    call conda create --prefix "%env_path%" python=3.12 -y
     call conda activate "%env_path%"
 )
 goto :check_git
