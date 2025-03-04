@@ -9,13 +9,6 @@ EudraVigilance is a data processing network and management system for reporting 
 
 The script automates navigation to https://www.adrreports.eu/en/search.html, where it searches for target drugs specified in a .txt file located in the data folder. The file can have any name but must list drug names to be queried. Upon locating the target drugs, the script downloads associated data reports in the form of Excel files. The implementation uses ChromeDriver to simulate user interaction with the browser, ensuring smooth and accurate navigation of the EMA database.
 
-**ATC Code Retrieval**
-
-EMADB AutoPilot now integrates with the WHO ATC/DDD Index, accessed via https://atcddd.fhi.no/atc_ddd_index/. This resource enables the retrieval of Anatomical Therapeutic Chemical (ATC) classification codes for the drugs listed in the input .txt file. The ATC codes provide a standardized way to classify drugs based on their therapeutic, pharmacological, and chemical properties.
-
-**Drug Interaction APIs**
-
-Beyond database browsing, the project also explores the use of popular drug interaction APIs to provide insights into potential interactions between drugs (work in progress!)
 
 ## 2. Installation
 The installation process on Windows has been designed for simplicity and ease of use. To begin, simply run *start_on_windows.bat.* On its first execution, the installation procedure will automatically start with minimal user input required. The script will check if either Anaconda or Miniconda is installed on your system. If neither is found, it will automatically download and install the latest Miniconda release from https://docs.anaconda.com/miniconda/. After setting up Anaconda/Miniconda, the installation script will proceed with the installation of all necessary Python dependencies. If you'd prefer to handle the installation process separately, you can run the standalone installer by executing *setup/install_on_windows.bat*.  
