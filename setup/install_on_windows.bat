@@ -40,7 +40,7 @@ echo.
 echo Checking git installation
 git --version >nul 2>&1
 if errorlevel 1 (
-    echo Git not found. Installing git using conda...
+    echo Git not found. Installing git using conda..
     call conda install -y git
 ) else (
     echo Git is already installed.
