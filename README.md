@@ -3,8 +3,6 @@
 ## 1. Project Overview
 This project aims to develop a framework that autonomously navigates multiple drug-related online resources to retrieve data regarding drugs interactions and EMA drugs adverse reactions reports. Initially designed to browse the EMA database of EudraVigilance (European Database of suspected adverse drug reaction reports), the project has now been expanded to incorporate additional functionalities.
 
-**EudraVigilance Integration**
-
 EudraVigilance is a data processing network and management system for reporting and evaluating suspected adverse drug reactions (ADRs) during the development and following the marketing authorization of medicinal products in the European Economic Area (EEA). The system supports the electronic exchange of suspected adverse drug reaction reports known as Individual Case Safety Reports (ICSRs) between the European Medicines Agency (EMA), National Competent Authorities (NCAs), Marketing Authorization Holders (MAHs), and sponsors of clinical trials in the EEA.
 
 The script automates navigation to https://www.adrreports.eu/en/search.html, where it searches for target drugs specified in *resources/drugs_to_search.txt*. Upon locating the target drugs, the script downloads associated data reports in the form of Excel files. The implementation uses ChromeDriver to simulate user interaction with the browser, ensuring smooth and accurate navigation of the EMA database.
@@ -39,7 +37,6 @@ On Windows, run *start_on_windows.bat* to launch the main navigation menu and br
 
 **3) Exit:** close the program immediately  
 
-
 ### 3.2 Resources
 This folder is used to organize the main data for the project, including downloaded files saved in *resources/download* and the app logs located in *resources/logs*. The *resources/drugs_to_search.txt* file contains the names of the drugs you want to download the reports for.  
 
@@ -53,6 +50,14 @@ For customization, you can modify the main configuration parameters using *setti
 | IGNORE_SSL_ERROR       | Ignore SSL error during connection                             |
 | HEADLESS               | Use webdriver without GUI                                      |
 | WAIT_TIME              | Waiting time before considering action failed                  |
+
+
+**Environmental variables** are stored in *setup/variables/.env*. For security reasons, this file is typically not uploaded to GitHub. Instead, you must create this file manually by copying the template from *resources/templates/.env* and placing it in the *setup/variables* directory.
+
+| Variable              | Description                                              |
+|-----------------------|----------------------------------------------------------|
+| None                  | Placeholder for future environmental variables           |
+
 
 ## 5. License
 This project is licensed under the terms of the MIT license. See the LICENSE file for details.

@@ -4,6 +4,7 @@ __pycache__
 *.xlsx
 setup/environment/*
 setup/miniconda/*
+setup/variables/.env
 
 *.egg-info
 !.gitkeep
