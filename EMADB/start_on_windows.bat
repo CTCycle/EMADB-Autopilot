@@ -4,11 +4,10 @@ setlocal enabledelayedexpansion
 for /f "delims=" %%i in ("%~dp0..") do set "project_folder=%%~fi"
 set "env_name=EMADB"
 set "project_name=EMADB"
-set "env_path=%project_folder%\setup\environment\%env_name%"
-set "app_path=%project_folder%\%project_name%"
-set "conda_path=%project_folder%\setup\miniconda"
 set "setup_path=%project_folder%\setup"
-
+set "env_path=%setup_path%\environment\%env_name%"
+set "conda_path=%setup_path%\miniconda"
+set "app_path=%project_folder%\%project_name%"
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Check if conda is installed
@@ -70,27 +69,27 @@ if %ERRORLEVEL% neq 0 (
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main_menu
 echo.
-echo =======================================
+echo ==========================================================================
 echo               EMAutoPilot
-echo =======================================
-echo 1. Start EMAutoPilot 
+echo ==========================================================================
+echo 1. Download EMA drugs adverse reactions report 
 echo 2. Setup and Maintenance
 echo 3. Exit
 echo.
 set /p choice="Select an option (1-3): "
 
-if "%choice%"=="1" goto :main
+if "%choice%"=="1" goto :autopilot
 if "%choice%"=="2" goto :setup_menu
 if "%choice%"=="3" goto exit
 echo Invalid option, try again.
 goto :main_menu
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Run main app
+:: Run download EMA reports
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:main
+:autopilot
 cls
-start cmd /k "call conda activate "%env_path%" && python "%app_path%"\commons\main.py"
+start cmd /k "call conda activate "%env_path%" && python "%app_path%"\services\download_EMA_reports.py"
 pause
 goto :main_menu
 
@@ -99,9 +98,9 @@ goto :main_menu
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :setup_menu
 cls
-echo =======================================
-echo         Setup and Maintenance
-echo =======================================
+echo ==========================================================================
+echo                         Setup  and Maintenance                          
+echo ==========================================================================
 echo 1. Install project in editable mode
 echo 2. Update project
 echo 3. Remove logs

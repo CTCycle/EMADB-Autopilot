@@ -9,10 +9,8 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class WebDriverToolkit:    
     
-    def __init__(self, check_version=False):        
-           
-        self.options = webdriver.ChromeOptions()
-        
+    def __init__(self, check_version=False):          
+        self.options = webdriver.ChromeOptions()        
         if CONFIG["HEADLESS"]:
             self.options.add_argument('--headless')       
         if CONFIG["IGNORE_SSL_ERROR"]:
@@ -54,7 +52,7 @@ class WebDriverToolkit:
         Returns:
             bool: True if Chrome WebDriver is successfully initialized, otherwise False.
 
-    '''
+        '''
         try:
             driver = webdriver.Chrome(options=self.options)
             driver.quit()

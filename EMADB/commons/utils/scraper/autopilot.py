@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH
 from EMADB.commons.logger import logger
 
-
     
 # [SCRAPER]
 ###############################################################################
@@ -71,7 +70,6 @@ class EMAWebPilot:
 
     #--------------------------------------------------------------------------
     def click_and_download(self, current_page=True):
-
         flag = 1 if current_page else 2
         wait = WebDriverWait(self.driver, self.wait_time)
         XPATH = '//*[@id="uberBar_dashboardpageoptions_image"]'       
@@ -96,8 +94,7 @@ class EMAWebPilot:
                 continue 
 
     #--------------------------------------------------------------------------
-    def download_manager(self, grouped_drugs):  
-
+    def download_manager(self, grouped_drugs):
         for letter, drugs in grouped_drugs.items():    
             self.driver.get(self.data_URL)       
             letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"   
