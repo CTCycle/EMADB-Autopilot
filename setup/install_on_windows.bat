@@ -4,11 +4,10 @@ setlocal enabledelayedexpansion
 for /f "delims=" %%i in ("%~dp0..") do set "project_folder=%%~fi"
 set "env_name=EMADB"
 set "project_name=EMADB"
-set "env_path=%project_folder%\setup\environment\%env_name%"
-set "app_path=%project_folder%\%project_name%"
-set "conda_path=%project_folder%\setup\miniconda"
 set "setup_path=%project_folder%\setup"
-
+set "env_path=%setup_path%\environment\%env_name%"
+set "conda_path=%setup_path%\miniconda"
+set "app_path=%project_folder%\%project_name%"
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Precheck for conda source 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -26,8 +25,8 @@ if %ERRORLEVEL% neq 0 (
 :check_env
 call conda activate %env_path% 2>nul
 if %ERRORLEVEL% neq 0 (
-    echo Python v3.11 environment "%env_name%" is being created
-    call conda create --prefix "%env_path%" python=3.11 -y
+    echo Python v3.12 environment "%env_name%" is being created
+    call conda create --prefix "%env_path%" python=3.12 -y
     call conda activate "%env_path%"
 )
 goto :check_git
@@ -41,7 +40,7 @@ echo.
 echo Checking git installation
 git --version >nul 2>&1
 if errorlevel 1 (
-    echo Git not found. Installing git using conda...
+    echo Git not found. Installing git using conda..
     call conda install -y git
 ) else (
     echo Git is already installed.
