@@ -31,6 +31,9 @@ On Windows, run *start_on_windows.bat* to launch the application. Please note th
 
 **EMAutoPilot:** the main UI allows you to either run a search from file or to use the input text box to insert drug names. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
+![main_UI](EMADB/commons/assets/main_window.jpg)
+
+
 **Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance. Available options are:
 - Run installation: run the application installer for Windows
 - Regenerate relative paths: regenerate relative paths if the main folder has been moved or renamed
