@@ -1,7 +1,7 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH
+from EMADB.commons.constants import DOWNLOAD_PATH
 from EMADB.commons.logger import logger
 
 

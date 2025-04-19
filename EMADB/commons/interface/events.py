@@ -11,10 +11,10 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class SearchEvents:
 
-    def __init__(self, headless=False, ignore_SSL=True, wait_time=10):
-        self.headless = headless
-        self.ignore_SSL = ignore_SSL
-        self.wait_time = wait_time
+    def __init__(self, configurations):
+        self.headless = configurations.get('headless', False)
+        self.ignore_SSL = configurations.get('ignore_SSL', False)
+        self.wait_time = configurations.get('wait_time', 0)        
         self.toolkit = WebDriverToolkit(self.headless, self.ignore_SSL) 
 
     #--------------------------------------------------------------------------

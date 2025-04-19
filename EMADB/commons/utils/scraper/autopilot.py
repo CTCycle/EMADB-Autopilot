@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH
+from EMADB.commons.constants import DOWNLOAD_PATH
 from EMADB.commons.logger import logger
 
     
