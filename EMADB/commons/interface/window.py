@@ -3,6 +3,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
+from EMADB.commons.interface.configurations import Configurations
 from EMADB.commons.interface.events import SearchEvents
 from EMADB.commons.constants import UI_PATH
 from EMADB.commons.logger import logger
@@ -20,20 +21,18 @@ class MainWindow:
         ui_file.open(QIODevice.ReadOnly)
         self.main_win = loader.load(ui_file)
         ui_file.close()  
-
+       
         # initial settings
-        self.headless = False
-        self.ignore_ssl = False
-        self.wait_time = 10
+        self.config_manager = Configurations()
+        self.configurations = self.config_manager.get_configurations()
 
         self.threadpool = QThreadPool.globalInstance()
 
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
-        self.search_handler = SearchEvents(
-            headless=self.headless, ignore_SSL=self.ignore_ssl)
+        self.search_handler = SearchEvents(self.configurations)        
         self.webdriver_handler = WebDriverToolkit(
-            headless=False, ignore_SSL=False)
+            headless=True, ignore_SSL=False)
         
         # --- modular checkbox setup ---
         self._setup_configurations()
@@ -52,7 +51,7 @@ class MainWindow:
         self.check_ignore_ssl = self.main_win.findChild(QCheckBox, "IgnoreSSL")
         # set the default value of the wait time box to the current wait time
         self.set_wait_time = self.main_win.findChild(QSpinBox, "waitTime")
-        self.set_wait_time.setValue(self.wait_time)
+        self.set_wait_time.setValue(self.configurations.get('wait_time', 0))
         # connect their toggled signals to our updater
         self.check_headless.toggled.connect(self._update_search_settings)
         self.check_ignore_ssl.toggled.connect(self._update_search_settings) 
@@ -71,13 +70,13 @@ class MainWindow:
     # handler objects. Using @Slot decorator is optional but good practice
     #--------------------------------------------------------------------------
     @Slot()
-    def _update_search_settings(self):        
-        self.headless = self.check_headless.isChecked()
-        self.ignore_ssl = self.check_ignore_ssl.isChecked()
-        self.wait_time = self.set_wait_time.value()
-        self.search_handler = SearchEvents(
-            self.headless, self.ignore_ssl, self.wait_time)
-
+    def _update_search_settings(self):
+        self.config_manager.update_value('headless', self.check_headless.isChecked())         
+        self.config_manager.update_value('ignore_SSL', self.check_ignore_ssl.isChecked())
+        self.config_manager.update_value('wait_time', self.set_wait_time.value())
+        self.configurations = self.config_manager.get_configurations()
+        self.search_handler = SearchEvents(self.configurations)
+            
     #--------------------------------------------------------------------------
     @Slot()
     def search_from_file_slot(self):               

@@ -55,7 +55,7 @@ goto :dependencies
 :dependencies
 echo.
 echo Install python libraries and packages
-call pip install tqdm==4.67.1 selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
+call pip install PySide6==6.9.0 selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
 
 :: [INSTALL PROJECT IN EDITABLE MODE] 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

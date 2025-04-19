@@ -43,22 +43,12 @@ On Windows, run *start_on_windows.bat* to launch the application. Please note th
 ### 3.1 Resources
 This folder is used to organize the main data for the project, including downloaded files saved in *resources/download* and the app logs located in *resources/logs*. The *resources/drugs_to_search.txt* file contains the names of the drugs you want to download the reports for.  
 
-### 4. Settings and configurations
-
-| Setting                | Description                                                    |
-|------------------------|----------------------------------------------------------------|
-| IGNORE_SSL_ERROR       | Ignore SSL error during connection                             |
-| HEADLESS               | Use webdriver without GUI                                      |
-| WAIT_TIME              | Waiting time before considering action failed                  |
-
-
 **Environmental variables** are stored in *setup/variables/.env*. For security reasons, this file is typically not uploaded to GitHub. Instead, you must create this file manually by copying the template from *resources/templates/.env* and placing it in the *setup/variables* directory.
 
 | Variable              | Description                                              |
 |-----------------------|----------------------------------------------------------|
 | None                  | Placeholder for future environmental variables           |
 
-
-## 5. License
+## 4. License
 This project is licensed under the terms of the MIT license. See the LICENSE file for details.
 

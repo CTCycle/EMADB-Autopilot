@@ -1,7 +1,7 @@
 import os
 from collections import defaultdict
 
-from EMADB.commons.constants import CONFIG, DOWNLOAD_PATH, DATA_PATH
+from EMADB.commons.constants import DOWNLOAD_PATH
 from EMADB.commons.logger import logger
 
 
