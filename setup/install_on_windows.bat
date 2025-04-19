@@ -8,6 +8,7 @@ set "setup_path=%project_folder%\setup"
 set "env_path=%setup_path%\environment\%env_name%"
 set "conda_path=%setup_path%\miniconda"
 set "app_path=%project_folder%\%project_name%"
+
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Precheck for conda source 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
