@@ -61,7 +61,8 @@ if exist "%env_path%" (
 where conda >nul 2>&1
 if %ERRORLEVEL% neq 0 (   
     call "%conda_path%\Scripts\activate.bat" "%conda_path%"      
-    goto :main_menu) 
+    goto :main_menu
+) 
 
 start cmd /k "call conda activate "%env_path%" && python "%app_path%"\commons\app\main.py"
 

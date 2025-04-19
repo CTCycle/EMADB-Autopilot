@@ -1,3 +1,6 @@
+import sys
+from PySide6.QtWidgets import QApplication
+
 # [SETTING WARNINGS]
 import warnings
 warnings.simplefilter(action='ignore', category=Warning)
@@ -10,8 +13,10 @@ from EMADB.commons.logger import logger
 
 # [RUN MAIN]
 ###############################################################################
-if __name__ == "__main__":       
-    manager = MainWindow()   
-    manager.run()
+if __name__ == "__main__":  
+    app = QApplication(sys.argv) 
+    main_window = MainWindow(UI_PATH)   
+    main_window.show()
+    sys.exit(app.exec())
 
    
