@@ -12,26 +12,14 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class EMAWebPilot: 
 
-    def __init__(self, driver):         
+    def __init__(self, driver, wait_time=10):         
         self.driver = driver
-        self.wait_time = CONFIG["WAIT_TIME"]
+        self.wait_time = wait_time
         self.data_URL = 'https://www.adrreports.eu/en/search_subst.html'
         self.alphabet = []          
                
     #--------------------------------------------------------------------------
     def autoclick(self, string, mode='XPATH'):  
-
-        '''
-        Automatically click an element based on a provided XPath or CSS selector.
-
-        Keyword Arguments:
-            wait_time (int): The maximum time (in seconds) to wait for the element to appear.
-            string (str): The XPath or CSS selector string to locate the element.
-            mode (str, optional): The mode of selection, either 'XPATH' (default) or 'CSS'.
-
-        Returns:
-            None
-        '''
         wait = WebDriverWait(self.driver, self.wait_time)     
         if mode=='XPATH':
             item = wait.until(EC.visibility_of_element_located((By.XPATH, string)))
@@ -42,18 +30,6 @@ class EMAWebPilot:
     
     #--------------------------------------------------------------------------
     def drug_finder(self, name):
-
-        '''
-        Find and click on a drug link by searching for its name.
-
-        Keyword Arguments:
-            wait_time (int): The maximum time (in seconds) to wait for the drug link to appear.
-            name (str): The name of the drug to search for.
-
-        Returns:
-            item: The WebElement representing the drug link that was clicked.
-
-        '''  
         wait = WebDriverWait(self.driver, self.wait_time)
         cap_name = name.upper()               
         item = wait.until(EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, cap_name)))

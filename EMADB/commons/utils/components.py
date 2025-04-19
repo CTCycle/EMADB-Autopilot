@@ -16,13 +16,9 @@ def file_remover():
 
 # aggregate filenames with their corresponding initial letter
 ###############################################################################
-def drug_to_letter_aggregator():     
-    filepath = os.path.join(DATA_PATH, 'drugs_to_search.txt')  
-    with open(filepath, 'r') as file:
-        drug_list = [x.lower().strip() for x in file.readlines()]             
-
+def drug_to_letter_aggregator(drugs):    
     # get list of drugs and group them by initial letter    
-    unique_drug_names = sorted(list(set(drug_list)))
+    unique_drug_names = sorted(list(set(drugs)))
     grouped_drugs = defaultdict(list)
     for drug in unique_drug_names:    
         grouped_drugs[drug[0]].append(drug)
