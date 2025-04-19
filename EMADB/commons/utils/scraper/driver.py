@@ -10,7 +10,7 @@ from EMADB.commons.logger import logger
 class WebDriverToolkit:    
     
     def __init__(self, headless=False, ignore_SSL=True):          
-        self.options = webdriver.ChromeOptions()        
+        self.options = webdriver.ChromeOptions()                
         if headless:
             self.options.add_argument('--headless')       
         if ignore_SSL:
@@ -36,10 +36,10 @@ class WebDriverToolkit:
         try:
             driver = webdriver.Chrome(options=self.options)
             driver.quit()
-            return True
+            return 'ChomeDriver is installed'
         except Exception as e:
             logger.error(f'Error initializing ChromeDriver: {e}')
-            return False
+            return f'Error initializing ChromeDriver: {e}'
 
     #--------------------------------------------------------------------------
     def check_chrome_version(self):  
@@ -48,10 +48,10 @@ class WebDriverToolkit:
             version = driver.capabilities['browserVersion']
             driver.quit()
             logger.info(f'Detected Chrome version: {version}')            
-            return True
+            return version
         except Exception as e:
             logger.error(f'Error detecting Chrome version: {e}')
-            return False
+            return 'Version not detected'
 
     #--------------------------------------------------------------------------
     def initialize_webdriver(self):         
