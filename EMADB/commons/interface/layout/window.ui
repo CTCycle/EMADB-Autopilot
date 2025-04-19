@@ -6,62 +6,202 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
-    <height>729</height>
+    <width>1001</width>
+    <height>866</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>950</width>
-    <height>700</height>
+    <width>800</width>
+    <height>500</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>EMADB</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">/* soft-solid-blue-solid.qss – flat pale-blue background with blue buttons */
+
+/* 1. Base window/background */
+QWidget {
+    background-color: #e3f2fd;            /* solid pale sky blue */
+    color: #2e3a46;                       /* dark slate for text */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 10pt;
+}
+
+/* 2. Labels */
+QLabel {
+    background-color: transparent;
+    color: inherit;
+    padding: 2px;
+}
+
+/* 3. Buttons */
+QPushButton {
+    background-color: #90caf9;            /* light sky blue */
+    border: 1px solid #64b5f6;
+    border-radius: 4px;
+    padding: 6px 12px;
+}
+QPushButton:hover {
+    background-color: #64b5f6;
+}
+QPushButton:pressed {
+    background-color: #42a5f5;
+}
+
+/* 4. Line edits and text areas */
+QLineEdit, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #cfd8dc;
+    border-radius: 4px;
+    padding: 4px;
+}
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 1px solid #90a4ae;
+}
+
+/* 5. Combo boxes */
+QComboBox {
+    background-color: #ffffff;
+    border: 1px solid #cfd8dc;
+    border-radius: 4px;
+    padding: 4px 24px 4px 8px;
+}
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 16px;
+    border-left: 1px solid #cfd8dc;
+}
+
+/* 6. Tabs */
+QTabWidget::pane {
+    border: 1px solid #cfd8dc;
+    border-radius: 4px;
+}
+QTabBar::tab {
+    background: #90caf9;
+    border: 1px solid #64b5f6;
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 6px 12px;
+    margin-right: -1px;
+}
+QTabBar::tab:selected {
+    background: #ffffff;
+    border-color: #64b5f6;
+}
+
+/* 7. Scrollbars */
+QScrollBar:vertical {
+    background: #eceff1;
+    width: 8px;
+    margin: 16px 0 16px 0;
+    border-radius: 4px;
+}
+QScrollBar::handle:vertical {
+    background: #cfd8dc;
+    min-height: 20px;
+    border-radius: 4px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #b0bec5;
+}
+QScrollBar::add-line, QScrollBar::sub-line {
+    height: 0;
+}
+
+/* 8. Menu bar &amp; menus */
+QMenuBar {
+    background-color: #e3f2fd;
+    border: 1px solid #cfd8dc;
+}
+QMenuBar::item {
+    spacing: 3px;
+    padding: 4px 10px;
+}
+QMenuBar::item:selected {
+    background: #90caf9;
+}
+QMenu {
+    background-color: #ffffff;
+    border: 1px solid #cfd8dc;
+}
+QMenu::item {
+    padding: 4px 24px 4px 20px;
+}
+QMenu::item:selected {
+    background-color: #90caf9;
+}
+
+/* 9. Tooltips */
+QToolTip {
+    background-color: #fff9c4;
+    color: #2e3a46;
+    border: 1px solid #cfd8dc;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+/* 10. Headers (QTreeView/QTableView) */
+QHeaderView::section {
+    background-color: #90caf9;
+    padding: 4px;
+    border: 1px solid #64b5f6;
+}
+
+/* 11. Tables and lists */
+QTableView, QListView, QTreeView {
+    background-color: #ffffff;
+    gridline-color: #eceff1;
+    alternate-background-color: #e3f2fd;
+}
+QTableView::item:selected, QListView::item:selected, QTreeView::item:selected {
+    background-color: #64b5f6;
+    color: #ffffff;
+}
+</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBoxDrugSearch">
       <property name="title">
        <string>Drug search</string>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>60</y>
-         <width>831</width>
-         <height>241</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="inputLabel">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Insert drug names (separated by comma)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPlainTextEdit" name="drugInputs"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="searchFromBox">
-          <property name="text">
-           <string>Search from input</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="searchFromFile">
-          <property name="text">
-           <string>Search from file</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="inputLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Insert drug names (separated by comma)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="drugInputs"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="searchFromBox">
+           <property name="text">
+            <string>Search from input</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="searchFromFile">
+           <property name="text">
+            <string>Search from file</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </item>
     <item row="1" column="0">
@@ -69,85 +209,88 @@
       <property name="title">
        <string>Configurations</string>
       </property>
-      <widget class="QWidget" name="">
-       <property name="geometry">
-        <rect>
-         <x>40</x>
-         <y>80</y>
-         <width>811</width>
-         <height>127</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <property name="leftMargin">
-             <number>5</number>
-            </property>
-            <property name="topMargin">
-             <number>5</number>
-            </property>
-            <item>
-             <widget class="QCheckBox" name="IgnoreSSL">
-              <property name="text">
-               <string>Ignore SSL errors</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="Headless">
-              <property name="text">
-               <string>Headless mode</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <item>
-               <widget class="QSpinBox" name="waitTime">
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="waitTimeSliderLabel">
-                <property name="text">
-                 <string>Wait time (s)</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QPushButton" name="checkWDVersion">
-            <property name="text">
-             <string>Check webdriver version</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="verifyWD">
-            <property name="text">
-             <string>Verify webdriver state</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="leftMargin">
+              <number>5</number>
+             </property>
+             <property name="topMargin">
+              <number>5</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="IgnoreSSL">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ignore SSL error during webdriver execution&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Ignore SSL errors</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="Headless">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Run the webdriver in headless mode (no GUI)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Headless mode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QSpinBox" name="waitTime">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Max waiting time before considering action failed&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="waitTimeSliderLabel">
+                 <property name="text">
+                  <string>Wait time (s)</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QPushButton" name="checkWDVersion">
+             <property name="text">
+              <string>Check webdriver version</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="verifyWD">
+             <property name="text">
+              <string>Verify webdriver state</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -157,12 +300,11 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>950</width>
+     <width>1001</width>
      <height>27</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
