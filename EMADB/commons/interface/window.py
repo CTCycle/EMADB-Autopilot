@@ -30,9 +30,8 @@ class MainWindow:
 
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
-        self.search_handler = SearchEvents(self.configurations)        
-        self.webdriver_handler = WebDriverToolkit(
-            headless=True, ignore_SSL=False)
+        self.search_handler = SearchEvents(self.configurations)   
+        self.webdriver_handler = WebDriverToolkit(headless=True, ignore_SSL=False)         
         
         # --- modular checkbox setup ---
         self._setup_configurations()
@@ -92,7 +91,7 @@ class MainWindow:
 
     #--------------------------------------------------------------------------
     @Slot()
-    def verify_webdriver_slot(self):        
+    def verify_webdriver_slot(self):            
         is_installed = self.webdriver_handler.is_chromedriver_installed()
         QMessageBox.information(
         self.main_win,
@@ -102,7 +101,7 @@ class MainWindow:
 
     #--------------------------------------------------------------------------
     @Slot()
-    def check_webdriver_version_slot(self):        
+    def check_webdriver_version_slot(self):           
         version = self.webdriver_handler.check_chrome_version()
         QMessageBox.information(
         self.main_win,
