@@ -9,7 +9,7 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class WebDriverToolkit:    
     
-    def __init__(self, headless=False, ignore_SSL=True, disable_images=True, disable_GPU=True):          
+    def __init__(self, headless=False, ignore_SSL=True):          
         self.options = webdriver.ChromeOptions()        
         if headless:
             self.options.add_argument('--headless')       
@@ -20,21 +20,16 @@ class WebDriverToolkit:
         # Set download directory       
         self.chrome_prefs = {'download.default_directory': DOWNLOAD_PATH}        
         # Disable images for smoother performances
-        if disable_images:
-            self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
-            self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}
-        
+        self.chrome_prefs['profile.default_content_settings'] = {'images': 2}
+        self.chrome_prefs['profile.managed_default_content_settings'] = {'images': 2}        
         self.options.experimental_options['prefs'] = self.chrome_prefs      
 
         # Additional recommended options        
         self.options.add_argument('--disable-extensions')        
         self.options.add_argument('--no-sandbox')
         self.options.add_argument('--disable-dev-shm-usage')
-        self.options.add_argument("--disable-search-engine-choice-screen")
-
-        # Disable GPU hardware acceleration
-        if disable_GPU:            
-            self.options.add_argument('--disable-gpu')       
+        self.options.add_argument("--disable-search-engine-choice-screen")           
+        self.options.add_argument('--disable-gpu')       
 
     #--------------------------------------------------------------------------
     def is_chromedriver_installed(self):        

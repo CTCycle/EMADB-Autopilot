@@ -142,9 +142,6 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout"/>
-             </item>
-             <item>
               <widget class="QPushButton" name="checkWDVersion">
                <property name="text">
                 <string>Check webdriver version</string>
@@ -152,7 +149,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="VerifyWD">
+              <widget class="QPushButton" name="verifyWD">
                <property name="text">
                 <string>Verify webdriver state</string>
                </property>

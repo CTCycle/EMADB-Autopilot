@@ -11,8 +11,8 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class SearchEvents:
 
-    def __init__(self):
-        self.toolkit = WebDriverToolkit()
+    def __init__(self, headless=False, ignore_SSL=True):
+        self.toolkit = WebDriverToolkit(headless, ignore_SSL)
 
     #--------------------------------------------------------------------------
     def search_from_file(self):         
