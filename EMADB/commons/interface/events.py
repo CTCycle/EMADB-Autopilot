@@ -3,7 +3,7 @@ import os
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
 from EMADB.commons.utils.scraper.autopilot import EMAWebPilot
 from EMADB.commons.utils.components import file_remover, drug_to_letter_aggregator
-from EMADB.commons.constants import ROOT_DIR, DATA_PATH
+from EMADB.commons.constants import DATA_PATH
 from EMADB.commons.logger import logger
 
 
@@ -12,10 +12,10 @@ from EMADB.commons.logger import logger
 class SearchEvents:
 
     def __init__(self, configurations):
+        self.configurations = configurations       
         self.headless = configurations.get('headless', False)
         self.ignore_SSL = configurations.get('ignore_SSL', False)
         self.wait_time = configurations.get('wait_time', 0)        
-        self.toolkit = WebDriverToolkit(self.headless, self.ignore_SSL) 
 
     #--------------------------------------------------------------------------
     def get_drug_names(self):         
@@ -27,6 +27,8 @@ class SearchEvents:
 
     #--------------------------------------------------------------------------
     def search_using_webdriver(self, drug_list=None):
+        # initialize webdriver and webscraper
+        self.toolkit = WebDriverToolkit(self.headless, self.ignore_SSL) 
         webdriver = self.toolkit.initialize_webdriver()
         webscraper = EMAWebPilot(webdriver, self.wait_time)  
         # check if files downloaded in the past are still present, then remove them
