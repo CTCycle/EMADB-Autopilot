@@ -72,13 +72,13 @@ class MainWindow:
     def _update_search_settings(self):
         self.config_manager.update_value('headless', self.check_headless.isChecked())         
         self.config_manager.update_value('ignore_SSL', self.check_ignore_ssl.isChecked())
-        self.config_manager.update_value('wait_time', self.set_wait_time.value())
-        self.configurations = self.config_manager.get_configurations()
-        self.search_handler = SearchEvents(self.configurations)
+        self.config_manager.update_value('wait_time', self.set_wait_time.value())        
             
     #--------------------------------------------------------------------------
     @Slot()
-    def search_from_file_slot(self):               
+    def search_from_file_slot(self): 
+        self.configurations = self.config_manager.get_configurations()
+        self.search_handler = SearchEvents(self.configurations)              
         self.threadpool.start(lambda: self.search_handler.search_using_webdriver())       
 
     #--------------------------------------------------------------------------
@@ -86,7 +86,10 @@ class MainWindow:
     def search_from_text_box(self):  
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
         query = text_box.toPlainText()
-        drug_list = None if not query else query.strip(',')            
+        drug_list = None if not query else query.strip(',')
+
+        self.configurations = self.config_manager.get_configurations()
+        self.search_handler = SearchEvents(self.configurations)            
         self.threadpool.start(lambda: self.search_handler.search_using_webdriver(drug_list))
 
     #--------------------------------------------------------------------------
