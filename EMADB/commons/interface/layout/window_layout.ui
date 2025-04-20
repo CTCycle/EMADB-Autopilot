@@ -316,26 +316,6 @@ QTableView::item:selected, QListView::item:selected, QTreeView::item:selected {
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="action_run_installer">
-   <property name="text">
-    <string>Run installer</string>
-   </property>
-  </action>
-  <action name="action_look_for_updates">
-   <property name="text">
-    <string>Look for updates</string>
-   </property>
-  </action>
-  <action name="action_run_developer_mode_install">
-   <property name="text">
-    <string>Run developer mode install</string>
-   </property>
-  </action>
-  <action name="action_remove_all_logs">
-   <property name="text">
-    <string>Remove all logs</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>
