@@ -9,7 +9,8 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class WorkerSignals(QObject):
     finished = Signal(object)      
-    error = Signal(tuple)       
+    error = Signal(tuple)   
+    progress = Signal(int)    
 
 
 # [MAIN WINDOW]
