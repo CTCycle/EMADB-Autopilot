@@ -58,10 +58,9 @@ class MainWindow:
 
     #--------------------------------------------------------------------------
     def _connect_signals(self):        
-        self._connect_button("searchFromFile", self.search_from_file_slot)
-        self._connect_button("searchFromBox", self.search_from_text_box)
-        self._connect_button("checkWDVersion", self.check_webdriver_version_slot)     
-        self._connect_button("verifyWD", self.verify_webdriver_slot) 
+        self._connect_button("searchFromFile", self.search_from_file)
+        self._connect_button("searchFromBox", self.search_from_text)    
+        self._connect_button("checkDriver", self.check_webdriver) 
 
     # --- Slots ---
     # It's good practice to define methods that act as slots within the class
@@ -76,14 +75,14 @@ class MainWindow:
             
     #--------------------------------------------------------------------------
     @Slot()
-    def search_from_file_slot(self): 
+    def search_from_file(self): 
         self.configurations = self.config_manager.get_configurations()
         self.search_handler = SearchEvents(self.configurations)              
         self.threadpool.start(lambda: self.search_handler.search_using_webdriver())       
 
     #--------------------------------------------------------------------------
     @Slot()
-    def search_from_text_box(self):  
+    def search_from_text(self):  
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
         query = text_box.toPlainText()
         drug_list = None if not query else query.strip(',')
@@ -94,24 +93,21 @@ class MainWindow:
 
     #--------------------------------------------------------------------------
     @Slot()
-    def verify_webdriver_slot(self):            
+    def check_webdriver(self):   
         is_installed = self.webdriver_handler.is_chromedriver_installed()
-        QMessageBox.information(
-        self.main_win,
-        "Verify Chrome webdriver installation",
-        is_installed,
-        QMessageBox.Ok)
+        if is_installed:
+            version = self.webdriver_handler.check_chrome_version()
+            message = f'Chrome driver is installed, current version: {version}'
+            QMessageBox.information(
+            self.main_win,
+            "Chrome driver is installed",
+            message,
+            QMessageBox.Ok)
+        else:
+            message = 'Chrome driver is not installed, it will be installed automatically when running search'
+            QMessageBox.critical(self.main_win, 'Chrome driver not installed', message) 
 
-    #--------------------------------------------------------------------------
-    @Slot()
-    def check_webdriver_version_slot(self):           
-        version = self.webdriver_handler.check_chrome_version()
-        QMessageBox.information(
-        self.main_win,
-        "WebDriver Version",
-        f"Current ChromeDriver version: {version}",
-        QMessageBox.Ok)
-        
+     
     #--------------------------------------------------------------------------
     def show(self):        
         self.main_win.show()   
