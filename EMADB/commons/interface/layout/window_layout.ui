@@ -543,7 +543,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
          <item>
           <widget class="QPushButton" name="searchFromBox">
            <property name="text">
-            <string>Search from input</string>
+            <string>Search from text box</string>
            </property>
           </widget>
          </item>
@@ -628,16 +628,9 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QPushButton" name="checkWDVersion">
+            <widget class="QPushButton" name="checkDriver">
              <property name="text">
-              <string>Check webdriver version</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="verifyWD">
-             <property name="text">
-              <string>Verify webdriver state</string>
+              <string>Check webdriver installation</string>
              </property>
             </widget>
            </item>
