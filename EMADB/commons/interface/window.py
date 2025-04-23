@@ -3,7 +3,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
-from EMADB.commons.interface.configurations import Configurations
+from EMADB.commons.configurations import Configurations
 from EMADB.commons.interface.events import SearchEvents
 from EMADB.commons.constants import UI_PATH
 from EMADB.commons.logger import logger

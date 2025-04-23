@@ -34,12 +34,15 @@ if "%sub_choice%"=="5" goto :exit
 echo Invalid option, try again.
 goto :setup_menu
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :start_installation
 call "%setup_path%\install_on_windows.bat"
 goto :setup_menu
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:eggs
+call conda activate "%env_path%" && cd "%project_folder%" && pip install -e . --use-pep517
+pause
+goto :setup_menu
+
 :update
 cd "%project_folder%"
 call git pull
@@ -51,7 +54,6 @@ if errorlevel 1 (
 pause
 goto :setup_menu
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :logs
 cd "%app_path%\resources\logs" 
 if not exist *.log (
@@ -64,6 +66,5 @@ echo Log files deleted.
 pause
 goto :setup_menu
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :exit
 endlocal
