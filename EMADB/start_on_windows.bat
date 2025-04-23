@@ -64,5 +64,5 @@ if %ERRORLEVEL% neq 0 (
     goto :main_menu
 ) 
 
-start cmd /k "call conda activate "%env_path%" && python "%app_path%"\commons\app\main.py"
+call conda activate "%env_path%" && python "%app_path%\commons\app\main.py"
 
