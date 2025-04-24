@@ -45,6 +45,10 @@ class MainWindow:
         button.clicked.connect(slot) 
 
     #--------------------------------------------------------------------------
+    def _send_message(self, message): 
+        self.main_win.statusBar().showMessage(message)
+
+    #--------------------------------------------------------------------------
     def _setup_configurations(self):              
         self.check_headless = self.main_win.findChild(QCheckBox, "Headless")
         self.check_ignore_ssl = self.main_win.findChild(QCheckBox, "IgnoreSSL")
