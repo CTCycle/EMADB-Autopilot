@@ -34,7 +34,8 @@ On Windows, run *start_on_windows.bat* to launch the application. Please note th
 ![main_UI](EMADB/commons/assets/main_window.jpg)
 
 
-**Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance. Available options are:
+**Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
+
 - Run installation: run the application installer for Windows
 - Regenerate relative paths: regenerate relative paths if the main folder has been moved or renamed
 - Update project: check for updates from Github
