@@ -56,6 +56,7 @@ goto :dependencies
 echo.
 echo Install python libraries and packages
 call pip install PySide6==6.9.0 selenium==4.23.0 webdriver-manager==4.0.1 beautifulsoup4==4.12.3 
+call pip install python-dotenv==1.1.0
 
 :: [INSTALL PROJECT IN EDITABLE MODE] 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
