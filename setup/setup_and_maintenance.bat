@@ -19,7 +19,7 @@ echo ==========================================================================
 echo                         Setup  and Maintenance                          
 echo ==========================================================================
 echo 1. Run installation
-echo 2. Regenerate relative paths
+echo 2. Enable root path imports
 echo 3. Update project
 echo 4. Remove logs
 echo 5. Exit
