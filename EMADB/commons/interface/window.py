@@ -39,9 +39,23 @@ class MainWindow:
         self.webdriver_handler = WebDriverToolkit(headless=True, ignore_SSL=False)         
         
         # setup UI elements
-        self._setup_configurations()
-        self._connect_signals()
         self._set_states()
+        self.widgets = {}
+        self._setup_configurations([
+            (QCheckBox,  "Headless", 'check_headless'),
+            (QCheckBox,  "IgnoreSSL", 'check_ignore_ssl'),
+            (QSpinBox,   "waitTime", 'set_wait_time'),
+            (QPlainTextEdit, "drugInputs", 'text_drug_inputs'),
+            (QPushButton, "searchFromFile", 'btn_search_file'),
+            (QPushButton, "searchFromBox", 'btn_search_box'),
+            (QPushButton, "checkDriver", 'btn_check_driver')])
+        self._connect_signals([
+            ('check_headless',  'toggled', self._update_settings),
+            ('check_ignore_ssl','toggled', self._update_settings),
+            ('set_wait_time',   'valueChanged', self._update_settings),
+            ('btn_search_file', 'clicked', self.search_from_file),
+            ('btn_search_box',  'clicked', self.search_from_text),
+            ('btn_check_driver','clicked', self.check_webdriver)])
 
     # [SHOW WINDOW]
     ###########################################################################
@@ -49,7 +63,7 @@ class MainWindow:
         self.main_win.show()     
 
     # [HELPERS FOR SETTING CONNECTIONS]
-    ###########################################################################
+    ###########################################################################  
     def _set_states(self): 
         pass   
 
@@ -64,20 +78,17 @@ class MainWindow:
 
     # [SETUP]
     ###########################################################################
-    def _setup_configurations(self):              
-        self.check_headless = self.main_win.findChild(QCheckBox, "Headless")
-        self.check_ignore_ssl = self.main_win.findChild(QCheckBox, "IgnoreSSL")        
-        self.set_wait_time = self.main_win.findChild(QSpinBox, "waitTime")
-        
-        self.check_headless.toggled.connect(self._update_search_settings)
-        self.check_ignore_ssl.toggled.connect(self._update_search_settings) 
-        self.set_wait_time.valueChanged.connect(self._update_search_settings)  
+    def _setup_configurations(self, widget_defs):
+        for cls, name, attr in widget_defs:
+            w = self.main_win.findChild(cls, name)
+            setattr(self, attr, w)
+            self.widgets[attr] = w
 
     #--------------------------------------------------------------------------
-    def _connect_signals(self):        
-        self._connect_button("searchFromFile", self.search_from_file)
-        self._connect_button("searchFromBox", self.search_from_text)    
-        self._connect_button("checkDriver", self.check_webdriver) 
+    def _connect_signals(self, connections):
+        for attr, signal, slot in connections:
+            widget = self.widgets[attr]
+            getattr(widget, signal).connect(slot)
 
     # [SLOT]
     ###########################################################################
@@ -86,7 +97,7 @@ class MainWindow:
     # handler objects. Using @Slot decorator is optional but good practice
     #--------------------------------------------------------------------------
     @Slot()
-    def _update_search_settings(self):
+    def _update_settings(self):
         self.config_manager.update_value('headless', self.check_headless.isChecked())         
         self.config_manager.update_value('ignore_SSL', self.check_ignore_ssl.isChecked())
         self.config_manager.update_value('wait_time', self.set_wait_time.value())        
