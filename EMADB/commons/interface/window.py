@@ -1,3 +1,6 @@
+from EMADB.commons.variables import EnvironmentVariables
+EV = EnvironmentVariables()
+
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import QPushButton, QCheckBox, QPlainTextEdit, QSpinBox, QMessageBox
@@ -27,12 +30,8 @@ class MainWindow:
         self.configurations = self.config_manager.get_configurations()
     
         self.threadpool = QThreadPool.globalInstance()      
-        self._search_worker = None        
-
-        # get Hugging Face access token
-        EV = EnvironmentVariables()
-        self.env_variables = EV.get_environment_variables()
-
+        self._search_worker = None
+     
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
         self.search_handler = SearchEvents(self.configurations)   
@@ -46,16 +45,16 @@ class MainWindow:
             (QCheckBox,  "IgnoreSSL", 'check_ignore_ssl'),
             (QSpinBox,   "waitTime", 'set_wait_time'),
             (QPlainTextEdit, "drugInputs", 'text_drug_inputs'),
-            (QPushButton, "searchFromFile", 'btn_search_file'),
-            (QPushButton, "searchFromBox", 'btn_search_box'),
-            (QPushButton, "checkDriver", 'btn_check_driver')])
+            (QPushButton, "searchFromFile", 'search_file'),
+            (QPushButton, "searchFromBox", 'search_box'),
+            (QPushButton, "checkDriver", 'check_driver')])
         self._connect_signals([
             ('check_headless',  'toggled', self._update_settings),
             ('check_ignore_ssl','toggled', self._update_settings),
             ('set_wait_time',   'valueChanged', self._update_settings),
-            ('btn_search_file', 'clicked', self.search_from_file),
-            ('btn_search_box',  'clicked', self.search_from_text),
-            ('btn_check_driver','clicked', self.check_webdriver)])
+            ('search_file', 'clicked', self.search_from_file),
+            ('search_box',  'clicked', self.search_from_text),
+            ('check_driver','clicked', self.check_webdriver)])
 
     # [SHOW WINDOW]
     ###########################################################################
@@ -123,7 +122,6 @@ class MainWindow:
     @Slot()
     def search_from_text(self): 
         self.main_win.findChild(QPushButton, "searchFromBox").setEnabled(False) 
-
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
         query = text_box.toPlainText()
         drug_list = None if not query else query.strip(',')

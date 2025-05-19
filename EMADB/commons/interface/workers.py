@@ -6,8 +6,6 @@ from EMADB.commons.constants import ROOT_DIR, DATA_PATH
 from EMADB.commons.logger import logger
 
 
-
-
 ###############################################################################
 class WorkerSignals(QObject):
     finished = Signal(object)      
