@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QPushButton, QCheckBox, QPlainTextEdit, QSpinBox, 
 
 from EMADB.commons.variables import EnvironmentVariables
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
-from EMADB.commons.configurations import Configurations
+from EMADB.commons.configuration import Configuration
 from EMADB.commons.interface.events import SearchEvents
 from EMADB.commons.interface.workers import Worker
 from EMADB.commons.constants import UI_PATH
@@ -26,21 +26,21 @@ class MainWindow:
         ui_file.close()  
        
         # initial settings
-        self.config_manager = Configurations()
-        self.configurations = self.config_manager.get_configurations()
+        self.config_manager = Configuration()
+        self.configuration = self.config_manager.get_configuration()
     
         self.threadpool = QThreadPool.globalInstance()      
         self._search_worker = None
      
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
-        self.search_handler = SearchEvents(self.configurations)   
+        self.search_handler = SearchEvents(self.configuration)   
         self.webdriver_handler = WebDriverToolkit(headless=True, ignore_SSL=False)         
         
         # setup UI elements
         self._set_states()
         self.widgets = {}
-        self._setup_configurations([
+        self._setup_configuration([
             (QCheckBox,  "Headless", 'check_headless'),
             (QCheckBox,  "IgnoreSSL", 'check_ignore_ssl'),
             (QSpinBox,   "waitTime", 'set_wait_time'),
@@ -77,7 +77,7 @@ class MainWindow:
 
     # [SETUP]
     ###########################################################################
-    def _setup_configurations(self, widget_defs):
+    def _setup_configuration(self, widget_defs):
         for cls, name, attr in widget_defs:
             w = self.main_win.findChild(cls, name)
             setattr(self, attr, w)
@@ -105,8 +105,8 @@ class MainWindow:
     @Slot()
     def search_from_file(self): 
         self.main_win.findChild(QPushButton, "searchFromFile").setEnabled(False)
-        self.configurations = self.config_manager.get_configurations()
-        self.search_handler = SearchEvents(self.configurations)   
+        self.configuration = self.config_manager.get_configuration()
+        self.search_handler = SearchEvents(self.configuration)   
 
         # initialize worker for asynchronous loading of the dataset
         # functions that are passed to the worker will be executed in a separate thread
@@ -129,8 +129,8 @@ class MainWindow:
             logger.warning(
                 'No drug names in the text box. Proceeding with file screening...')
 
-        self.configurations = self.config_manager.get_configurations()
-        self.search_handler = SearchEvents(self.configurations)     
+        self.configuration = self.config_manager.get_configuration()
+        self.search_handler = SearchEvents(self.configuration)     
 
         # initialize worker for asynchronous loading of the dataset
         # functions that are passed to the worker will be executed in a separate thread

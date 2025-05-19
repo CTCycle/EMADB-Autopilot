@@ -13,11 +13,11 @@ from EMADB.commons.logger import logger
 ###############################################################################
 class SearchEvents:
 
-    def __init__(self, configurations):
-        self.configurations = configurations       
-        self.headless = configurations.get('headless', False)
-        self.ignore_SSL = configurations.get('ignore_SSL', False)
-        self.wait_time = configurations.get('wait_time', 0)        
+    def __init__(self, configuration):
+        self.configuration = configuration       
+        self.headless = configuration.get('headless', False)
+        self.ignore_SSL = configuration.get('ignore_SSL', False)
+        self.wait_time = configuration.get('wait_time', 0)        
 
     #--------------------------------------------------------------------------
     def get_drugs_from_file(self):         
