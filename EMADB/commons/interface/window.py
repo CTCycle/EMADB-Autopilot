@@ -1,6 +1,7 @@
 from EMADB.commons.variables import EnvironmentVariables
 EV = EnvironmentVariables()
 
+from functools import partial
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import QPushButton, QCheckBox, QPlainTextEdit, QSpinBox, QMessageBox
@@ -41,20 +42,49 @@ class MainWindow:
         self._set_states()
         self.widgets = {}
         self._setup_configuration([
-            (QCheckBox,  "Headless", 'check_headless'),
-            (QCheckBox,  "IgnoreSSL", 'check_ignore_ssl'),
-            (QSpinBox,   "waitTime", 'set_wait_time'),
+            (QCheckBox,  "Headless", 'headless'),
+            (QCheckBox,  "IgnoreSSL", 'ignore_ssl'),
+            (QSpinBox,   "waitTime", 'wait_time'),
             (QPlainTextEdit, "drugInputs", 'text_drug_inputs'),
             (QPushButton, "searchFromFile", 'search_file'),
             (QPushButton, "searchFromBox", 'search_box'),
             (QPushButton, "checkDriver", 'check_driver')])
         self._connect_signals([
-            ('check_headless',  'toggled', self._update_settings),
-            ('check_ignore_ssl','toggled', self._update_settings),
-            ('set_wait_time',   'valueChanged', self._update_settings),
+            ('headless',  'toggled', self._update_settings),
+            ('ignore_ssl','toggled', self._update_settings),
+            ('wait_time',   'valueChanged', self._update_settings),
             ('search_file', 'clicked', self.search_from_file),
             ('search_box',  'clicked', self.search_from_text),
             ('check_driver','clicked', self.check_webdriver)])
+        
+        self._auto_connect_settings() 
+
+    # ------------------- Helpers for configuration updates -------------------
+    def connect_update_setting(self, widget, signal_name, config_key, getter=None):
+        if getter is None:
+            if isinstance(widget, (QCheckBox)):
+                getter = widget.isChecked
+            elif isinstance(widget, (QSpinBox)):
+                getter = widget.value            
+           
+        signal = getattr(widget, signal_name)
+        signal.connect(partial(self._update_single_setting, config_key, getter))
+
+    #--------------------------------------------------------------------------
+    def _update_single_setting(self, config_key, getter, *args):
+        value = getter()
+        self.config_manager.update_value(config_key, value)
+
+    #--------------------------------------------------------------------------
+    def _auto_connect_settings(self):
+        connections = [            
+            ('headless', 'toggled', 'headless'),
+            ('ignore_SSL', 'toggled', 'ignore_SSL'),
+            ('wait_time', 'valueChanged', 'wait_time')]
+        
+        for attr, signal_name, config_key in connections:
+            widget = self.widgets[attr]
+            self.connect_update_setting(widget, signal_name, config_key)
 
     # [SHOW WINDOW]
     ###########################################################################
@@ -97,9 +127,9 @@ class MainWindow:
     #--------------------------------------------------------------------------
     @Slot()
     def _update_settings(self):
-        self.config_manager.update_value('headless', self.check_headless.isChecked())         
-        self.config_manager.update_value('ignore_SSL', self.check_ignore_ssl.isChecked())
-        self.config_manager.update_value('wait_time', self.set_wait_time.value())        
+        self.config_manager.update_value('headless', self.headless.isChecked())         
+        self.config_manager.update_value('ignore_SSL', self.ignore_ssl.isChecked())
+        self.config_manager.update_value('wait_time', self.wait_time.value())        
             
     #--------------------------------------------------------------------------
     @Slot()
