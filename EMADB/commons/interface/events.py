@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QMessageBox
 
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
 from EMADB.commons.utils.scraper.autopilot import EMAWebPilot
+from EMADB.commons.interface.workers import check_thread_status
 from EMADB.commons.utils.components import file_remover, drug_to_letter_aggregator
 from EMADB.commons.constants import DATA_PATH
 from EMADB.commons.logger import logger
@@ -28,7 +29,7 @@ class SearchEvents:
         return drug_list  
 
     #--------------------------------------------------------------------------
-    def search_using_webdriver(self, drug_list=None):        
+    def search_using_webdriver(self, drug_list=None, worker=None):
         # check if files downloaded in the past are still present, then remove them
         # create a dictionary of drug names with their initial letter as key    
         file_remover()
@@ -38,12 +39,14 @@ class SearchEvents:
         # initialize webdriver and webscraper
         self.toolkit = WebDriverToolkit(self.headless, self.ignore_SSL) 
         webdriver = self.toolkit.initialize_webdriver()
-        webscraper = EMAWebPilot(webdriver, self.wait_time)  
+        webscraper = EMAWebPilot(webdriver, self.wait_time)
 
-        grouped_drugs = drug_to_letter_aggregator(drug_list)
+        # check for thread status and eventually stop it  
+        check_thread_status(worker)        
         # click on letter page (based on first letter of names group) and then iterate over
-        # all drugs in that page (from the list). Download excel reports and rename them automatically         
-        webscraper.download_manager(grouped_drugs) 
+        # all drugs in that page (from the list). Download excel reports and rename them automatically 
+        grouped_drugs = drug_to_letter_aggregator(drug_list)        
+        webscraper.download_manager(grouped_drugs, worker=worker) 
 
     # define the logic to handle successfull data retrieval outside the main UI loop
     #--------------------------------------------------------------------------
