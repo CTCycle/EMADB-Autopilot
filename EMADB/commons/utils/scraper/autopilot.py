@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from EMADB.commons.interface.workers import check_thread_status
 from EMADB.commons.constants import DOWNLOAD_PATH
 from EMADB.commons.logger import logger
 
@@ -70,14 +71,16 @@ class EMAWebPilot:
                 continue 
 
     #--------------------------------------------------------------------------
-    def download_manager(self, grouped_drugs):
+    def download_manager(self, grouped_drugs, worker=None):
         for letter, drugs in grouped_drugs.items():    
             self.driver.get(self.data_URL)       
             letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"   
             self.autoclick(letter_css, mode='CSS')
-            for d in drugs:        
+            for d in drugs:
+                # check for thread status and eventually stop it 
+                check_thread_status(worker)         
                 logger.info(f'Collecting data for drug: {d}')
-                try:
+                try:                    
                     self.drug_finder(d)             
                     self.click_and_download(current_page=False)
                     self.check_DAP_filenames()
@@ -85,7 +88,7 @@ class EMAWebPilot:
                     DAP_path = os.path.join(DOWNLOAD_PATH, 'DAP.xlsx')
                     rename_path = os.path.join(DOWNLOAD_PATH, f'{d}.xlsx')
                     os.rename(DAP_path, rename_path) 
-                    logger.debug(f'Succesfully downloaded file {rename_path}')            
+                    logger.debug(f'Succesfully downloaded file {rename_path}')                              
                 except:
                     logger.error(f'An error has been encountered while fetching {d} data. Skipping this drug.')
 

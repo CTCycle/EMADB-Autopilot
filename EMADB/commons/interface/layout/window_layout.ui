@@ -554,6 +554,13 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="stopSearch">
+           <property name="text">
+            <string>Stop search</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
