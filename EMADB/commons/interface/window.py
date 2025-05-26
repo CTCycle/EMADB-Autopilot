@@ -88,13 +88,6 @@ class MainWindow:
             widget = self.widgets[attr]
             self.connect_update_setting(widget, signal_name, config_key)
 
-    #--------------------------------------------------------------------------
-    Slot()
-    def stop_running_worker(self):
-        if self.worker is not None:
-            self.worker.stop()       
-        self._send_message("Interrupt requested. Waiting for threads to stop...")
-
     # [SHOW WINDOW]
     ###########################################################################
     def show(self):        
@@ -133,6 +126,13 @@ class MainWindow:
     # It's good practice to define methods that act as slots within the class
     # that manages the UI elements. These slots can then call methods on the
     # handler objects. Using @Slot decorator is optional but good practice
+    #--------------------------------------------------------------------------
+    Slot()
+    def stop_running_worker(self):
+        if self.worker is not None:
+            self.worker.stop()       
+        self._send_message("Interrupt requested. Waiting for threads to stop...")
+
     #--------------------------------------------------------------------------
     @Slot()
     def _update_settings(self):
