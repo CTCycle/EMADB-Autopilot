@@ -61,7 +61,13 @@ class MainWindow:
         
         self._auto_connect_settings() 
 
-    # ------------------- Helpers for configuration updates -------------------
+    # [SHOW WINDOW]
+    ###########################################################################
+    def show(self):        
+        self.main_win.show() 
+
+    # [HELPERS]
+    ###########################################################################
     def connect_update_setting(self, widget, signal_name, config_key, getter=None):
         if getter is None:
             if isinstance(widget, (QCheckBox)):
@@ -86,15 +92,9 @@ class MainWindow:
         
         for attr, signal_name, config_key in connections:
             widget = self.widgets[attr]
-            self.connect_update_setting(widget, signal_name, config_key)
+            self.connect_update_setting(widget, signal_name, config_key)  
 
-    # [SHOW WINDOW]
-    ###########################################################################
-    def show(self):        
-        self.main_win.show()     
-
-    # [HELPERS FOR SETTING CONNECTIONS]
-    ###########################################################################  
+    #--------------------------------------------------------------------------  
     def _set_states(self): 
         pass   
 
@@ -102,6 +102,13 @@ class MainWindow:
     def _connect_button(self, button_name: str, slot):        
         button = self.main_win.findChild(QPushButton, button_name)
         button.clicked.connect(slot)     
+
+    #--------------------------------------------------------------------------
+    def _start_worker(self, worker : Worker, on_finished, on_error, on_interrupted):        
+        worker.signals.finished.connect(on_finished)
+        worker.signals.error.connect(on_error)        
+        worker.signals.interrupted.connect(on_interrupted)
+        self.threadpool.start(worker)
 
     #--------------------------------------------------------------------------
     def _send_message(self, message): 
@@ -147,15 +154,15 @@ class MainWindow:
         self.configuration = self.config_manager.get_configuration()
         self.search_handler = SearchEvents(self.configuration)   
 
-        # initialize worker for asynchronous loading of the dataset
+        
         # functions that are passed to the worker will be executed in a separate thread
         self.worker = Worker(self.search_handler.search_using_webdriver)
 
-        # inject the progress signal into the worker 
-        self.worker.signals.finished.connect(self.on_search_finished)         
-        self.worker.signals.error.connect(self.on_search_error)
-        self.worker.signals.interrupted.connect(self.on_task_interrupted)
-        self.threadpool.start(self.worker)          
+        # start worker and inject signals
+        self._start_worker(
+            self.worker, on_finished=self.on_search_finished,
+            on_error=self.on_search_error,
+            on_interrupted=self.on_task_interrupted)       
 
     #--------------------------------------------------------------------------
     @Slot()
@@ -171,17 +178,17 @@ class MainWindow:
         self.configuration = self.config_manager.get_configuration()
         self.search_handler = SearchEvents(self.configuration)     
 
-        # initialize worker for asynchronous loading of the dataset
+        
         # functions that are passed to the worker will be executed in a separate thread
         self.worker = Worker(
-            self.search_handler.search_using_webdriver, drug_list)       
+            self.search_handler.search_using_webdriver, drug_list)  
 
-        # inject the progress signal into the worker 
-        self.worker.signals.finished.connect(self.on_search_finished)         
-        self.worker.signals.error.connect(self.on_search_error)
-        self.worker.signals.interrupted.connect(self.on_task_interrupted)
-        self.threadpool.start(self.worker)         
-
+        # start worker and inject signals
+        self._start_worker(
+            self.worker, on_finished=self.on_search_finished,
+            on_error=self.on_search_error,
+            on_interrupted=self.on_task_interrupted)  
+       
     #--------------------------------------------------------------------------
     @Slot()
     def check_webdriver(self):         
