@@ -34,11 +34,10 @@ On Windows, run *start_on_windows.bat* to launch the application. Please note th
 The main UI allows you to either run a search from file or to use the input text box to insert drug names. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
 **Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
-
-- Run installation: run the application installer for Windows
-- Enable root path imports: Enable root path imports if the main folder has been moved or renamed
-- Update project: check for updates from Github
-- Remove logs: remove all logs file from *resources/logs*
+- **Run installation:** run the application installer for Windows
+- **Enable root path imports:** refresh root path imports if the main folder has been moved or renamed
+- **Update project:** check for updates from Github
+- **Remove logs:** remove all logs file from *resources/logs*
 
 ### 3.1 Resources
 This folder is used to organize the main data for the project, including downloaded files saved in *resources/download* and the app logs located in *resources/logs*. The *resources/drugs_to_search.txt* file contains the names of the drugs you want to download the reports for.  
