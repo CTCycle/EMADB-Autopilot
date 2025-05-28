@@ -1,10 +1,14 @@
+from EMADB.commons.variables import EnvironmentVariables
+EV = EnvironmentVariables()
+
+from functools import partial
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import QPushButton, QCheckBox, QPlainTextEdit, QSpinBox, QMessageBox
 
 from EMADB.commons.variables import EnvironmentVariables
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
-from EMADB.commons.configurations import Configurations
+from EMADB.commons.configuration import Configuration
 from EMADB.commons.interface.events import SearchEvents
 from EMADB.commons.interface.workers import Worker
 from EMADB.commons.constants import UI_PATH
@@ -23,33 +27,74 @@ class MainWindow:
         ui_file.close()  
        
         # initial settings
-        self.config_manager = Configurations()
-        self.configurations = self.config_manager.get_configurations()
+        self.config_manager = Configuration()
+        self.configuration = self.config_manager.get_configuration()
     
         self.threadpool = QThreadPool.globalInstance()      
-        self._search_worker = None        
-
-        # get Hugging Face access token
-        EV = EnvironmentVariables()
-        self.env_variables = EV.get_environment_variables()
-
+        self.worker = None
+     
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
-        self.search_handler = SearchEvents(self.configurations)   
+        self.search_handler = SearchEvents(self.configuration)   
         self.webdriver_handler = WebDriverToolkit(headless=True, ignore_SSL=False)         
         
         # setup UI elements
-        self._setup_configurations()
-        self._connect_signals()
         self._set_states()
+        self.widgets = {}
+        self._setup_configuration([
+            (QPushButton,'stopSearch','stop_search'),   
+            (QCheckBox,"Headless",'headless'),
+            (QCheckBox,"IgnoreSSL",'ignore_SSL'),
+            (QSpinBox,"waitTime",'wait_time'),
+            (QPlainTextEdit,"drugInputs",'text_drug_inputs'),
+            (QPushButton,"searchFromFile",'search_file'),
+            (QPushButton,"searchFromBox", 'search_box'),
+            (QPushButton,"checkDriver", 'check_driver')])
+        self._connect_signals([
+            ('headless','toggled', self._update_settings),
+            ('ignore_SSL','toggled', self._update_settings),
+            ('wait_time','valueChanged', self._update_settings),
+            ('stop_search','clicked',self.stop_running_worker),   
+            ('search_file','clicked', self.search_from_file),
+            ('search_box','clicked', self.search_from_text),
+            ('check_driver','clicked', self.check_webdriver)])
+        
+        self._auto_connect_settings() 
 
     # [SHOW WINDOW]
     ###########################################################################
     def show(self):        
-        self.main_win.show()     
+        self.main_win.show() 
 
-    # [HELPERS FOR SETTING CONNECTIONS]
+    # [HELPERS]
     ###########################################################################
+    def connect_update_setting(self, widget, signal_name, config_key, getter=None):
+        if getter is None:
+            if isinstance(widget, (QCheckBox)):
+                getter = widget.isChecked
+            elif isinstance(widget, (QSpinBox)):
+                getter = widget.value            
+           
+        signal = getattr(widget, signal_name)
+        signal.connect(partial(self._update_single_setting, config_key, getter))
+
+    #--------------------------------------------------------------------------
+    def _update_single_setting(self, config_key, getter, *args):
+        value = getter()
+        self.config_manager.update_value(config_key, value)
+
+    #--------------------------------------------------------------------------
+    def _auto_connect_settings(self):
+        connections = [            
+            ('headless', 'toggled', 'headless'),
+            ('ignore_SSL', 'toggled', 'ignore_SSL'),
+            ('wait_time', 'valueChanged', 'wait_time')]
+        
+        for attr, signal_name, config_key in connections:
+            widget = self.widgets[attr]
+            self.connect_update_setting(widget, signal_name, config_key)  
+
+    #--------------------------------------------------------------------------  
     def _set_states(self): 
         pass   
 
@@ -59,25 +104,29 @@ class MainWindow:
         button.clicked.connect(slot)     
 
     #--------------------------------------------------------------------------
+    def _start_worker(self, worker : Worker, on_finished, on_error, on_interrupted):        
+        worker.signals.finished.connect(on_finished)
+        worker.signals.error.connect(on_error)        
+        worker.signals.interrupted.connect(on_interrupted)
+        self.threadpool.start(worker)
+
+    #--------------------------------------------------------------------------
     def _send_message(self, message): 
         self.main_win.statusBar().showMessage(message)
 
     # [SETUP]
     ###########################################################################
-    def _setup_configurations(self):              
-        self.check_headless = self.main_win.findChild(QCheckBox, "Headless")
-        self.check_ignore_ssl = self.main_win.findChild(QCheckBox, "IgnoreSSL")        
-        self.set_wait_time = self.main_win.findChild(QSpinBox, "waitTime")
-        
-        self.check_headless.toggled.connect(self._update_search_settings)
-        self.check_ignore_ssl.toggled.connect(self._update_search_settings) 
-        self.set_wait_time.valueChanged.connect(self._update_search_settings)  
+    def _setup_configuration(self, widget_defs):
+        for cls, name, attr in widget_defs:
+            w = self.main_win.findChild(cls, name)
+            setattr(self, attr, w)
+            self.widgets[attr] = w
 
     #--------------------------------------------------------------------------
-    def _connect_signals(self):        
-        self._connect_button("searchFromFile", self.search_from_file)
-        self._connect_button("searchFromBox", self.search_from_text)    
-        self._connect_button("checkDriver", self.check_webdriver) 
+    def _connect_signals(self, connections):
+        for attr, signal, slot in connections:
+            widget = self.widgets[attr]
+            getattr(widget, signal).connect(slot)
 
     # [SLOT]
     ###########################################################################
@@ -85,34 +134,40 @@ class MainWindow:
     # that manages the UI elements. These slots can then call methods on the
     # handler objects. Using @Slot decorator is optional but good practice
     #--------------------------------------------------------------------------
+    Slot()
+    def stop_running_worker(self):
+        if self.worker is not None:
+            self.worker.stop()       
+        self._send_message("Interrupt requested. Waiting for threads to stop...")
+
+    #--------------------------------------------------------------------------
     @Slot()
-    def _update_search_settings(self):
-        self.config_manager.update_value('headless', self.check_headless.isChecked())         
-        self.config_manager.update_value('ignore_SSL', self.check_ignore_ssl.isChecked())
-        self.config_manager.update_value('wait_time', self.set_wait_time.value())        
+    def _update_settings(self):
+        self.config_manager.update_value('headless', self.headless.isChecked())         
+        self.config_manager.update_value('ignore_SSL', self.ignore_ssl.isChecked())
+        self.config_manager.update_value('wait_time', self.wait_time.value())        
             
     #--------------------------------------------------------------------------
     @Slot()
     def search_from_file(self): 
-        self.main_win.findChild(QPushButton, "searchFromFile").setEnabled(False)
-        self.configurations = self.config_manager.get_configurations()
-        self.search_handler = SearchEvents(self.configurations)   
+        self.search_file.setEnabled(False)    
+        self.configuration = self.config_manager.get_configuration()
+        self.search_handler = SearchEvents(self.configuration)   
 
-        # initialize worker for asynchronous loading of the dataset
+        
         # functions that are passed to the worker will be executed in a separate thread
-        self._search_worker = Worker(self.search_handler.search_using_webdriver)
-        worker = self._search_worker
+        self.worker = Worker(self.search_handler.search_using_webdriver)
 
-        # inject the progress signal into the worker 
-        worker.signals.finished.connect(self.on_search_finished)         
-        worker.signals.error.connect(self.on_search_error)
-        self.threadpool.start(worker)          
+        # start worker and inject signals
+        self._start_worker(
+            self.worker, on_finished=self.on_search_finished,
+            on_error=self.on_search_error,
+            on_interrupted=self.on_task_interrupted)       
 
     #--------------------------------------------------------------------------
     @Slot()
-    def search_from_text(self): 
-        self.main_win.findChild(QPushButton, "searchFromBox").setEnabled(False) 
-
+    def search_from_text(self):         
+        self.search_box.setEnabled(False)
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
         query = text_box.toPlainText()
         drug_list = None if not query else query.strip(',')
@@ -120,20 +175,20 @@ class MainWindow:
             logger.warning(
                 'No drug names in the text box. Proceeding with file screening...')
 
-        self.configurations = self.config_manager.get_configurations()
-        self.search_handler = SearchEvents(self.configurations)     
+        self.configuration = self.config_manager.get_configuration()
+        self.search_handler = SearchEvents(self.configuration)     
 
-        # initialize worker for asynchronous loading of the dataset
+        
         # functions that are passed to the worker will be executed in a separate thread
-        self._search_worker = Worker(
-            self.search_handler.search_using_webdriver, drug_list)
-        worker = self._search_worker
+        self.worker = Worker(
+            self.search_handler.search_using_webdriver, drug_list)  
 
-        # inject the progress signal into the worker 
-        worker.signals.finished.connect(self.on_search_finished)         
-        worker.signals.error.connect(self.on_search_error)
-        self.threadpool.start(worker)         
-
+        # start worker and inject signals
+        self._start_worker(
+            self.worker, on_finished=self.on_search_finished,
+            on_error=self.on_search_error,
+            on_interrupted=self.on_task_interrupted)  
+       
     #--------------------------------------------------------------------------
     @Slot()
     def check_webdriver(self):         
@@ -155,15 +210,25 @@ class MainWindow:
     def on_search_finished(self, search):                       
         message = 'Search for drugs is finished, please check your downloads'   
         self.search_handler.handle_success(self.main_win, message)
-        self.main_win.findChild(QPushButton, "searchFromFile").setEnabled(True)   
-        self.main_win.findChild(QPushButton, "searchFromBox").setEnabled(True) 
+        self.search_file.setEnabled(True) 
+        self.search_box.setEnabled(True)
     
     # [NEGATIVE OUTCOME HANDLERS]
     ###########################################################################    
     @Slot(tuple)
     def on_search_error(self, err_tb):
         self.search_handler.handle_error(self.main_win, err_tb)
-        self.main_win.findChild(QPushButton, "searchFromFile").setEnabled(True)   
-        self.main_win.findChild(QPushButton, "searchFromBox").setEnabled(True)   
+        self.search_file.setEnabled(True) 
+        self.search_box.setEnabled(True)
+
+    #--------------------------------------------------------------------------
+    def on_task_interrupted(self): 
+        self.search_file.setEnabled(True) 
+        self.search_box.setEnabled(True)       
+        self._send_message('Current task has been interrupted by user') 
+        logger.warning('Current task has been interrupted by user')        
+        
+          
+            
 
     
