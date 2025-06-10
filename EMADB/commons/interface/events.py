@@ -1,5 +1,4 @@
 import os
-import io
 from PySide6.QtWidgets import QMessageBox
 
 from EMADB.commons.utils.scraper.driver import WebDriverToolkit
@@ -30,6 +29,8 @@ class SearchEvents:
 
     #--------------------------------------------------------------------------
     def search_using_webdriver(self, drug_list=None, worker=None):
+        # check for thread status and eventually stop it  
+        check_thread_status(worker) 
         # check if files downloaded in the past are still present, then remove them
         # create a dictionary of drug names with their initial letter as key    
         file_remover()
