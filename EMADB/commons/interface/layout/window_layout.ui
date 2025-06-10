@@ -525,7 +525,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBoxDrugSearch">
       <property name="title">
-       <string>Drug search</string>
+       <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
@@ -573,7 +573,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,3">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
@@ -595,7 +595,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="Headless">
+              <widget class="QCheckBox" name="headless">
                <property name="toolTip">
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Run the webdriver in headless mode (no GUI)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
@@ -623,7 +623,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="waitTimeSliderLabel">
+                <widget class="QLabel" name="waitTimeLabel">
                  <property name="text">
                   <string>Wait time (s)</string>
                  </property>
