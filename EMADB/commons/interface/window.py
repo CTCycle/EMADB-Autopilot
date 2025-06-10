@@ -32,6 +32,7 @@ class MainWindow:
     
         self.threadpool = QThreadPool.globalInstance()      
         self.worker = None
+        self.worker_running = False
      
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
@@ -43,7 +44,7 @@ class MainWindow:
         self.widgets = {}
         self._setup_configuration([
             (QPushButton,'stopSearch','stop_search'),   
-            (QCheckBox,"Headless",'headless'),
+            (QCheckBox,"headless",'headless'),
             (QCheckBox,"IgnoreSSL",'ignore_SSL'),
             (QSpinBox,"waitTime",'wait_time'),
             (QPlainTextEdit,"drugInputs",'text_drug_inputs'),
@@ -109,6 +110,7 @@ class MainWindow:
         worker.signals.error.connect(on_error)        
         worker.signals.interrupted.connect(on_interrupted)
         self.threadpool.start(worker)
+        self.worker_running = True        
 
     #--------------------------------------------------------------------------
     def _send_message(self, message): 
@@ -149,12 +151,12 @@ class MainWindow:
             
     #--------------------------------------------------------------------------
     @Slot()
-    def search_from_file(self): 
-        self.search_file.setEnabled(False)    
+    def search_from_file(self):   
+        if self.worker_running:            
+            return   
+         
         self.configuration = self.config_manager.get_configuration()
-        self.search_handler = SearchEvents(self.configuration)   
-
-        
+        self.search_handler = SearchEvents(self.configuration)           
         # functions that are passed to the worker will be executed in a separate thread
         self.worker = Worker(self.search_handler.search_using_webdriver)
 
@@ -166,8 +168,10 @@ class MainWindow:
 
     #--------------------------------------------------------------------------
     @Slot()
-    def search_from_text(self):         
-        self.search_box.setEnabled(False)
+    def search_from_text(self):
+        if self.worker_running:            
+            return 
+                  
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
         query = text_box.toPlainText()
         drug_list = None if not query else query.strip(',')
@@ -176,12 +180,10 @@ class MainWindow:
                 'No drug names in the text box. Proceeding with file screening...')
 
         self.configuration = self.config_manager.get_configuration()
-        self.search_handler = SearchEvents(self.configuration)     
+        self.search_handler = SearchEvents(self.configuration) 
 
-        
         # functions that are passed to the worker will be executed in a separate thread
-        self.worker = Worker(
-            self.search_handler.search_using_webdriver, drug_list)  
+        self.worker = Worker(self.search_handler.search_using_webdriver, drug_list)  
 
         # start worker and inject signals
         self._start_worker(
@@ -210,23 +212,20 @@ class MainWindow:
     def on_search_finished(self, search):                       
         message = 'Search for drugs is finished, please check your downloads'   
         self.search_handler.handle_success(self.main_win, message)
-        self.search_file.setEnabled(True) 
-        self.search_box.setEnabled(True)
+        self.worker_running = False
     
     # [NEGATIVE OUTCOME HANDLERS]
     ###########################################################################    
     @Slot(tuple)
     def on_search_error(self, err_tb):
         self.search_handler.handle_error(self.main_win, err_tb)
-        self.search_file.setEnabled(True) 
-        self.search_box.setEnabled(True)
-
+        self.worker_running = False
+        
     #--------------------------------------------------------------------------
-    def on_task_interrupted(self): 
-        self.search_file.setEnabled(True) 
-        self.search_box.setEnabled(True)       
+    def on_task_interrupted(self):         
         self._send_message('Current task has been interrupted by user') 
-        logger.warning('Current task has been interrupted by user')        
+        logger.warning('Current task has been interrupted by user')
+        self.worker_running = False        
         
           
             
