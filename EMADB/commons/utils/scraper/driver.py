@@ -1,4 +1,4 @@
-from selenium import webdriver
+from selenium.webdriver import Chrome, ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 
 from EMADB.commons.constants import DOWNLOAD_PATH
@@ -10,7 +10,7 @@ from EMADB.commons.logger import logger
 class WebDriverToolkit:    
     
     def __init__(self, headless=False, ignore_SSL=True):          
-        self.options = webdriver.ChromeOptions()                
+        self.options = ChromeOptions()                
         if headless:
             self.options.add_argument('--headless')       
         if ignore_SSL:
@@ -34,7 +34,7 @@ class WebDriverToolkit:
     #--------------------------------------------------------------------------
     def is_chromedriver_installed(self):        
         try:
-            driver = webdriver.Chrome(options=self.options)
+            driver = Chrome(options=self.options)
             driver.quit()
             return 'ChomeDriver is installed'
         except Exception as e:
@@ -44,7 +44,7 @@ class WebDriverToolkit:
     #--------------------------------------------------------------------------
     def check_chrome_version(self):  
         try:
-            driver = webdriver.Chrome(options=self.options)
+            driver = Chrome(options=self.options)
             version = driver.capabilities['browserVersion']
             driver.quit()
             logger.info(f'Detected Chrome version: {version}')            
@@ -56,7 +56,7 @@ class WebDriverToolkit:
     #--------------------------------------------------------------------------
     def initialize_webdriver(self):         
         self.path = ChromeDriverManager().install()          
-        driver = webdriver.Chrome(options=self.options)                   
+        driver = Chrome(options=self.options)                   
         
         return driver
     

@@ -1,5 +1,6 @@
 import os
 import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -21,19 +22,16 @@ class EMAWebPilot:
                
     #--------------------------------------------------------------------------
     def autoclick(self, string, mode='XPATH'):  
-        wait = WebDriverWait(self.driver, self.wait_time)     
-        if mode=='XPATH':
-            item = wait.until(EC.visibility_of_element_located((By.XPATH, string)))
-            item.click()
-        elif mode=='CSS':
-            item = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, string)))
-            item.click()    
+        wait = WebDriverWait(self.driver, self.wait_time) 
+        modes = {'XPATH': wait.until(EC.visibility_of_element_located((By.XPATH, string))),
+                 'CSS': wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, string)))}    
+              
+        modes[mode].click() 
     
     #--------------------------------------------------------------------------
     def drug_finder(self, name):
-        wait = WebDriverWait(self.driver, self.wait_time)
-        cap_name = name.upper()               
-        item = wait.until(EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, cap_name)))
+        wait = WebDriverWait(self.driver, self.wait_time)                       
+        item = wait.until(EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, name.upper())))
         item.click()
         original_window = self.driver.current_window_handle
         WebDriverWait(self.driver, self.wait_time).until(EC.number_of_windows_to_be(2)) 
@@ -71,14 +69,14 @@ class EMAWebPilot:
                 continue 
 
     #--------------------------------------------------------------------------
-    def download_manager(self, grouped_drugs, worker=None):
+    def download_manager(self, grouped_drugs, **kwargs):
         for letter, drugs in grouped_drugs.items():    
             self.driver.get(self.data_URL)       
             letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"   
             self.autoclick(letter_css, mode='CSS')
             for d in drugs:
                 # check for thread status and eventually stop it 
-                check_thread_status(worker)         
+                check_thread_status(kwargs.get('worker', None))         
                 logger.info(f'Collecting data for drug: {d}')
                 try:                    
                     self.drug_finder(d)             
