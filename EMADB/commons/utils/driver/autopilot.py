@@ -22,11 +22,10 @@ class EMAWebPilot:
                
     #--------------------------------------------------------------------------
     def autoclick(self, string, mode='XPATH'):  
-        wait = WebDriverWait(self.driver, self.wait_time) 
-        modes = {'XPATH': wait.until(EC.visibility_of_element_located((By.XPATH, string))),
-                 'CSS': wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, string)))}    
-              
-        modes[mode].click() 
+        wait = WebDriverWait(self.driver, self.wait_time)
+        by_elem = By.CSS_SELECTOR if mode == 'CSS' else By.XPATH
+        page = wait.until(EC.visibility_of_element_located((by_elem, string)))    
+        page.click()
     
     #--------------------------------------------------------------------------
     def drug_finder(self, name):
