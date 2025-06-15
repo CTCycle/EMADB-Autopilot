@@ -4,14 +4,13 @@ EV = EnvironmentVariables()
 from functools import partial
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
-from PySide6.QtWidgets import QPushButton, QCheckBox, QPlainTextEdit, QSpinBox, QMessageBox
+from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit, 
+                               QSpinBox, QDoubleSpinBox, QMessageBox)
 
-from EMADB.commons.variables import EnvironmentVariables
-from EMADB.commons.utils.scraper.driver import WebDriverToolkit
+from EMADB.commons.utils.driver.toolkit import WebDriverToolkit
 from EMADB.commons.configuration import Configuration
 from EMADB.commons.interface.events import SearchEvents
 from EMADB.commons.interface.workers import Worker
-from EMADB.commons.constants import UI_PATH
 from EMADB.commons.logger import logger
 
 
@@ -31,13 +30,12 @@ class MainWindow:
         self.configuration = self.config_manager.get_configuration()
     
         self.threadpool = QThreadPool.globalInstance()      
-        self.worker = None
-        self.worker_running = False
+        self.worker = None        
      
         # --- Create persistent handlers ---
         # These objects will live as long as the MainWindow instance lives
         self.search_handler = SearchEvents(self.configuration)   
-        self.webdriver_handler = WebDriverToolkit(headless=True, ignore_SSL=False)         
+        self.webdriver = WebDriverToolkit(headless=True, ignore_SSL=False)         
         
         # setup UI elements
         self._set_states()
@@ -46,7 +44,7 @@ class MainWindow:
             (QPushButton,'stopSearch','stop_search'),   
             (QCheckBox,"headless",'headless'),
             (QCheckBox,"IgnoreSSL",'ignore_SSL'),
-            (QSpinBox,"waitTime",'wait_time'),
+            (QDoubleSpinBox,"waitTime",'wait_time'),
             (QPlainTextEdit,"drugInputs",'text_drug_inputs'),
             (QPushButton,"searchFromFile",'search_file'),
             (QPushButton,"searchFromBox", 'search_box'),
@@ -194,8 +192,8 @@ class MainWindow:
     #--------------------------------------------------------------------------
     @Slot()
     def check_webdriver(self):         
-        if self.webdriver_handler.is_chromedriver_installed():
-            version = self.webdriver_handler.check_chrome_version()
+        if self.webdriver.is_chromedriver_installed():
+            version = self.webdriver.check_chrome_version()
             message = f'Chrome driver is installed, current version: {version}'
             QMessageBox.information(
             self.main_win,

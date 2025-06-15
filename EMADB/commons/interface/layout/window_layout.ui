@@ -556,12 +556,28 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
          </item>
          <item>
           <widget class="QPushButton" name="stopSearch">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click to stop search as soon as possible&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>Stop search</string>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -607,7 +623,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QSpinBox" name="waitTime">
+                <widget class="QDoubleSpinBox" name="waitTime">
                  <property name="toolTip">
                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Max waiting time before considering action failed&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
@@ -615,10 +631,10 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                  </property>
                  <property name="maximum">
-                  <number>60</number>
+                  <double>100.000000000000000</double>
                  </property>
                  <property name="value">
-                  <number>5</number>
+                  <double>1.000000000000000</double>
                  </property>
                 </widget>
                </item>
