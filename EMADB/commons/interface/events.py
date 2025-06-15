@@ -28,13 +28,12 @@ class SearchEvents:
         return drug_list  
 
     #--------------------------------------------------------------------------
-    def search_using_webdriver(self, drug_list=None, worker=None):
-        # check for thread status and eventually stop it  
-        check_thread_status(worker) 
+    def search_using_webdriver(self, drug_list=None, worker=None):        
         # check if files downloaded in the past are still present, then remove them
         # create a dictionary of drug names with their initial letter as key    
         file_remover()
         if drug_list is None:
+            logger.info('No drug targets provided, reading from source file directly')
             drug_list = self.get_drugs_from_file()
 
         # initialize webdriver and webscraper
