@@ -29,11 +29,12 @@ class MainWindow:
         self.config_manager = Configuration()
         self.configuration = self.config_manager.get_configuration()
     
+        # set thread pool for the workers
         self.threadpool = QThreadPool.globalInstance()      
-        self.worker = None        
+        self.worker = None
+        self.worker_running = False          
      
         # --- Create persistent handlers ---
-        # These objects will live as long as the MainWindow instance lives
         self.search_handler = SearchEvents(self.configuration)   
         self.webdriver = WebDriverToolkit(headless=True, ignore_SSL=False)         
         
@@ -49,10 +50,7 @@ class MainWindow:
             (QPushButton,"searchFromFile",'search_file'),
             (QPushButton,"searchFromBox", 'search_box'),
             (QPushButton,"checkDriver", 'check_driver')])
-        self._connect_signals([
-            ('headless','toggled', self._update_settings),
-            ('ignore_SSL','toggled', self._update_settings),
-            ('wait_time','valueChanged', self._update_settings),
+        self._connect_signals([            
             ('stop_search','clicked',self.stop_running_worker),   
             ('search_file','clicked', self.search_from_file),
             ('search_box','clicked', self.search_from_text),
@@ -71,7 +69,7 @@ class MainWindow:
         if getter is None:
             if isinstance(widget, (QCheckBox)):
                 getter = widget.isChecked
-            elif isinstance(widget, (QSpinBox)):
+            elif isinstance(widget, (QDoubleSpinBox)):
                 getter = widget.value            
            
         signal = getattr(widget, signal_name)
@@ -140,13 +138,6 @@ class MainWindow:
             self.worker.stop()       
         self._send_message("Interrupt requested. Waiting for threads to stop...")
 
-    #--------------------------------------------------------------------------
-    @Slot()
-    def _update_settings(self):
-        self.config_manager.update_value('headless', self.headless.isChecked())         
-        self.config_manager.update_value('ignore_SSL', self.ignore_ssl.isChecked())
-        self.config_manager.update_value('wait_time', self.wait_time.value())        
-            
     #--------------------------------------------------------------------------
     @Slot()
     def search_from_file(self):   
