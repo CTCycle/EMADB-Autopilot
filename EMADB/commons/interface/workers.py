@@ -2,7 +2,6 @@ import traceback
 import inspect
 from PySide6.QtCore import QObject, Signal, QRunnable, Slot
 
-from EMADB.commons.constants import ROOT_DIR, DATA_PATH
 from EMADB.commons.logger import logger
 
 
