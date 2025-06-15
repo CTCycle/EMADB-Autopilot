@@ -1,8 +1,8 @@
 import os
 from PySide6.QtWidgets import QMessageBox
 
-from EMADB.commons.utils.scraper.driver import WebDriverToolkit
-from EMADB.commons.utils.scraper.autopilot import EMAWebPilot
+from EMADB.commons.utils.driver.toolkit import WebDriverToolkit
+from EMADB.commons.utils.driver.autopilot import EMAWebPilot
 from EMADB.commons.interface.workers import check_thread_status
 from EMADB.commons.utils.components import file_remover, drug_to_letter_aggregator
 from EMADB.commons.constants import DATA_PATH
@@ -39,13 +39,14 @@ class SearchEvents:
         # initialize webdriver and webscraper
         self.toolkit = WebDriverToolkit(self.headless, self.ignore_SSL) 
         webdriver = self.toolkit.initialize_webdriver()
-        webscraper = EMAWebPilot(webdriver, self.wait_time)
-
+        
         # check for thread status and eventually stop it  
         check_thread_status(worker)        
         # click on letter page (based on first letter of names group) and then iterate over
         # all drugs in that page (from the list). Download excel reports and rename them automatically 
-        grouped_drugs = drug_to_letter_aggregator(drug_list)        
+        grouped_drugs = drug_to_letter_aggregator(drug_list)  
+
+        webscraper = EMAWebPilot(webdriver, self.wait_time)      
         webscraper.download_manager(grouped_drugs, worker=worker) 
 
     # define the logic to handle successfull data retrieval outside the main UI loop
