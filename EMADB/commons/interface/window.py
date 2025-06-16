@@ -5,7 +5,7 @@ from functools import partial
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit, 
-                               QSpinBox, QDoubleSpinBox, QMessageBox)
+                               QDoubleSpinBox, QMessageBox)
 
 from EMADB.commons.utils.driver.toolkit import WebDriverToolkit
 from EMADB.commons.configuration import Configuration
