@@ -1,68 +1,96 @@
 @echo off
 setlocal enabledelayedexpansion
 
-for /f "delims=" %%i in ("%~dp0..") do set "project_folder=%%~fi"
-set "env_name=EMADB"
-set "project_name=EMADB"
-set "setup_path=%project_folder%\setup"
-set "env_path=%setup_path%\environment\%env_name%"
-set "conda_path=%setup_path%\miniconda"
-set "app_path=%project_folder%\%project_name%"
+REM ============================================================================
+REM == Configuration: define project and Python paths
+REM ============================================================================
+set "project_folder=%~dp0"
+set "python_dir=%project_folder%app\python"
+set "python_exe=%python_dir%\python.exe"
+set "pip_exe=%python_dir%\Scripts\pip.exe"
+set "app_script=%project_folder%app\src\main.py"
+set "requirements_path=%project_folder%app\requirements.txt"
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Check if conda is installed
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:check_conda
-where conda >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    echo Anaconda/Miniconda is not installed. Installing Miniconda...   
-    cd /d "%conda_path%"        
-    if not exist Miniconda3-latest-Windows-x86_64.exe (
-        echo Downloading Miniconda 64-bit installer...
-        powershell -Command "Invoke-WebRequest -Uri https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -OutFile Miniconda3-latest-Windows-x86_64.exe"
-    )    
-    echo Installing Miniconda to %conda_path%
-    start /wait "" Miniconda3-latest-Windows-x86_64.exe ^
-        /InstallationType=JustMe ^
-        /RegisterPython=0 ^
-        /AddToPath=0 ^
-        /S ^
-        /D=%conda_path%    
-    
-    call "%conda_path%\Scripts\activate.bat" "%conda_path%"
-    echo Miniconda installation is complete.    
-    goto :check_environment
-
-) else (
-    echo Anaconda/Miniconda already installed.   
-    goto :check_environment
+REM ============================================================================
+REM == 0. Skip full setup if environment already present
+REM ============================================================================
+if exist "%python_exe%" if exist "%pip_exe%" (
+    echo [INFO] Environment already installed. Skipping setup.
+    goto :run_app
 )
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Check if the environment exists when not using a custom environment
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:check_environment
-if exist "%env_path%" (    
-    echo Python environment '%env_name%' detected.
-    goto :conda_activation
+REM ============================================================================
+REM == 1. Full environment setup
+REM ============================================================================
+echo [STEP 1/3] Setting up Python environment...
 
-) else (
-    echo Running first-time installation for %env_name%. 
-    echo Please wait until completion and do not close this window!
-    echo Depending on your internet connection, this may take a while...
-    call "%setup_path%\install_on_windows.bat"
-    goto :conda_activation
+REM --- Dynamic variables for Python distribution
+set "python_version=3.12.10"
+set "python_major_version=3"
+set "python_minor_version=12"
+set "python_zip_filename=python-%python_version%-embed-amd64.zip"
+set "python_zip_url=https://www.python.org/ftp/python/%python_version%/%python_zip_filename%"
+set "python_zip_path=%python_dir%\%python_zip_filename%"
+set "python_pth_file=%python_dir%\python%python_major_version%%python_minor_version%._pth"
+set "get_pip_url=https://bootstrap.pypa.io/get-pip.py"
+set "get_pip_path=%python_dir%\get-pip.py"
+set "root_folder=%project_folder%..\"
+
+REM Create Python directory
+mkdir "%python_dir%" 2>nul
+
+REM Download and extract embeddable Python
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%python_zip_url%', '%python_zip_path%')" || goto :error
+powershell -Command "Expand-Archive -Path '%python_zip_path%' -DestinationPath '%python_dir%' -Force" || goto :error
+del "%python_zip_path%"
+
+REM Bootstrap pip
+powershell -Command "(Get-Content '%python_pth_file%') -replace '#import site','import site' | Set-Content '%python_pth_file%'" || goto :error
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%get_pip_url%', '%get_pip_path%')" || goto :error
+"%python_exe%" "%get_pip_path%" || goto :error
+del "%get_pip_path%"
+
+REM Install dependencies
+echo [STEP 2/3] Installing dependencies...
+if not exist "%requirements_path%" (
+    echo [FATAL] requirements.txt not found.
+    goto :error
 )
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Precheck for conda source 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:conda_activation
-where conda >nul 2>&1
-if %ERRORLEVEL% neq 0 (   
-    call "%conda_path%\Scripts\activate.bat" "%conda_path%"      
-    goto :main_menu
-) 
 
-call conda activate "%env_path%" && python "%app_path%\commons\app\main.py"
+"%pip_exe%" install --upgrade pip >nul 2>&1
 
+"%pip_exe%" install --no-warn-script-location -r "%requirements_path%" || goto :error
+
+"%pip_exe%" install --no-warn-script-location setuptools wheel || goto :error
+
+pushd "%root_folder%"
+"%pip_exe%" install -e . --use-pep517 || (popd & goto :error)
+popd
+
+echo [SUCCESS] Environment setup complete.
+
+REM ============================================================================
+REM == 2. Run the application
+REM ============================================================================
+:run_app
+echo [STEP 3/3] Running application...
+if not exist "%app_script%" (
+    echo [FATAL] Application script not found: "%app_script%"
+    goto :error
+)
+"%python_exe%" "%app_script%" || goto :error
+echo [SUCCESS] Application finished successfully.
+
+endlocal
+exit /b 0
+
+REM ============================================================================
+REM == Error handling
+REM ============================================================================
+:error
+echo.
+echo !!! An error occurred during execution. !!!
+pause
+endlocal
+exit /b 1
