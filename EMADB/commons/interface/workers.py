@@ -84,9 +84,3 @@ def check_thread_status(worker : Worker):
         logger.warning('Running thread interrupted by user')
         raise WorkerInterrupted()    
 
-#------------------------------------------------------------------------------
-def update_progress_callback(progress, items, progress_callback=None):   
-    if progress_callback is not None:
-        total = len(items)
-        percent = int((progress + 1) * 100 / total)
-        progress_callback(percent)   

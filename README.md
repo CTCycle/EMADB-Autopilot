@@ -35,7 +35,6 @@ The main UI allows you to either run a search from file or to use the input text
 
 **Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
 
-- **Run installation:** run the application installer for Windows
 - **Enable root path imports:** refresh root path imports if the main folder has been moved or renamed
 - **Update project:** check for updates from Github
 - **Remove logs:** remove all logs file from *resources/logs*

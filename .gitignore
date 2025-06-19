@@ -2,9 +2,7 @@ __pycache__
 
 *.log
 *.xlsx
-setup/environment/*
-setup/miniconda/*
-setup/variables/.env
+EMADB/app/python/*
 
 *.egg-info
 !.gitkeep
