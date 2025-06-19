@@ -1,12 +1,19 @@
 @echo off
 setlocal enabledelayedexpansion
 
-for /f "delims=" %%i in ("%~dp0..") do set "project_folder=%%~fi"
-set "env_name=EMADB"
-set "project_name=EMADB"
-set "setup_path=%project_folder%\setup"
-set "venv_path=%setup_path%\%env_name%"
-set "app_path=%project_folder%\%project_name%"
+REM ============================================================================
+REM == Configuration: define project and Python paths
+REM ============================================================================
+set "project_folder=%~dp0"
+set "python_dir=%project_folder%app\python"
+set "python_exe=%python_dir%\python.exe"
+set "pip_exe=%python_dir%\Scripts\pip.exe"
+set "app_script=%project_folder%app\src\main.py"
+set "requirements_path=%project_folder%app\requirements.txt"
+set "git_dir=%project_folder%app\git"
+set "git_exe=%git_dir%\cmd\git.exe"
+set "root_folder=%project_folder%..\"
+set "log_path=%project_folder%resources\logs"
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -32,26 +39,15 @@ echo Invalid option, try again.
 goto :setup_menu
 
 :eggs
-if exist "%venv_path%\Scripts\activate.bat" (
-    call "%venv_path%\Scripts\activate.bat"
-    cd "%project_folder%"
-    pip install -e . --use-pep517
-    pause
-) else (
-    echo Virtual environment not found. Please run installation first.
-    pause
-)
+pushd "%root_folder%"
+"%pip_exe%" install -e . --use-pep517 
+popd
 goto :setup_menu
 
 :update
-cd "%project_folder%"
-git pull
-if errorlevel 1 (
-    echo Error: Git pull failed.
-    pause
-    goto :setup_menu
-)
-pause
+pushd "%root_folder%"
+"%git_exe%" pull || popd 
+popd
 goto :setup_menu
 
 :logs
@@ -65,6 +61,8 @@ del *.log /q
 echo Log files deleted.
 pause
 goto :setup_menu
+
+
 
 :exit
 endlocal
