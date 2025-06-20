@@ -1,8 +1,13 @@
-__pycache__
-
-*.log
-*.xlsx
+!EMADB/commons/assets/*
 EMADB/app/python/*
+EMADB/app/git/*
 
+__pycache__
+*.jpeg
+*.jpg
+*.png
+*.db
+*.log
+*.npy
 *.egg-info
 !.gitkeep
