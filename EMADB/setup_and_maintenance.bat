@@ -40,7 +40,7 @@ goto :setup_menu
 
 :eggs
 pushd "%root_folder%"
-"%pip_exe%" install -e . --use-pep517 
+"%pip_exe%" install -e . --use-pep517 || popd
 popd
 goto :setup_menu
 
@@ -51,17 +51,19 @@ popd
 goto :setup_menu
 
 :logs
-cd "%app_path%\resources\logs"
+pushd "%app_path%\resources\logs"
 if not exist *.log (
     echo No log files found.
+    popd
     pause
     goto :setup_menu
 )
-del *.log /q
-echo Log files deleted.
+
+del *.log /q || popd
+echo Log files deleted 
+popd 
 pause
 goto :setup_menu
-
 
 
 :exit
