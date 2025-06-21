@@ -637,7 +637,7 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
                   <double>0.100000000000000</double>
                  </property>
                  <property name="value">
-                  <double>1.000000000000000</double>
+                  <double>5.000000000000000</double>
                  </property>
                 </widget>
                </item>

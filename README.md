@@ -19,7 +19,7 @@ The installation process for Windows is fully automated. Simply run the script *
 
 **Important:** After installation, if the project folder is moved or its path is changed, the application will no longer function correctly. To fix this, you can either:
 
-- Open *setup/setup_and_maintenance.bat* and select *Enable root path imports* 
+- Open *setup_and_maintenance.bat* and select *Enable root path imports* 
 - Manually run the following commands in the terminal, ensuring the project folder is set as the current working directory (CWD):
 
     `conda activate EMADB`
@@ -33,7 +33,7 @@ On Windows, run *start_on_windows.bat* to launch the application. Please note th
 
 The main UI allows you to either run a search from file or to use the input text box to insert drug names. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
-**Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
+**Setup and Maintenance:** you can run *setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
 
 - **Enable root path imports:** refresh root path imports if the main folder has been moved or renamed
 - **Update project:** check for updates from Github
