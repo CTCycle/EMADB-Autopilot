@@ -15,11 +15,11 @@ The suspected adverse drug reaction report for Abasaglar
 
 
 ## 2. Installation
-The installation process on Windows has been designed to be fully automated. To begin, simply run *start_on_windows.bat.* On its first execution, the installation procedure will execute with minimal user input required. The script will check if either Anaconda or Miniconda is installed and can be accessed from your system path. If neither is found, it will automatically download and install the latest Miniconda release from https://docs.anaconda.com/miniconda/. Following this step, the script will proceed with the installation of all necessary Python dependencies. Should you prefer to handle the installation process separately, you can run the standalone installer by running *setup/install_on_windows.bat* or *setup/setup_and_maintenance.bat* and select *Run installation*.  
+The installation process for Windows is fully automated. Simply run the script *start_on_windows.bat* to begin. During its initial execution, the script installs portable Python, necessary dependencies, and a portable version of Git, minimizing user interaction and ensuring all components are ready for local use.  
 
 **Important:** After installation, if the project folder is moved or its path is changed, the application will no longer function correctly. To fix this, you can either:
 
-- Open *setup/setup_and_maintenance.bat* and select *Enable root path imports* 
+- Open *setup_and_maintenance.bat* and select *Enable root path imports* 
 - Manually run the following commands in the terminal, ensuring the project folder is set as the current working directory (CWD):
 
     `conda activate EMADB`
@@ -33,9 +33,8 @@ On Windows, run *start_on_windows.bat* to launch the application. Please note th
 
 The main UI allows you to either run a search from file or to use the input text box to insert drug names. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
-**Setup and Maintenance:** you can run *setup/setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
+**Setup and Maintenance:** you can run *setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
 
-- **Run installation:** run the application installer for Windows
 - **Enable root path imports:** refresh root path imports if the main folder has been moved or renamed
 - **Update project:** check for updates from Github
 - **Remove logs:** remove all logs file from *resources/logs*
@@ -43,7 +42,7 @@ The main UI allows you to either run a search from file or to use the input text
 ### 3.1 Resources
 This folder is used to organize the main data for the project, including downloaded files saved in *resources/download* and the app logs located in *resources/logs*. The *resources/drugs_to_search.txt* file contains the names of the drugs you want to download the reports for.  
 
-**Environmental variables** are stored in *setup/variables/.env*. For security reasons, this file is typically not uploaded to GitHub. Instead, you must create this file manually by copying the template from *resources/templates/.env* and placing it in the *setup/variables* directory.
+**Environmental variables** are stored in the *app* folder (within the project folder). For security reasons, this file is typically not uploaded to GitHub. Instead, you must create this file manually by copying the template from *resources/templates/.env* and placing it in the *app* directory.
 
 | Variable              | Description                                              |
 |-----------------------|----------------------------------------------------------|
