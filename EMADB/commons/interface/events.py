@@ -66,5 +66,6 @@ class SearchEvents:
     #--------------------------------------------------------------------------
     def handle_error(self, window, err_tb):
         exc, tb = err_tb
+        logger.error(exc, '\n', tb)
         QMessageBox.critical(window, 'Something went wrong!', f"{exc}\n\n{tb}") 
 
