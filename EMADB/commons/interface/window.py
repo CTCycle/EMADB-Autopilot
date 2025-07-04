@@ -31,8 +31,7 @@ class MainWindow:
     
         # set thread pool for the workers
         self.threadpool = QThreadPool.globalInstance()      
-        self.worker = None
-        self.worker_running = False          
+        self.worker = None          
      
         # --- Create persistent handlers ---
         self.search_handler = SearchEvents(self.configuration)   
@@ -105,8 +104,7 @@ class MainWindow:
         worker.signals.finished.connect(on_finished)
         worker.signals.error.connect(on_error)        
         worker.signals.interrupted.connect(on_interrupted)
-        self.threadpool.start(worker)
-        self.worker_running = True        
+        self.threadpool.start(worker)        
 
     #--------------------------------------------------------------------------
     def _send_message(self, message): 
@@ -141,7 +139,7 @@ class MainWindow:
     #--------------------------------------------------------------------------
     @Slot()
     def search_from_file(self):   
-        if self.worker_running:            
+        if self.worker:            
             return   
          
         self.configuration = self.config_manager.get_configuration()
@@ -158,7 +156,7 @@ class MainWindow:
     #--------------------------------------------------------------------------
     @Slot()
     def search_from_text(self):
-        if self.worker_running:            
+        if self.worker:            
             return 
                   
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
@@ -201,20 +199,20 @@ class MainWindow:
     def on_search_finished(self, search):                       
         message = 'Search for drugs is finished, please check your downloads'   
         self.search_handler.handle_success(self.main_win, message)
-        self.worker_running = False
+        self.worker = None
     
     # [NEGATIVE OUTCOME HANDLERS]
     ###########################################################################    
     @Slot(tuple)
     def on_search_error(self, err_tb):
         self.search_handler.handle_error(self.main_win, err_tb)
-        self.worker_running = False
+        self.worker = None
         
     #--------------------------------------------------------------------------
     def on_task_interrupted(self):         
         self._send_message('Current task has been interrupted by user') 
         logger.warning('Current task has been interrupted by user')
-        self.worker_running = False        
+        self.worker = None        
         
           
             

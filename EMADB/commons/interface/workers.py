@@ -1,7 +1,10 @@
+import gc
 import traceback
 import inspect
+
 from PySide6.QtCore import QObject, Signal, QRunnable, Slot
 
+from EMADB.commons.constants import ROOT_DIR, DATA_PATH
 from EMADB.commons.logger import logger
 
 
@@ -62,7 +65,7 @@ class Worker(QRunnable):
     @Slot()    
     def run(self):
         try:
-            # Remove progress_callback if not accepted by the function
+            # Remove progress_callback and worker if not accepted by the function
             if "progress_callback" in self.kwargs and \
                "progress_callback" not in inspect.signature(self.fn).parameters:
                 self.kwargs.pop("progress_callback")
@@ -76,11 +79,17 @@ class Worker(QRunnable):
         except Exception as e:
             tb = traceback.format_exc()
             self.signals.error.emit((e, tb))
+        finally: 
+            gc.collect()
 
 
 #------------------------------------------------------------------------------
 def check_thread_status(worker : Worker):
-    if worker is not None and worker.is_interrupted():
-        logger.warning('Running thread interrupted by user')
+    if worker is not None and worker.is_interrupted():        
         raise WorkerInterrupted()    
 
+#------------------------------------------------------------------------------
+def update_progress_callback(progress, total, progress_callback=None):   
+    if progress_callback is not None:        
+        percent = int((progress + 1) * 100 / total)
+        progress_callback(percent)  
