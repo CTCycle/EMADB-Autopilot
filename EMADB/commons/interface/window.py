@@ -150,7 +150,7 @@ class MainWindow:
         # start worker and inject signals
         self._start_worker(
             self.worker, on_finished=self.on_search_finished,
-            on_error=self.on_search_error,
+            on_error=self.on_error,
             on_interrupted=self.on_task_interrupted)       
 
     #--------------------------------------------------------------------------
@@ -175,7 +175,7 @@ class MainWindow:
         # start worker and inject signals
         self._start_worker(
             self.worker, on_finished=self.on_search_finished,
-            on_error=self.on_search_error,
+            on_error=self.on_error,
             on_interrupted=self.on_task_interrupted)  
        
     #--------------------------------------------------------------------------
@@ -193,26 +193,34 @@ class MainWindow:
             message = 'Chrome driver is not installed, it will be installed automatically when running search'
             QMessageBox.critical(self.main_win, 'Chrome driver not installed', message)  
 
+    ###########################################################################
     # [POSITIVE OUTCOME HANDLERS]
     ###########################################################################     
     @Slot(object)
-    def on_search_finished(self, search):                       
-        message = 'Search for drugs is finished, please check your downloads'   
-        self.search_handler.handle_success(self.main_win, message)
+    def on_search_finished(self, search):  
+        self._send_message('Search for drugs is finished, please check your downloads')
         self.worker = None
+        self.search_handler = None   
     
+    ###########################################################################   
     # [NEGATIVE OUTCOME HANDLERS]
-    ###########################################################################    
+    ###########################################################################     
     @Slot(tuple)
-    def on_search_error(self, err_tb):
-        self.search_handler.handle_error(self.main_win, err_tb)
-        self.worker = None
+    def on_error(self, err_tb):  
+        exc, tb = err_tb
+        logger.error(exc, '\n', tb)
+        QMessageBox.critical(self.main_win, 'Something went wrong!', f"{exc}\n\n{tb}")        
+        self.worker = None    
+        self.search_handler = None       
         
-    #--------------------------------------------------------------------------
+    ###########################################################################   
+    # [INTERRUPTION HANDLERS]
+    ########################################################################### 
     def on_task_interrupted(self):         
         self._send_message('Current task has been interrupted by user') 
         logger.warning('Current task has been interrupted by user')
-        self.worker = None        
+        self.worker = None  
+        self.search_handler = None      
         
           
             

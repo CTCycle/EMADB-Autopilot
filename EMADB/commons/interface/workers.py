@@ -60,6 +60,18 @@ class Worker(QRunnable):
     #--------------------------------------------------------------------------
     def is_interrupted(self):
         return self._is_interrupted
+    
+    #--------------------------------------------------------------------------
+    def cleanup(self):       
+        try:            
+            self.fn = None
+            self.args = None
+            self.kwargs = None
+            # Force garbage collection
+            gc.collect()
+            
+        except Exception as e:
+            logger.error(f"Error during worker memory cleanup: {e}")
 
     #--------------------------------------------------------------------------
     @Slot()    
@@ -79,8 +91,8 @@ class Worker(QRunnable):
         except Exception as e:
             tb = traceback.format_exc()
             self.signals.error.emit((e, tb))
-        finally: 
-            gc.collect()
+        finally:   
+            self.cleanup()
 
 
 #------------------------------------------------------------------------------
