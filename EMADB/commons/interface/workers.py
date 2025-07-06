@@ -23,7 +23,7 @@ class WorkerSignals(QObject):
 
     
 ###############################################################################
-class Worker(QRunnable):
+class ThreadWorker(QRunnable):
     def __init__(self, fn, *args, **kwargs):
         super().__init__()
         self.fn = fn
@@ -60,18 +60,6 @@ class Worker(QRunnable):
     #--------------------------------------------------------------------------
     def is_interrupted(self):
         return self._is_interrupted
-    
-    #--------------------------------------------------------------------------
-    def cleanup(self):       
-        try:            
-            self.fn = None
-            self.args = None
-            self.kwargs = None
-            # Force garbage collection
-            gc.collect()
-            
-        except Exception as e:
-            logger.error(f"Error during worker memory cleanup: {e}")
 
     #--------------------------------------------------------------------------
     @Slot()    
@@ -90,13 +78,38 @@ class Worker(QRunnable):
             self.signals.interrupted.emit()
         except Exception as e:
             tb = traceback.format_exc()
-            self.signals.error.emit((e, tb))
-        finally:   
-            self.cleanup()
+            self.signals.error.emit((e, tb))        
+
+    #--------------------------------------------------------------------------
+    @Slot()
+    def cleanup(self):
+        """
+        Disconnects all signals and cleans up resources.
+        Call this from the main thread after the worker has completed.
+        """        
+        try:
+            # Disconnect all signals explicitly to prevent dangling connections
+            if self.signals:
+                self.signals.finished.disconnect()
+                self.signals.error.disconnect()
+                self.signals.interrupted.disconnect()
+                self.signals.progress.disconnect()
+            
+            # 3. Break potential reference cycles for faster garbage collection
+            self.fn = None
+            self.args = None
+            self.kwargs = None
+            self.signals = None
+            
+            # 4. Force garbage collection
+            gc.collect()           
+            
+        except Exception as e:
+            logger.error(f"Error during worker cleanup: {e}")
 
 
 #------------------------------------------------------------------------------
-def check_thread_status(worker : Worker):
+def check_thread_status(worker : ThreadWorker):
     if worker is not None and worker.is_interrupted():        
         raise WorkerInterrupted()    
 
