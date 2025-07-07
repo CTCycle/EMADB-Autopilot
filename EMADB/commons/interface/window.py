@@ -100,7 +100,7 @@ class MainWindow:
         button.clicked.connect(slot)     
 
     #--------------------------------------------------------------------------
-    def _start_worker(self, worker : ThreadWorker, on_finished, on_error, on_interrupted):        
+    def _start_thread_worker(self, worker : ThreadWorker, on_finished, on_error, on_interrupted):        
         worker.signals.finished.connect(on_finished)
         worker.signals.error.connect(on_error)        
         worker.signals.interrupted.connect(on_interrupted)
@@ -148,7 +148,7 @@ class MainWindow:
         self.worker = ThreadWorker(self.search_handler.search_using_webdriver)
 
         # start worker and inject signals
-        self._start_worker(
+        self._start_thread_worker(
             self.worker, on_finished=self.on_search_finished,
             on_error=self.on_error,
             on_interrupted=self.on_task_interrupted)       
@@ -173,7 +173,7 @@ class MainWindow:
         self.worker = ThreadWorker(self.search_handler.search_using_webdriver, drug_list)  
 
         # start worker and inject signals
-        self._start_worker(
+        self._start_thread_worker(
             self.worker, on_finished=self.on_search_finished,
             on_error=self.on_error,
             on_interrupted=self.on_task_interrupted)  
@@ -199,7 +199,7 @@ class MainWindow:
     @Slot(object)
     def on_search_finished(self, search):  
         self._send_message('Search for drugs is finished, please check your downloads')
-        self.worker = self.worker.cleanup()  
+        self.worker = self.worker.cleanup()        
     
     ###########################################################################   
     # [NEGATIVE OUTCOME HANDLERS]
@@ -208,8 +208,8 @@ class MainWindow:
     def on_error(self, err_tb):  
         exc, tb = err_tb
         logger.error(exc, '\n', tb)
-        QMessageBox.critical(self.main_win, 'Something went wrong!', f"{exc}\n\n{tb}")        
-        self.worker = self.worker.cleanup()      
+        QMessageBox.critical(self.main_win, 'Something went wrong!', f"{exc}\n\n{tb}") 
+        self.worker = self.worker.cleanup()             
         
     ###########################################################################   
     # [INTERRUPTION HANDLERS]
@@ -218,6 +218,7 @@ class MainWindow:
         self._send_message('Current task has been interrupted by user') 
         logger.warning('Current task has been interrupted by user')
         self.worker = self.worker.cleanup()
+        
           
             
 
