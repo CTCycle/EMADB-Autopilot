@@ -207,7 +207,7 @@ class MainWindow:
     @Slot(tuple)
     def on_error(self, err_tb):  
         exc, tb = err_tb
-        logger.error(exc, '\n', tb)
+        logger.error(f"{exc}\n{tb}")
         QMessageBox.critical(self.main_win, 'Something went wrong!', f"{exc}\n\n{tb}") 
         self.worker = self.worker.cleanup()             
         
