@@ -1,4 +1,4 @@
-from EMADB.app.src.commons.variables import EnvironmentVariables
+from EMADB.app.src.variables import EnvironmentVariables
 EV = EnvironmentVariables()
 
 from functools import partial
@@ -7,11 +7,11 @@ from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit, 
                                QDoubleSpinBox, QMessageBox)
 
-from EMADB.app.src.commons.utils.driver.toolkit import WebDriverToolkit
-from EMADB.app.src.commons.configuration import Configuration
-from EMADB.app.src.commons.interface.events import SearchEvents
-from EMADB.app.src.commons.interface.workers import Worker
-from EMADB.app.src.commons.logger import logger
+from EMADB.app.src.utils.driver.toolkit import WebDriverToolkit
+from EMADB.app.src.configuration import Configuration
+from EMADB.app.src.interface.events import SearchEvents
+from EMADB.app.src.interface.workers import Worker
+from EMADB.app.src.logger import logger
 
 
 ###############################################################################
