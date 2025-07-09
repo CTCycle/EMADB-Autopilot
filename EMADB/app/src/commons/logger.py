@@ -3,7 +3,7 @@ import logging
 import logging.config
 from datetime import datetime
 
-from EMADB.commons.constants import LOGS_PATH
+from EMADB.app.src.commons.constants import LOGS_PATH
 
 
 # Generate timestamp for the log filename
