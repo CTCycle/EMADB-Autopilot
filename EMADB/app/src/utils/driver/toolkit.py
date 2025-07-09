@@ -1,8 +1,8 @@
 from selenium.webdriver import Chrome, ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 
-from EMADB.app.src.commons.constants import DOWNLOAD_PATH
-from EMADB.app.src.commons.logger import logger
+from EMADB.app.src.constants import DOWNLOAD_PATH
+from EMADB.app.src.logger import logger
 
 
 # [WEBDRIVER]

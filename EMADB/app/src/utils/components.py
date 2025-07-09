@@ -1,7 +1,7 @@
 import os
 from collections import defaultdict
 
-from EMADB.app.src.commons.constants import DOWNLOAD_PATH
+from EMADB.app.src.constants import DOWNLOAD_PATH
 
 # check if files downloaded in the past are still present, then remove them
 #------------------------------------------------------------------------------
