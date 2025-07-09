@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
 
-from EMADB.commons.constants import PROJECT_DIR
-from EMADB.commons.logger import logger
+from EMADB.app.src.commons.constants import PROJECT_DIR
+from EMADB.app.src.commons.logger import logger
 
 # [IMPORT CUSTOM MODULES]
 ###############################################################################
