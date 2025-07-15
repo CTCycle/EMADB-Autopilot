@@ -684,6 +684,21 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuApplication">
+    <property name="title">
+     <string>Application</string>
+    </property>
+    <addaction name="actionReloadApp"/>
+   </widget>
+   <widget class="QMenu" name="menuConfiguration">
+    <property name="title">
+     <string>Configuration</string>
+    </property>
+    <addaction name="actionSaveConfig"/>
+    <addaction name="actionLoadConfig"/>
+   </widget>
+   <addaction name="menuApplication"/>
+   <addaction name="menuConfiguration"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -696,6 +711,21 @@ QTimeEdit, QToolBox, QToolBox::tab, QToolBox::tab:selected {
     <bool>false</bool>
    </attribute>
   </widget>
+  <action name="actionReloadApp">
+   <property name="text">
+    <string>Reload application</string>
+   </property>
+  </action>
+  <action name="actionSaveConfig">
+   <property name="text">
+    <string>Save current configuration</string>
+   </property>
+  </action>
+  <action name="actionLoadConfig">
+   <property name="text">
+    <string>Load configuration</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
