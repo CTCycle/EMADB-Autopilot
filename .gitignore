@@ -1,12 +1,8 @@
-!EMADB/app/assets/figures/*
 EMADB/setup/python/*
 EMADB/setup/git/*
 EMADB/setup/.env
 
 __pycache__
-*.jpeg
-*.jpg
-*.png
 *.db
 *.log
 *.npy
