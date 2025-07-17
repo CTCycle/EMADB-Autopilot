@@ -1,12 +1,12 @@
 import os
 from PySide6.QtWidgets import QMessageBox
 
-from EMADB.app.src.utils.driver.toolkit import WebDriverToolkit
-from EMADB.app.src.utils.driver.autopilot import EMAWebPilot
-from EMADB.app.src.interface.workers import check_thread_status
-from EMADB.app.src.utils.components import file_remover, drug_to_letter_aggregator
-from EMADB.app.src.constants import DATA_PATH
-from EMADB.app.src.logger import logger
+from EMADB.app.utils.driver.toolkit import WebDriverToolkit
+from EMADB.app.utils.driver.autopilot import EMAWebPilot
+from EMADB.app.interface.workers import check_thread_status
+from EMADB.app.utils.components import file_remover, drug_to_letter_aggregator
+from EMADB.app.constants import DATA_PATH
+from EMADB.app.logger import logger
 
 
 
