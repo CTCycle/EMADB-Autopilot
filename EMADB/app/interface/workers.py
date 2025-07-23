@@ -80,7 +80,8 @@ class ThreadWorker(QRunnable):
 
     #--------------------------------------------------------------------------
     def cleanup(self):
-        pass   
+        pass
+
 
 #------------------------------------------------------------------------------
 def check_thread_status(worker : ThreadWorker):
