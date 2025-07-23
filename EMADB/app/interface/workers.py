@@ -77,6 +77,10 @@ class Worker(QRunnable):
             tb = traceback.format_exc()
             self.signals.error.emit((e, tb))
 
+    #--------------------------------------------------------------------------
+    def cleanup(self):
+        pass
+
 
 #------------------------------------------------------------------------------
 def check_thread_status(worker : Worker):

@@ -152,7 +152,7 @@ class MainWindow:
         # start worker and inject signals
         self._start_worker(
             self.worker, on_finished=self.on_search_finished,
-            on_error=self.on_search_error,
+            on_error=self.on_error,
             on_interrupted=self.on_task_interrupted)       
 
     #--------------------------------------------------------------------------
@@ -177,7 +177,7 @@ class MainWindow:
         # start worker and inject signals
         self._start_worker(
             self.worker, on_finished=self.on_search_finished,
-            on_error=self.on_search_error,
+            on_error=self.on_error,
             on_interrupted=self.on_task_interrupted)  
        
     #--------------------------------------------------------------------------
@@ -195,26 +195,34 @@ class MainWindow:
             message = 'Chrome driver is not installed, it will be installed automatically when running search'
             QMessageBox.critical(self.main_win, 'Chrome driver not installed', message)  
 
+    ###########################################################################   
     # [POSITIVE OUTCOME HANDLERS]
     ###########################################################################     
     @Slot(object)
     def on_search_finished(self, search):                       
         message = 'Search for drugs is finished, please check your downloads'   
-        self.search_handler.handle_success(self.main_win, message)
-        self.worker_running = False
+        self._send_message(message)  
+        self.worker = self.worker.cleanup() 
     
+    ###########################################################################   
     # [NEGATIVE OUTCOME HANDLERS]
-    ###########################################################################    
-    @Slot(tuple)
-    def on_search_error(self, err_tb):
-        self.search_handler.handle_error(self.main_win, err_tb)
-        self.worker_running = False
-        
-    #--------------------------------------------------------------------------
+    ###########################################################################     
+    @Slot() 
+    def on_error(self, err_tb):
+        exc, tb = err_tb
+        logger.error(f"{exc}\n{tb}")
+        message = "An error occurred during the operation. Check the logs for details."
+        QMessageBox.critical(self.main_win, 'Something went wrong!', message)             
+        self.worker = self.worker.cleanup()  
+
+    ###########################################################################   
+    # [INTERRUPTION HANDLERS]
+    ###########################################################################
     def on_task_interrupted(self):         
+        self.progress_bar.setValue(0)
         self._send_message('Current task has been interrupted by user') 
-        logger.warning('Current task has been interrupted by user')
-        self.worker_running = False        
+        logger.warning('Current task has been interrupted by user') 
+        self.worker = self.worker.cleanup() 
         
           
             

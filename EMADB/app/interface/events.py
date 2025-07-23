@@ -1,5 +1,4 @@
 import os
-from PySide6.QtWidgets import QMessageBox
 
 from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 from EMADB.app.utils.driver.autopilot import EMAWebPilot
@@ -49,22 +48,5 @@ class SearchEvents:
         webscraper = EMAWebPilot(webdriver, self.wait_time)      
         webscraper.download_manager(grouped_drugs, worker=worker) 
 
-    # define the logic to handle successfull data retrieval outside the main UI loop
-    #--------------------------------------------------------------------------
-    def handle_success(self, window, message, popup=False): 
-        if popup:                
-            QMessageBox.information(
-            window, 
-            "Task successful",
-            message,
-            QMessageBox.Ok)
-
-        # send message to status bar
-        window.statusBar().showMessage(message)
     
-    # define the logic to handle error during data retrieval outside the main UI loop
-    #--------------------------------------------------------------------------
-    def handle_error(self, window, err_tb):
-        exc, tb = err_tb
-        QMessageBox.critical(window, 'Something went wrong!', f"{exc}\n\n{tb}") 
 
