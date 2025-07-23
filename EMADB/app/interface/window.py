@@ -193,31 +193,34 @@ class MainWindow:
             message = 'Chrome driver is not installed, it will be installed automatically when running search'
             QMessageBox.critical(self.main_win, 'Chrome driver not installed', message)  
 
-    ###########################################################################
+    ###########################################################################   
     # [POSITIVE OUTCOME HANDLERS]
     ###########################################################################     
     @Slot(object)
-    def on_search_finished(self, search):  
-        self._send_message('Search for drugs is finished, please check your downloads')
-        self.worker = self.worker.cleanup()        
+    def on_search_finished(self, search):                       
+        message = 'Search for drugs is finished, please check your downloads'   
+        self._send_message(message)  
+        self.worker = self.worker.cleanup() 
     
     ###########################################################################   
     # [NEGATIVE OUTCOME HANDLERS]
     ###########################################################################     
-    @Slot(tuple)
-    def on_error(self, err_tb):  
+    @Slot() 
+    def on_error(self, err_tb):
         exc, tb = err_tb
         logger.error(f"{exc}\n{tb}")
-        QMessageBox.critical(self.main_win, 'Something went wrong!', f"{exc}\n\n{tb}") 
-        self.worker = self.worker.cleanup()             
-        
+        message = "An error occurred during the operation. Check the logs for details."
+        QMessageBox.critical(self.main_win, 'Something went wrong!', message)             
+        self.worker = self.worker.cleanup()  
+
     ###########################################################################   
     # [INTERRUPTION HANDLERS]
-    ########################################################################### 
+    ###########################################################################
     def on_task_interrupted(self):         
+        self.progress_bar.setValue(0)
         self._send_message('Current task has been interrupted by user') 
-        logger.warning('Current task has been interrupted by user')
-        self.worker = self.worker.cleanup()
+        logger.warning('Current task has been interrupted by user') 
+        self.worker = self.worker.cleanup() 
         
           
             

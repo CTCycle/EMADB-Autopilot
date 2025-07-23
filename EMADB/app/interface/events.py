@@ -49,3 +49,4 @@ class SearchEvents:
         webscraper.download_manager(grouped_drugs, worker=worker) 
 
     
+
