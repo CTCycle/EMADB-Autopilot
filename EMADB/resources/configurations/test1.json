@@ -1,0 +1,5 @@
+{
+    "headless": true,
+    "ignore_SSL": true,
+    "wait_time": 2.0
+}
