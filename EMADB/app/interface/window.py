@@ -3,9 +3,11 @@ EV = EnvironmentVariables()
 
 from functools import partial
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtGui import QAction
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit, 
-                               QDoubleSpinBox, QMessageBox)
+                               QDoubleSpinBox, QMessageBox, QDialog, QVBoxLayout, 
+                               QLineEdit, QLabel, QDialogButtonBox)
 
 from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 from EMADB.app.configuration import Configuration
@@ -42,6 +44,9 @@ class MainWindow:
         self._set_states()
         self.widgets = {}
         self._setup_configuration([
+            # actions
+            (QAction, 'actionLoadConfig', 'load_configuration'),
+            (QAction, 'actionSaveConfig', 'save_configuration'),
             (QPushButton,'stopSearch','stop_search'),   
             (QCheckBox,"headless",'headless'),
             (QCheckBox,"IgnoreSSL",'ignore_SSL'),
@@ -50,7 +55,9 @@ class MainWindow:
             (QPushButton,"searchFromFile",'search_file'),
             (QPushButton,"searchFromBox", 'search_box'),
             (QPushButton,"checkDriver", 'check_driver')])
-        self._connect_signals([            
+        self._connect_signals([  
+            # actions
+            ('save_configuration', 'triggered', self.save_config_to_json),          
             ('stop_search','clicked',self.stop_running_worker),   
             ('search_file','clicked', self.search_from_file),
             ('search_box','clicked', self.search_from_text),
@@ -139,6 +146,18 @@ class MainWindow:
         self._send_message("Interrupt requested. Waiting for threads to stop...")
 
     #--------------------------------------------------------------------------
+    # [ACTIONS]
+    #--------------------------------------------------------------------------
+    @Slot()
+    def save_config_to_json(self):
+        dialog = NameInputDialog(self.main_win)
+        if dialog.exec() == QDialog.Accepted:
+            name = dialog.get_name()
+            name = 'default_config' if not name else name            
+            self.config_manager.save_configuration_to_json(name)
+            self._send_message(f"Configuration [{name}] has been saved")
+
+    #--------------------------------------------------------------------------
     @Slot()
     def search_from_file(self):   
         if self.worker_running:            
@@ -218,13 +237,33 @@ class MainWindow:
     ###########################################################################   
     # [INTERRUPTION HANDLERS]
     ###########################################################################
-    def on_task_interrupted(self):         
-        self.progress_bar.setValue(0)
+    def on_task_interrupted(self): 
         self._send_message('Current task has been interrupted by user') 
         logger.warning('Current task has been interrupted by user') 
         self.worker = self.worker.cleanup() 
         
           
-            
+
+###############################################################################
+class NameInputDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Save Configuration As")
+        self.layout = QVBoxLayout(self)
+
+        self.label = QLabel("Enter a name for your configuration:", self)
+        self.layout.addWidget(self.label)
+
+        self.name_edit = QLineEdit(self)
+        self.layout.addWidget(self.name_edit)
+
+        self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        self.layout.addWidget(self.buttons)
+
+        self.buttons.accepted.connect(self.accept)
+        self.buttons.rejected.connect(self.reject)
+
+    def get_name(self):
+        return self.name_edit.text().strip()       
 
     

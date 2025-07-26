@@ -3,6 +3,7 @@ EMADB/setup/git/*
 EMADB/setup/.env
 
 __pycache__
+*.vscode
 *.db
 *.log
 *.npy
