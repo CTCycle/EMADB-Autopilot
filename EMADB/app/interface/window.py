@@ -3,13 +3,15 @@ EV = EnvironmentVariables()
 
 from functools import partial
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtGui import QAction
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit, 
-                               QDoubleSpinBox, QMessageBox)
+                               QDoubleSpinBox, QMessageBox, QDialog)
 
 from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 from EMADB.app.configuration import Configuration
 from EMADB.app.interface.events import SearchEvents
+from EMADB.app.interface.dialogs import SaveConfigDialog, LoadConfigDialog
 from EMADB.app.interface.workers import Worker
 from EMADB.app.logger import logger
 
@@ -41,6 +43,9 @@ class MainWindow:
         self._set_states()
         self.widgets = {}
         self._setup_configuration([
+            # actions
+            (QAction, 'actionLoadConfig', 'load_configuration_action'),
+            (QAction, 'actionSaveConfig', 'save_configuration_action'),
             (QPushButton,'stopSearch','stop_search'),   
             (QCheckBox,"headless",'headless'),
             (QCheckBox,"IgnoreSSL",'ignore_SSL'),
@@ -49,7 +54,10 @@ class MainWindow:
             (QPushButton,"searchFromFile",'search_file'),
             (QPushButton,"searchFromBox", 'search_box'),
             (QPushButton,"checkDriver", 'check_driver')])
-        self._connect_signals([            
+        self._connect_signals([  
+            # actions
+            ('save_configuration_action', 'triggered', self.save_configuration),   
+            ('load_configuration_action', 'triggered', self.load_configuration),                 
             ('stop_search','clicked',self.stop_running_worker),   
             ('search_file','clicked', self.search_from_file),
             ('search_box','clicked', self.search_from_text),
@@ -124,6 +132,26 @@ class MainWindow:
             widget = self.widgets[attr]
             getattr(widget, signal).connect(slot)
 
+    #--------------------------------------------------------------------------
+    def _set_widgets_from_configuration(self):
+        cfg = self.config_manager.get_configuration()
+        for attr, widget in self.widgets.items():
+            if attr not in cfg:
+                continue
+            v = cfg[attr]
+            # CheckBox
+            if hasattr(widget, "setChecked") and isinstance(v, bool):
+                widget.setChecked(v)
+            # Numeric widgets (SpinBox/DoubleSpinBox)
+            elif hasattr(widget, "setValue") and isinstance(v, (int, float)):
+                widget.setValue(v)
+            # PlainTextEdit/TextEdit
+            elif hasattr(widget, "setPlainText") and isinstance(v, str):
+                widget.setPlainText(v)
+            # LineEdit (or any widget with setText)
+            elif hasattr(widget, "setText") and isinstance(v, str):
+                widget.setText(v)
+
     # [SLOT]
     ###########################################################################
     # It's good practice to define methods that act as slots within the class
@@ -135,6 +163,28 @@ class MainWindow:
         if self.worker is not None:
             self.worker.stop()       
         self._send_message("Interrupt requested. Waiting for threads to stop...")
+
+    #--------------------------------------------------------------------------
+    # [ACTIONS]
+    #--------------------------------------------------------------------------
+    @Slot()
+    def save_configuration(self):
+        dialog = SaveConfigDialog(self.main_win)
+        if dialog.exec() == QDialog.Accepted:
+            name = dialog.get_name()
+            name = 'default_config' if not name else name            
+            self.config_manager.save_configuration_to_json(name)
+            self._send_message(f"Configuration [{name}] has been saved")
+
+    #--------------------------------------------------------------------------
+    @Slot()
+    def load_configuration(self):
+        dialog = LoadConfigDialog(self.main_win)
+        if dialog.exec() == QDialog.Accepted:
+            name = dialog.get_selected_config()
+            self.config_manager.load_configuration_from_json(name)                
+            self._set_widgets_from_configuration()
+            self._send_message(f"Loaded configuration [{name}]")
 
     #--------------------------------------------------------------------------
     @Slot()
@@ -216,13 +266,13 @@ class MainWindow:
     ###########################################################################   
     # [INTERRUPTION HANDLERS]
     ###########################################################################
-    def on_task_interrupted(self):         
-        self.progress_bar.setValue(0)
+    def on_task_interrupted(self): 
         self._send_message('Current task has been interrupted by user') 
         logger.warning('Current task has been interrupted by user') 
         self.worker = self.worker.cleanup() 
         
           
-            
+
+
 
     

@@ -5,9 +5,10 @@ from os.path import join, abspath
 ROOT_DIR = abspath(join(__file__, "../../.."))
 PROJECT_DIR = join(ROOT_DIR, 'EMADB')
 SETUP_PATH = join(ROOT_DIR, 'setup')
-DATA_PATH = join(PROJECT_DIR, 'resources')
-DOWNLOAD_PATH = join(DATA_PATH, 'download')
-LOGS_PATH = join(DATA_PATH, 'logs')
+RSC_PATH = join(PROJECT_DIR, 'resources')
+DOWNLOAD_PATH = join(RSC_PATH, 'download')
+CONFIG_PATH = join(RSC_PATH, 'configurations')
+LOGS_PATH = join(RSC_PATH, 'logs')
 
 # [UI LAYOUT PATH]
 ###############################################################################
