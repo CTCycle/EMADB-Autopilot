@@ -205,17 +205,6 @@
    <addaction name="menuApplication"/>
    <addaction name="menuConfiguration"/>
   </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>RightToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <action name="actionReloadApp">
    <property name="text">
     <string>Reload application</string>

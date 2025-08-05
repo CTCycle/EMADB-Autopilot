@@ -1,5 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
+from qt_material import apply_stylesheet, list_themes
 
 # [SETTING WARNINGS]
 import warnings
@@ -14,10 +15,9 @@ from EMADB.app.constants import UI_PATH, QSS_PATH
 ###############################################################################
 if __name__ == "__main__":  
     app = QApplication(sys.argv) 
-
-    # ---- LOAD QSS STYLE ----
-    with open(QSS_PATH, "r") as f:
-        app.setStyleSheet(f.read())
+   
+    # setup stylesheet
+    apply_stylesheet(app, theme='dark_teal.xml')
 
     main_window = MainWindow(UI_PATH)   
     main_window.show()
