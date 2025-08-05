@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
-from qt_material import apply_stylesheet, list_themes
+from qt_material import apply_stylesheet
 
 # [SETTING WARNINGS]
 import warnings
