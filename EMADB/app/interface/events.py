@@ -12,7 +12,7 @@ from EMADB.app.logger import logger
 ###############################################################################
 class SearchEvents:
 
-    def __init__(self, configuration):
+    def __init__(self, configuration : dict):
         self.configuration = configuration       
         self.headless = configuration.get('headless', False)
         self.ignore_SSL = configuration.get('ignore_SSL', False)
