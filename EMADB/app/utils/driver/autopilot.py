@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from EMADB.app.interface.workers import check_thread_status
+from EMADB.app.client.workers import check_thread_status
 from EMADB.app.constants import DOWNLOAD_PATH
 from EMADB.app.logger import logger
 

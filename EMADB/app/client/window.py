@@ -10,9 +10,9 @@ from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit,
 
 from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 from EMADB.app.configuration import Configuration
-from EMADB.app.interface.events import SearchEvents
-from EMADB.app.interface.dialogs import SaveConfigDialog, LoadConfigDialog
-from EMADB.app.interface.workers import Worker
+from EMADB.app.client.events import SearchEvents
+from EMADB.app.client.dialogs import SaveConfigDialog, LoadConfigDialog
+from EMADB.app.client.workers import Worker
 from EMADB.app.logger import logger
 
 
