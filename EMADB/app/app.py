@@ -7,7 +7,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=Warning)
 
 # [IMPORT CUSTOM MODULES]
-from EMADB.app.interface.window import MainWindow
+from EMADB.app.client.window import MainWindow
 from EMADB.app.constants import UI_PATH
 
 
