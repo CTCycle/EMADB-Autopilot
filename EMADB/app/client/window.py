@@ -2,19 +2,36 @@ from EMADB.app.variables import EnvironmentVariables
 EV = EnvironmentVariables()
 
 from functools import partial
+from qt_material import apply_stylesheet
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtGui import QAction
 from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
 from PySide6.QtWidgets import (QPushButton, QCheckBox, QPlainTextEdit, 
-                               QDoubleSpinBox, QMessageBox, QDialog)
+                               QDoubleSpinBox, QMessageBox, QDialog, QApplication)
 
 from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 from EMADB.app.configuration import Configuration
-from EMADB.app.interface.events import SearchEvents
-from EMADB.app.interface.dialogs import SaveConfigDialog, LoadConfigDialog
-from EMADB.app.interface.workers import Worker
+from EMADB.app.client.events import SearchEvents
+from EMADB.app.client.dialogs import SaveConfigDialog, LoadConfigDialog
+from EMADB.app.client.workers import Worker
 from EMADB.app.logger import logger
 
+###############################################################################
+def apply_style(app : QApplication):
+    theme = 'dark_yellow'
+    extra = {'density_scale': '-1'}
+    apply_stylesheet(app, theme=f'{theme}.xml', extra=extra)
+
+    # Make % text visible/centered for ALL progress bars
+    app.setStyleSheet(app.styleSheet() + """
+    QProgressBar {
+        text-align: center;   /* align percentage to the center */
+        color: black;        /* black text for yellow bar */
+        font-weight: bold;   /* bold percentage */        
+    }
+    """)
+
+    return app
 
 ###############################################################################
 class MainWindow:
