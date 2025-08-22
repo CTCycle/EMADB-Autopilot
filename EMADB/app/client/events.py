@@ -2,7 +2,7 @@ import os
 
 from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 from EMADB.app.utils.driver.autopilot import EMAWebPilot
-from EMADB.app.interface.workers import check_thread_status
+from EMADB.app.client.workers import check_thread_status
 from EMADB.app.utils.components import file_remover, drug_to_letter_aggregator
 from EMADB.app.constants import RSC_PATH
 from EMADB.app.logger import logger
@@ -12,7 +12,7 @@ from EMADB.app.logger import logger
 ###############################################################################
 class SearchEvents:
 
-    def __init__(self, configuration):
+    def __init__(self, configuration : dict):
         self.configuration = configuration       
         self.headless = configuration.get('headless', False)
         self.ignore_SSL = configuration.get('ignore_SSL', False)
