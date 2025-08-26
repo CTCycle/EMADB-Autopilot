@@ -33,7 +33,7 @@ class EMAWebPilot:
             EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, name.upper()))
         )
         item.click()
-        original_window = self.driver.current_window_handle
+        _ = self.driver.current_window_handle
         WebDriverWait(self.driver, self.wait_time).until(EC.number_of_windows_to_be(2))
         self.driver.switch_to.window(self.driver.window_handles[1])
 
@@ -87,7 +87,7 @@ class EMAWebPilot:
                     rename_path = os.path.join(DOWNLOAD_PATH, f"{d}.xlsx")
                     os.rename(DAP_path, rename_path)
                     logger.debug(f"Succesfully downloaded file {rename_path}")
-                except:
+                except Exception:
                     logger.error(
                         f"An error has been encountered while fetching {d} data. Skipping this drug."
                     )
