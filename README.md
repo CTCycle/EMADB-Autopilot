@@ -1,6 +1,6 @@
 # EMADB AutoPilot
 
-## 1. Project Overview
+## 1. Introduction
 This project aims to develop a framework that autonomously navigates multiple drug-related online resources to retrieve data regarding drugs interactions and EMA drugs adverse reactions reports. Initially designed to browse the EMA database of EudraVigilance (European Database of suspected adverse drug reaction reports), the project has now been expanded to incorporate additional functionalities.
 
 EudraVigilance is a data processing network and management system for reporting and evaluating suspected adverse drug reactions (ADRs) during the development and following the marketing authorization of medicinal products in the European Economic Area (EEA). The system supports the electronic exchange of suspected adverse drug reaction reports known as Individual Case Safety Reports (ICSRs) between the European Medicines Agency (EMA), National Competent Authorities (NCAs), Marketing Authorization Holders (MAHs), and sponsors of clinical trials in the EEA.
@@ -13,18 +13,10 @@ Search page at https://www.adrreports.eu/en/search.html#
 ![Drug_report](EMADB/app/assets/figures/EUDRA_drug_page.jpg)
 The suspected adverse drug reaction report for Abasaglar
 
-
 ## 2. Installation
 The installation process for Windows is fully automated. Simply run the script *start_on_windows.bat* to begin. During its initial execution, the script installs portable Python, necessary dependencies, minimizing user interaction and ensuring all components are ready for local use.  
 
-**Important:** After installation, if the project folder is moved or its path is changed, the application will no longer function correctly. To fix this, you can either:
-
-- Open *setup_and_maintenance.bat* and select *Enable root path imports* 
-- Manually run the following commands in the terminal, ensuring the project folder is set as the current working directory (CWD):
-
-    `conda activate EMADB`
-
-    `pip install -e . --use-pep517` 
+**Important:** After installation, if the project folder is moved or its path is changed, the application will no longer function correctly. To fix this, you can open *setup_and_maintenance.bat* and select *Enable root path imports*.
 
 ## 3. How to use
 On Windows, run *start_on_windows.bat* to launch the application. Please note that some antivirus software, such as Avast, may flag or quarantine python.exe when called by the .bat file. If you encounter unusual behavior, consider adding an exception in your antivirus settings.
