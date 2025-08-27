@@ -16,8 +16,6 @@ The suspected adverse drug reaction report for Abasaglar
 ## 2. Installation
 The installation process for Windows is fully automated. Simply run the script *start_on_windows.bat* to begin. During its initial execution, the script installs portable Python, necessary dependencies, minimizing user interaction and ensuring all components are ready for local use.  
 
-**Important:** After installation, if the project folder is moved or its path is changed, the application will no longer function correctly. To fix this, you can open *setup_and_maintenance.bat* and select *Enable root path imports*.
-
 ## 3. How to use
 On Windows, run *start_on_windows.bat* to launch the application. Please note that some antivirus software, such as Avast, may flag or quarantine python.exe when called by the .bat file. If you encounter unusual behavior, consider adding an exception in your antivirus settings.
 
@@ -27,7 +25,6 @@ The main UI allows you to either run a search from file or to use the input text
 
 **Setup and Maintenance:** you can run *setup_and_maintenance.bat* to start the external tools for maintenance with the following options:
 
-- **Enable root path imports:** refresh root path imports if the main folder has been moved or renamed
 - **Update project:** check for updates from Github
 - **Remove logs:** remove all logs file from *resources/logs*
 

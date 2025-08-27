@@ -1,5 +1,5 @@
 EMADB/setup/python/*
-EMADB/setup/git/*
+EMADB/setup/uv/*
 EMADB/setup/.env
 
 __pycache__
@@ -8,5 +8,7 @@ __pycache__
 *.log
 *.npy
 *.json
+*.lock
+*.venv
 *.egg-info
 !.gitkeep
