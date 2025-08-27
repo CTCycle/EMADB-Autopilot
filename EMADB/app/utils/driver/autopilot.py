@@ -2,8 +2,8 @@ import os
 import time
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from EMADB.app.client.workers import check_thread_status
 from EMADB.app.constants import DOWNLOAD_PATH

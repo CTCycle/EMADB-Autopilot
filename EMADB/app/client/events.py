@@ -1,11 +1,11 @@
 import os
 
-from EMADB.app.utils.driver.toolkit import WebDriverToolkit
-from EMADB.app.utils.driver.autopilot import EMAWebPilot
 from EMADB.app.client.workers import check_thread_status
-from EMADB.app.utils.components import file_remover, drug_to_letter_aggregator
 from EMADB.app.constants import RSC_PATH
 from EMADB.app.logger import logger
+from EMADB.app.utils.components import drug_to_letter_aggregator, file_remover
+from EMADB.app.utils.driver.autopilot import EMAWebPilot
+from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 
 
 ###############################################################################
@@ -19,7 +19,7 @@ class SearchEvents:
     #-------------------------------------------------------------------------
     def get_drugs_from_file(self):
         filepath = os.path.join(RSC_PATH, "drugs_to_search.txt")
-        with open(filepath, "r") as file:
+        with open(filepath) as file:
             drug_list = [x.lower().strip() for x in file.readlines()]
 
         return drug_list

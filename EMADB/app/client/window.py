@@ -3,27 +3,28 @@ from EMADB.app.variables import EnvironmentVariables
 EV = EnvironmentVariables()
 
 from functools import partial
-from qt_material import apply_stylesheet
-from PySide6.QtUiTools import QUiLoader
+
+from PySide6.QtCore import QFile, QIODevice, QThreadPool, Slot
 from PySide6.QtGui import QAction
-from PySide6.QtCore import QFile, QIODevice, Slot, QThreadPool
+from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import (
-    QPushButton,
+    QApplication,
     QCheckBox,
     QComboBox,
-    QPlainTextEdit,
+    QDialog,
     QDoubleSpinBox,
     QMessageBox,
-    QDialog,
-    QApplication,
+    QPlainTextEdit,
+    QPushButton,
 )
+from qt_material import apply_stylesheet
 
-from EMADB.app.utils.driver.toolkit import WebDriverToolkit
-from EMADB.app.configuration import Configuration
+from EMADB.app.client.dialogs import LoadConfigDialog, SaveConfigDialog
 from EMADB.app.client.events import SearchEvents
-from EMADB.app.client.dialogs import SaveConfigDialog, LoadConfigDialog
 from EMADB.app.client.workers import Worker
+from EMADB.app.configuration import Configuration
 from EMADB.app.logger import logger
+from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 
 
 ###############################################################################

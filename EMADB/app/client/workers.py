@@ -1,6 +1,7 @@
-import traceback
 import inspect
-from PySide6.QtCore import QObject, Signal, QRunnable, Slot
+import traceback
+
+from PySide6.QtCore import QObject, QRunnable, Signal, Slot
 
 from EMADB.app.logger import logger
 
