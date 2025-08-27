@@ -16,7 +16,7 @@ class SearchEvents:
         self.ignore_SSL = configuration.get("ignore_SSL", False)
         self.wait_time = configuration.get("wait_time", 0)
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def get_drugs_from_file(self):
         filepath = os.path.join(RSC_PATH, "drugs_to_search.txt")
         with open(filepath, "r") as file:
@@ -24,7 +24,7 @@ class SearchEvents:
 
         return drug_list
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def search_using_webdriver(self, drug_list=None, worker=None):
         # check if files downloaded in the past are still present, then remove them
         # create a dictionary of drug names with their initial letter as key
