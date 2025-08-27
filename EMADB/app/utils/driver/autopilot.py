@@ -19,14 +19,14 @@ class EMAWebPilot:
         self.data_URL = "https://www.adrreports.eu/en/search_subst.html"
         self.alphabet = []
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def autoclick(self, string, mode="XPATH"):
         wait = WebDriverWait(self.driver, self.wait_time)
         by_elem = By.CSS_SELECTOR if mode == "CSS" else By.XPATH
         page = wait.until(EC.visibility_of_element_located((by_elem, string)))
         page.click()
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def drug_finder(self, name):
         wait = WebDriverWait(self.driver, self.wait_time)
         item = wait.until(
@@ -37,13 +37,13 @@ class EMAWebPilot:
         WebDriverWait(self.driver, self.wait_time).until(EC.number_of_windows_to_be(2))
         self.driver.switch_to.window(self.driver.window_handles[1])
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def close_and_switch_window(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def click_and_download(self, current_page=True):
         flag = 1 if current_page else 2
         wait = WebDriverWait(self.driver, self.wait_time)
@@ -57,7 +57,7 @@ class EMAWebPilot:
         item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
         item.click()
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def check_DAP_filenames(self):
         while True:
             current_files = os.listdir(DOWNLOAD_PATH)
@@ -68,7 +68,7 @@ class EMAWebPilot:
                 time.sleep(0.5)
                 continue
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def download_manager(self, grouped_drugs, **kwargs):
         for letter, drugs in grouped_drugs.items():
             self.driver.get(self.data_URL)
