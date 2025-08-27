@@ -30,7 +30,7 @@ class WebDriverToolkit:
         self.options.add_argument("--disable-search-engine-choice-screen")
         self.options.add_argument("--disable-gpu")
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def is_chromedriver_installed(self):
         try:
             driver = Chrome(options=self.options)
@@ -40,7 +40,7 @@ class WebDriverToolkit:
             logger.error(f"Error initializing ChromeDriver: {e}")
             return f"Error initializing ChromeDriver: {e}"
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def check_chrome_version(self):
         try:
             driver = Chrome(options=self.options)
@@ -52,7 +52,7 @@ class WebDriverToolkit:
             logger.error(f"Error detecting Chrome version: {e}")
             return "Version not detected"
 
-    # --------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def initialize_webdriver(self):
         self.path = ChromeDriverManager().install()
         driver = Chrome(options=self.options)
