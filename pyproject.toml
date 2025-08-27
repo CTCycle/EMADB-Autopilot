@@ -1,10 +1,19 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "EMADB"
-version = "2.1"
+version = "2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "PySide6==6.9.1",
+  "qt-material==2.17",
+  "selenium==4.35.0",
+  "webdriver-manager==4.0.1",
+  "beautifulsoup4==4.12.3",
+  "python-dotenv==1.1.0"
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
