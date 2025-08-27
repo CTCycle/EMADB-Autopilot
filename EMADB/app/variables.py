@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 from EMADB.app.constants import PROJECT_DIR
