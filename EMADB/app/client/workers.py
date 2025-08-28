@@ -1,5 +1,6 @@
 import inspect
 import traceback
+from typing import Any, Callable
 
 from PySide6.QtCore import QObject, QRunnable, Signal, Slot
 
@@ -23,7 +24,7 @@ class WorkerSignals(QObject):
 
 ###############################################################################
 class Worker(QRunnable):
-    def __init__(self, fn, *args, **kwargs) -> None:
+    def __init__(self, fn : Callable[[], None], *args : Any, **kwargs : Any) -> None:
         super().__init__()
         self.fn = fn
         self.args = args
