@@ -1,4 +1,4 @@
-from typing import Optional, cast
+from typing import Callable, Optional, cast
 
 from EMADB.app.variables import EnvironmentVariables
 
@@ -153,11 +153,11 @@ class MainWindow:
         )
         if button is None:
             raise LookupError(f"Button '{button_name}' not found.")
-        button.clicked.connect(slot)
+        button.clicked.connect(slot) if button else None
 
     # -------------------------------------------------------------------------
     def _start_worker(
-        self, worker: Worker, on_finished, on_error, on_interrupted
+        self, worker: Worker, on_finished : Callable, on_error : Callable, on_interrupted
     ) -> None:
         worker.signals.finished.connect(on_finished)
         worker.signals.error.connect(on_error)
@@ -215,8 +215,7 @@ class MainWindow:
     # that manages the UI elements. These slots can then call methods on the
     # handler objects. Using @Slot decorator is optional but good practice
     # -------------------------------------------------------------------------
-    Slot()
-
+    @Slot()
     def stop_running_worker(self) -> None:
         if self.worker is not None:
             self.worker.stop()
@@ -319,7 +318,7 @@ class MainWindow:
         message = "Search for drugs is finished, please check your downloads"
         self._send_message(message)
         if self.worker:
-            self.worker = self.worker.cleanup()
+            self.worker = self.worker.cleanup() if self.worker else None
 
     ###########################################################################
     # [NEGATIVE OUTCOME HANDLERS]
@@ -331,7 +330,7 @@ class MainWindow:
         message = "An error occurred during the operation. Check the logs for details."
         QMessageBox.critical(self.main_win, "Something went wrong!", message)
         if self.worker:
-            self.worker = self.worker.cleanup()
+            self.worker = self.worker.cleanup() if self.worker else None
 
     ###########################################################################
     # [INTERRUPTION HANDLERS]
@@ -340,4 +339,4 @@ class MainWindow:
         self._send_message("Current task has been interrupted by user")
         logger.warning("Current task has been interrupted by user")
         if self.worker:
-            self.worker = self.worker.cleanup()
+            self.worker = self.worker.cleanup() if self.worker else None

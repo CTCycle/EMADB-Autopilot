@@ -8,7 +8,7 @@ from EMADB.app.constants import CONFIG_PATH
 ###############################################################################
 class Configuration:
     def __init__(self) -> None:
-        self.configuration: dict[str, Any] = {
+        self.configuration: Dict[str, Any][str, Any] = {
             "headless": False,
             "ignore_SSL": False,
             "wait_time": 5.0,
