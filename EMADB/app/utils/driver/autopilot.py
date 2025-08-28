@@ -1,6 +1,8 @@
 import os
 import time
+from typing import Any, Dict, List
 
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,21 +15,21 @@ from EMADB.app.logger import logger
 # [SCRAPER]
 ###############################################################################
 class EMAWebPilot:
-    def __init__(self, driver, wait_time=10):
+    def __init__(self, driver : Chrome, wait_time: int = 10) -> None:
         self.driver = driver
         self.wait_time = wait_time
         self.data_URL = "https://www.adrreports.eu/en/search_subst.html"
         self.alphabet = []
 
-    #-------------------------------------------------------------------------
-    def autoclick(self, string, mode="XPATH"):
+    # -------------------------------------------------------------------------
+    def autoclick(self, string : str, mode : str ="XPATH") -> None:
         wait = WebDriverWait(self.driver, self.wait_time)
         by_elem = By.CSS_SELECTOR if mode == "CSS" else By.XPATH
         page = wait.until(EC.visibility_of_element_located((by_elem, string)))
         page.click()
 
-    #-------------------------------------------------------------------------
-    def drug_finder(self, name):
+    # -------------------------------------------------------------------------
+    def drug_finder(self, name : str) -> None:
         wait = WebDriverWait(self.driver, self.wait_time)
         item = wait.until(
             EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, name.upper()))
@@ -37,28 +39,28 @@ class EMAWebPilot:
         WebDriverWait(self.driver, self.wait_time).until(EC.number_of_windows_to_be(2))
         self.driver.switch_to.window(self.driver.window_handles[1])
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def close_and_switch_window(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
 
-    #-------------------------------------------------------------------------
-    def click_and_download(self, current_page=True):
+    # -------------------------------------------------------------------------
+    def click_and_download(self, current_page : bool = True) -> None:
         flag = 1 if current_page else 2
         wait = WebDriverWait(self.driver, self.wait_time)
-        XPATH = '//*[@id="uberBar_dashboardpageoptions_image"]'
-        item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
+        xpath = '//*[@id="uberBar_dashboardpageoptions_image"]'
+        item = wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
         item.click()
-        XPATH = '//*[@id="idPageExportToExcel"]/table/tbody/tr/td[2]'
-        item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
+        xpath = '//*[@id="idPageExportToExcel"]/table/tbody/tr/td[2]'
+        item = wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
         item.click()
-        XPATH = f'//*[@id="idDashboardExportToExcelMenu"]/table/tbody/tr[1]/td[1]/a[{flag}]/table/tbody/tr/td[2]'
-        item = wait.until(EC.visibility_of_element_located((By.XPATH, XPATH)))
+        xpath = f'//*[@id="idDashboardExportToExcelMenu"]/table/tbody/tr[1]/td[1]/a[{flag}]/table/tbody/tr/td[2]'
+        item = wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
         item.click()
 
-    #-------------------------------------------------------------------------
-    def check_DAP_filenames(self):
+    # -------------------------------------------------------------------------
+    def check_DAP_filenames(self) -> None:
         while True:
             current_files = os.listdir(DOWNLOAD_PATH)
             DAP_files = [x for x in current_files if "DAP" in x]
@@ -68,8 +70,8 @@ class EMAWebPilot:
                 time.sleep(0.5)
                 continue
 
-    #-------------------------------------------------------------------------
-    def download_manager(self, grouped_drugs, **kwargs):
+    # -------------------------------------------------------------------------
+    def download_manager(self, grouped_drugs : Dict[str, List[str]], **kwargs : Any) -> None:
         for letter, drugs in grouped_drugs.items():
             self.driver.get(self.data_URL)
             letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"
