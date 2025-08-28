@@ -1,12 +1,13 @@
 import os
 from collections import defaultdict
+from typing import DefaultDict, Dict, List
 
 from EMADB.app.constants import DOWNLOAD_PATH
 
 
 # check if files downloaded in the past are still present, then remove them
-#-----------------------------------------------------------------------------
-def file_remover():
+# -----------------------------------------------------------------------------
+def file_remover() -> None:
     xlsx_files = [x for x in os.listdir(DOWNLOAD_PATH) if x.endswith(".xlsx")]
     for filename in xlsx_files:
         file_path = os.path.join(DOWNLOAD_PATH, filename)
@@ -15,13 +16,11 @@ def file_remover():
 
 
 # aggregate filenames with their corresponding initial letter
-#-----------------------------------------------------------------------------
-def drug_to_letter_aggregator(drugs):
-    # get list of drugs and group them by initial letter
-    unique_drug_names = sorted(list(set(drugs)))
-    grouped_drugs = defaultdict(list)
+# -----------------------------------------------------------------------------
+def drug_to_letter_aggregator(drugs: List[str]) -> Dict[str, List[str]]:
+    unique_drug_names = sorted(set(drugs))
+    grouped: DefaultDict[str, List[str]] = defaultdict(list)
     for drug in unique_drug_names:
-        grouped_drugs[drug[0]].append(drug)
-    grouped_drugs = dict(grouped_drugs)
+        grouped[drug[0]].append(drug)
 
-    return grouped_drugs
+    return dict(grouped)
