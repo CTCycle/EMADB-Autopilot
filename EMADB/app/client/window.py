@@ -1,3 +1,5 @@
+from typing import Optional, cast
+
 from EMADB.app.variables import EnvironmentVariables
 
 EV = EnvironmentVariables()
@@ -13,6 +15,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QDoubleSpinBox,
+    QMainWindow,
     QMessageBox,
     QPlainTextEdit,
     QPushButton,
@@ -28,7 +31,7 @@ from EMADB.app.utils.driver.toolkit import WebDriverToolkit
 
 
 ###############################################################################
-def apply_style(app: QApplication):
+def apply_style(app: QApplication) -> QApplication:
     theme = "dark_yellow"
     extra = {"density_scale": "-1"}
     apply_stylesheet(app, theme=f"{theme}.xml", extra=extra)
@@ -50,12 +53,12 @@ def apply_style(app: QApplication):
 
 ###############################################################################
 class MainWindow:
-    def __init__(self, ui_file_path: str):
+    def __init__(self, ui_file_path: str) -> None:
         super().__init__()
         loader = QUiLoader()
         ui_file = QFile(ui_file_path)
-        ui_file.open(QIODevice.ReadOnly)
-        self.main_win = loader.load(ui_file)
+        ui_file.open(QIODevice.OpenModeFlag.ReadOnly)
+        self.main_win = cast(QMainWindow, loader.load(ui_file))
         ui_file.close()
 
         # initial settings
@@ -67,7 +70,7 @@ class MainWindow:
         self.worker = None
         self.worker_running = False
 
-        #--- Create persistent handlers ---
+        # --- Create persistent handlers ---
         self.search_handler = SearchEvents(self.configuration)
         self.webdriver = WebDriverToolkit(headless=True, ignore_SSL=False)
 
@@ -105,12 +108,14 @@ class MainWindow:
 
     # [SHOW WINDOW]
     ###########################################################################
-    def show(self):
+    def show(self) -> None:
         self.main_win.show()
 
     # [HELPERS]
     ###########################################################################
-    def connect_update_setting(self, widget, signal_name, config_key, getter=None):
+    def connect_update_setting(
+        self, widget, signal_name, config_key, getter=None
+    ) -> None:
         if getter is None:
             if isinstance(widget, (QCheckBox)):
                 getter = widget.isChecked
@@ -120,13 +125,13 @@ class MainWindow:
         signal = getattr(widget, signal_name)
         signal.connect(partial(self._update_single_setting, config_key, getter))
 
-    #-------------------------------------------------------------------------
-    def _update_single_setting(self, config_key, getter, *args):
+    # -------------------------------------------------------------------------
+    def _update_single_setting(self, config_key, getter, *args) -> None:
         value = getter()
         self.config_manager.update_value(config_key, value)
 
-    #-------------------------------------------------------------------------
-    def _auto_connect_settings(self):
+    # -------------------------------------------------------------------------
+    def _auto_connect_settings(self) -> None:
         connections = [
             ("headless", "toggled", "headless"),
             ("ignore_SSL", "toggled", "ignore_SSL"),
@@ -137,43 +142,49 @@ class MainWindow:
             widget = self.widgets[attr]
             self.connect_update_setting(widget, signal_name, config_key)
 
-    #-------------------------------------------------------------------------
-    def _set_states(self):
+    # -------------------------------------------------------------------------
+    def _set_states(self) -> None:
         pass
 
-    #-------------------------------------------------------------------------
-    def _connect_button(self, button_name: str, slot):
-        button = self.main_win.findChild(QPushButton, button_name)
+    # -------------------------------------------------------------------------
+    def _connect_button(self, button_name: str, slot) -> None:
+        button: Optional[QPushButton] = self.main_win.findChild(
+            QPushButton, button_name
+        )
+        if button is None:
+            raise LookupError(f"Button '{button_name}' not found.")
         button.clicked.connect(slot)
 
-    #-------------------------------------------------------------------------
-    def _start_worker(self, worker: Worker, on_finished, on_error, on_interrupted):
+    # -------------------------------------------------------------------------
+    def _start_worker(
+        self, worker: Worker, on_finished, on_error, on_interrupted
+    ) -> None:
         worker.signals.finished.connect(on_finished)
         worker.signals.error.connect(on_error)
         worker.signals.interrupted.connect(on_interrupted)
         self.threadpool.start(worker)
         self.worker_running = True
 
-    #-------------------------------------------------------------------------
-    def _send_message(self, message):
+    # -------------------------------------------------------------------------
+    def _send_message(self, message) -> None:
         self.main_win.statusBar().showMessage(message)
 
     # [SETUP]
     ###########################################################################
-    def _setup_configuration(self, widget_defs):
+    def _setup_configuration(self, widget_defs) -> None:
         for cls, name, attr in widget_defs:
             w = self.main_win.findChild(cls, name)
             setattr(self, attr, w)
             self.widgets[attr] = w
 
-    #-------------------------------------------------------------------------
-    def _connect_signals(self, connections):
+    # -------------------------------------------------------------------------
+    def _connect_signals(self, connections) -> None:
         for attr, signal, slot in connections:
             widget = self.widgets[attr]
             getattr(widget, signal).connect(slot)
 
-    #-------------------------------------------------------------------------
-    def _set_widgets_from_configuration(self):
+    # -------------------------------------------------------------------------
+    def _set_widgets_from_configuration(self) -> None:
         cfg = self.config_manager.get_configuration()
         for attr, widget in self.widgets.items():
             if attr not in cfg:
@@ -203,39 +214,40 @@ class MainWindow:
     # It's good practice to define methods that act as slots within the class
     # that manages the UI elements. These slots can then call methods on the
     # handler objects. Using @Slot decorator is optional but good practice
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     Slot()
 
-    def stop_running_worker(self):
+    def stop_running_worker(self) -> None:
         if self.worker is not None:
             self.worker.stop()
         self._send_message("Interrupt requested. Waiting for threads to stop...")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # [ACTIONS]
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @Slot()
-    def save_configuration(self):
+    def save_configuration(self) -> None:
         dialog = SaveConfigDialog(self.main_win)
-        if dialog.exec() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             name = dialog.get_name()
             name = "default_config" if not name else name
             self.config_manager.save_configuration_to_json(name)
             self._send_message(f"Configuration [{name}] has been saved")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @Slot()
-    def load_configuration(self):
+    def load_configuration(self) -> None:
         dialog = LoadConfigDialog(self.main_win)
-        if dialog.exec() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             name = dialog.get_selected_config()
-            self.config_manager.load_configuration_from_json(name)
-            self._set_widgets_from_configuration()
-            self._send_message(f"Loaded configuration [{name}]")
+            if name:
+                self.config_manager.load_configuration_from_json(name)
+                self._set_widgets_from_configuration()
+                self._send_message(f"Loaded configuration [{name}]")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @Slot()
-    def search_from_file(self):
+    def search_from_file(self) -> None:
         if self.worker_running:
             return
 
@@ -252,13 +264,16 @@ class MainWindow:
             on_interrupted=self.on_task_interrupted,
         )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @Slot()
-    def search_from_text(self):
+    def search_from_text(self) -> None:
         if self.worker_running:
             return
 
         text_box = self.main_win.findChild(QPlainTextEdit, "drugInputs")
+        if not text_box:
+            return
+
         query = text_box.toPlainText()
         drug_list = None if not query else query.strip(",")
         if drug_list is None:
@@ -280,14 +295,17 @@ class MainWindow:
             on_interrupted=self.on_task_interrupted,
         )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @Slot()
-    def check_webdriver(self):
+    def check_webdriver(self) -> None:
         if self.webdriver.is_chromedriver_installed():
             version = self.webdriver.check_chrome_version()
             message = f"Chrome driver is installed, current version: {version}"
             QMessageBox.information(
-                self.main_win, "Chrome driver is installed", message, QMessageBox.Ok
+                self.main_win,
+                "Chrome driver is installed",
+                message,
+                QMessageBox.StandardButton.Ok,
             )
         else:
             message = "Chrome driver is not installed, it will be installed automatically when running search"
@@ -297,26 +315,29 @@ class MainWindow:
     # [POSITIVE OUTCOME HANDLERS]
     ###########################################################################
     @Slot(object)
-    def on_search_finished(self, search):
+    def on_search_finished(self) -> None:
         message = "Search for drugs is finished, please check your downloads"
         self._send_message(message)
-        self.worker = self.worker.cleanup()
+        if self.worker:
+            self.worker = self.worker.cleanup()
 
     ###########################################################################
     # [NEGATIVE OUTCOME HANDLERS]
     ###########################################################################
     @Slot()
-    def on_error(self, err_tb):
+    def on_error(self, err_tb) -> None:
         exc, tb = err_tb
         logger.error(f"{exc}\n{tb}")
         message = "An error occurred during the operation. Check the logs for details."
         QMessageBox.critical(self.main_win, "Something went wrong!", message)
-        self.worker = self.worker.cleanup()
+        if self.worker:
+            self.worker = self.worker.cleanup()
 
     ###########################################################################
     # [INTERRUPTION HANDLERS]
     ###########################################################################
-    def on_task_interrupted(self):
+    def on_task_interrupted(self) -> None:
         self._send_message("Current task has been interrupted by user")
         logger.warning("Current task has been interrupted by user")
-        self.worker = self.worker.cleanup()
+        if self.worker:
+            self.worker = self.worker.cleanup()
