@@ -23,8 +23,8 @@ class WorkerSignals(QObject):
 
 
 ###############################################################################
-class ThreadWorker(QRunnable):
-    def __init__(self, fn, *args, **kwargs):
+class Worker(QRunnable):
+    def __init__(self, fn, *args, **kwargs) -> None:
         super().__init__()
         self.fn = fn
         self.args = args
@@ -53,17 +53,17 @@ class ThreadWorker(QRunnable):
         if accepts_worker:
             self.kwargs["worker"] = self
 
-    #-------------------------------------------------------------------------
-    def stop(self):
+    # -------------------------------------------------------------------------
+    def stop(self) -> None:
         self._is_interrupted = True
 
-    #-------------------------------------------------------------------------
-    def is_interrupted(self):
+    # -------------------------------------------------------------------------
+    def is_interrupted(self) -> bool:
         return self._is_interrupted
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     @Slot()
-    def run(self):
+    def run(self) -> None:
         try:
             # Remove progress_callback if not accepted by the function
             if (
@@ -84,13 +84,13 @@ class ThreadWorker(QRunnable):
             tb = traceback.format_exc()
             self.signals.error.emit((e, tb))
 
-    #-------------------------------------------------------------------------
-    def cleanup(self):
+    # -------------------------------------------------------------------------
+    def cleanup(self) -> None:
         pass
 
 
-#-----------------------------------------------------------------------------
-def check_thread_status(worker: Worker):
+# -----------------------------------------------------------------------------
+def check_thread_status(worker: Worker | None) -> None:
     if worker is not None and worker.is_interrupted():
         logger.warning("Running thread interrupted by user")
         raise WorkerInterrupted()
