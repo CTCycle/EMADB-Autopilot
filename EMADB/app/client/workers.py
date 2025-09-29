@@ -1,8 +1,9 @@
+from collections.abc import Callable
 import inspect
 import traceback
-import inspect
+from typing import Any
 
-from PySide6.QtCore import QObject, Signal, QRunnable, Slot
+from PySide6.QtCore import QObject, QRunnable, Signal, Slot
 
 from EMADB.app.logger import logger
 
