@@ -1,21 +1,42 @@
-import sys
+from __future__ import annotations
 
-# [SETTING WARNINGS]
-import warnings
+import os
 
-from PySide6.QtWidgets import QApplication
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import gradio as gr
 
-warnings.simplefilter(action="ignore", category=Warning)
+from EMADB.app.api.endpoints import configuration, search
+from EMADB.app.client.controllers import UIController
+from EMADB.app.client.ui import build_interface
+from EMADB.app.dependencies import config_service
+from EMADB.app.logger import logger
+from EMADB.app.variables import EnvironmentVariables
 
-# [IMPORT CUSTOM MODULES]
-from EMADB.app.client.window import MainWindow, apply_style
-from EMADB.app.constants import UI_PATH
 
-# [RUN MAIN]
 ###############################################################################
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app = apply_style(app)
-    main_window = MainWindow(UI_PATH)
-    main_window.show()
-    sys.exit(app.exec())
+def create_app() -> FastAPI:
+    os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "0")
+    EnvironmentVariables()
+    app = FastAPI(title="EMAutoPilot", version="1.0")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(configuration.router, prefix="/api")
+    app.include_router(search.router, prefix="/api")
+
+    controller = UIController(app)
+    initial_config = config_service.get_configuration()
+    interface = build_interface(controller, initial_config)
+    app = gr.mount_gradio_app(app, interface, path="/")
+
+    logger.info("EMAutoPilot web application initialized")
+    return app
+
+
+app = create_app()

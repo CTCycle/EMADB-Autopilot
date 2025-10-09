@@ -12,14 +12,15 @@ class Configuration:
             "headless": False,
             "ignore_SSL": False,
             "wait_time": 5.0,
+            "text_drug_inputs": "",
         }
 
     # -------------------------------------------------------------------------
     def get_configuration(self) -> dict[str, Any]:
-        return self.configuration
+        return dict(self.configuration)
 
     # -------------------------------------------------------------------------
-    def update_value(self, key: str, value: bool) -> None:
+    def update_value(self, key: str, value: Any) -> None:
         self.configuration[key] = value
 
     # -------------------------------------------------------------------------
@@ -32,4 +33,6 @@ class Configuration:
     def load_configuration_from_json(self, name: str) -> None:
         full_path = os.path.join(CONFIG_PATH, name)
         with open(full_path) as f:
-            self.configuration = json.load(f)
+            data = json.load(f)
+
+        self.configuration.update(data)

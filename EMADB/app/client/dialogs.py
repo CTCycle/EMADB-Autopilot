@@ -1,69 +1,29 @@
-import os
+from __future__ import annotations
 
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QLabel,
-    QLineEdit,
-    QListWidget,
-    QMainWindow,
-    QVBoxLayout,
-)
-
-from EMADB.app.constants import CONFIG_PATH
+import gradio as gr
 
 
 ###############################################################################
-class SaveConfigDialog(QDialog):
-    def __init__(self, parent: QMainWindow | None = None) -> None:
-        super().__init__(parent)
-        self.setWindowTitle("Save Configuration As")
-        self.dialog_layout = QVBoxLayout(self)
-
-        self.label = QLabel("Enter a name for your configuration:", self)
-        self.dialog_layout.addWidget(self.label)
-
-        self.name_edit = QLineEdit(self)
-        self.dialog_layout.addWidget(self.name_edit)
-
-        self.buttons = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
-            self,
-        )
-        self.dialog_layout.addWidget(self.buttons)
-
-        self.buttons.accepted.connect(self.accept)
-        self.buttons.rejected.connect(self.reject)
-
-    def get_name(self) -> str:
-        return self.name_edit.text().strip()
+class SaveConfigDialog:
+    def build(self) -> tuple[gr.Group, gr.Textbox, gr.Button, gr.Button]:
+        with gr.Group(visible=False, elem_classes=["modal-overlay"]) as dialog:
+            with gr.Column(elem_classes=["modal-content"]):
+                gr.Markdown("### Save Configuration As")
+                name_input = gr.Textbox(label="Enter a name for your configuration:")
+                with gr.Row():
+                    confirm = gr.Button("Save", variant="primary")
+                    cancel = gr.Button("Cancel")
+        return dialog, name_input, confirm, cancel
 
 
 ###############################################################################
-class LoadConfigDialog(QDialog):
-    def __init__(self, parent: QMainWindow | None = None) -> None:
-        super().__init__(parent)
-        self.setWindowTitle("Load Configuration")
-        self.dialog_layout = QVBoxLayout(self)
-
-        self.label = QLabel("Select a configuration:", self)
-        self.dialog_layout.addWidget(self.label)
-
-        self.config_list = QListWidget(self)
-        self.dialog_layout.addWidget(self.config_list)
-
-        # Populate the list with available .json files
-        configs = [f for f in os.listdir(CONFIG_PATH) if f.endswith(".json")]
-        self.config_list.addItems(configs)
-
-        self.buttons = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
-            self,
-        )
-        self.dialog_layout.addWidget(self.buttons)
-        self.buttons.accepted.connect(self.accept)
-        self.buttons.rejected.connect(self.reject)
-
-    def get_selected_config(self) -> str | None:
-        selected = self.config_list.currentItem()
-        return selected.text() if selected else None
+class LoadConfigDialog:
+    def build(self) -> tuple[gr.Group, gr.Dropdown, gr.Button, gr.Button]:
+        with gr.Group(visible=False, elem_classes=["modal-overlay"]) as dialog:
+            with gr.Column(elem_classes=["modal-content"]):
+                gr.Markdown("### Load Configuration")
+                dropdown = gr.Dropdown(label="Select a configuration:", choices=[], allow_custom_value=False)
+                with gr.Row():
+                    confirm = gr.Button("Load", variant="primary")
+                    cancel = gr.Button("Cancel")
+        return dialog, dropdown, confirm, cancel
