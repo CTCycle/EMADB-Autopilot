@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 import gradio as gr
 
 from EMADB.app.api.endpoints import configuration, search
@@ -19,13 +18,6 @@ def create_app() -> FastAPI:
     os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "0")
     EnvironmentVariables()
     app = FastAPI(title="EMAutoPilot", version="1.0")
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
 
     app.include_router(configuration.router, prefix="/api")
     app.include_router(search.router, prefix="/api")
