@@ -31,7 +31,7 @@ class Worker(QRunnable):
         self.args = args
         self.kwargs = kwargs
         self.signals = WorkerSignals()
-        self._is_interrupted = False
+        self.is_interrupted = False
 
         sig = inspect.signature(fn)
         params = sig.parameters.values()
@@ -56,11 +56,11 @@ class Worker(QRunnable):
 
     # -------------------------------------------------------------------------
     def stop(self) -> None:
-        self._is_interrupted = True
+        self.is_interrupted = True
 
     # -------------------------------------------------------------------------
     def is_interrupted(self) -> bool:
-        return self._is_interrupted
+        return self.is_interrupted
 
     # -------------------------------------------------------------------------
     @Slot()
