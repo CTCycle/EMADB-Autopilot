@@ -1,17 +1,18 @@
+from __future__ import annotations
 import os
-from typing import Any, Dict, List
+from typing import Any
 
 from EMADB.app.client.workers import Worker, check_thread_status
 from EMADB.app.constants import RSC_PATH
 from EMADB.app.logger import logger
 from EMADB.app.utils.components import drug_to_letter_aggregator, file_remover
-from EMADB.app.utils.driver.autopilot import EMAWebPilot
-from EMADB.app.utils.driver.toolkit import WebDriverToolkit
+from EMADB.app.utils.services.autopilot import EMAWebPilot
+from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
 
 ###############################################################################
 class SearchEvents:
-    def __init__(self, configuration: Dict[str, Any]) -> None:
+    def __init__(self, configuration: dict[str, Any]) -> None:
         self.configuration = configuration
         self.headless = configuration.get("headless", False)
         self.ignore_SSL = configuration.get("ignore_SSL", False)
@@ -27,7 +28,7 @@ class SearchEvents:
 
     # -------------------------------------------------------------------------
     def search_using_webdriver(
-        self, drug_list: List[str] | None = None, worker: Worker | None = None
+        self, drug_list: list[str] | None = None, worker: Worker | None = None
     ) -> None:
         # check if files downloaded in the past are still present, then remove them
         # create a dictionary of drug names with their initial letter as key

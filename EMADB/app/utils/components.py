@@ -1,6 +1,5 @@
 import os
 from collections import defaultdict
-from typing import DefaultDict, Dict, List
 
 from EMADB.app.constants import DOWNLOAD_PATH
 
@@ -17,9 +16,9 @@ def file_remover() -> None:
 
 # aggregate filenames with their corresponding initial letter
 # -----------------------------------------------------------------------------
-def drug_to_letter_aggregator(drugs: List[str]) -> Dict[str, List[str]]:
+def drug_to_letter_aggregator(drugs: list[str]) -> dict[str, list[str]]:
     unique_drug_names = sorted(set(drugs))
-    grouped: DefaultDict[str, List[str]] = defaultdict(list)
+    grouped: defaultdict[str, list[str]] = defaultdict(list)
     for drug in unique_drug_names:
         grouped[drug[0]].append(drug)
 

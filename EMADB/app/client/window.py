@@ -1,4 +1,6 @@
-from typing import Callable, Optional, cast
+from __future__ import annotations
+from typing import cast
+from collections.abc import Callable
 
 from EMADB.app.variables import EnvironmentVariables
 
@@ -27,7 +29,7 @@ from EMADB.app.client.events import SearchEvents
 from EMADB.app.client.workers import Worker
 from EMADB.app.configuration import Configuration
 from EMADB.app.logger import logger
-from EMADB.app.utils.driver.toolkit import WebDriverToolkit
+from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
 
 ###############################################################################
@@ -148,7 +150,7 @@ class MainWindow:
 
     # -------------------------------------------------------------------------
     def connect_button(self, button_name: str, slot) -> None:
-        button: Optional[QPushButton] = self.main_win.findChild(
+        button: QPushButton | None = self.main_win.findChild(
             QPushButton, button_name
         )
         if button is None:

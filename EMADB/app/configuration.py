@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict
+from typing import Any
 
 from EMADB.app.constants import CONFIG_PATH
 
@@ -8,7 +8,7 @@ from EMADB.app.constants import CONFIG_PATH
 ###############################################################################
 class Configuration:
     def __init__(self) -> None:
-        self.configuration: Dict[str, Any] = {
+        self.configuration: dict[str, Any] = {
             "headless": False,
             "ignore_SSL": False,
             "wait_time": 5.0,
