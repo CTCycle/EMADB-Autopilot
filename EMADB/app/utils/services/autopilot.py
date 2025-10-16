@@ -1,6 +1,6 @@
 import os
 import time
-from typing import Any, Dict, List
+from typing import Any
 
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
@@ -72,7 +72,7 @@ class EMAWebPilot:
 
     # -------------------------------------------------------------------------
     def download_manager(
-        self, grouped_drugs: Dict[str, List[str]], **kwargs: Any
+        self, grouped_drugs: dict[str, list[str]], **kwargs: Any
     ) -> None:
         for letter, drugs in grouped_drugs.items():
             self.driver.get(self.data_URL)
