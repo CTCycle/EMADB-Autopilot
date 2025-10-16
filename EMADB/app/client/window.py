@@ -1,4 +1,6 @@
-from typing import Callable, Optional, cast
+from __future__ import annotations
+from typing import cast
+from collections.abc import Callable
 
 from EMADB.app.variables import EnvironmentVariables
 
@@ -27,7 +29,7 @@ from EMADB.app.client.events import SearchEvents
 from EMADB.app.client.workers import Worker
 from EMADB.app.configuration import Configuration
 from EMADB.app.logger import logger
-from EMADB.app.utils.driver.toolkit import WebDriverToolkit
+from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
 
 ###############################################################################
@@ -75,9 +77,9 @@ class MainWindow:
         self.webdriver = WebDriverToolkit(headless=True, ignore_SSL=False)
 
         # setup UI elements
-        self._set_states()
+        self.set_states()
         self.widgets = {}
-        self._setup_configuration(
+        self.setup_configuration(
             [
                 # actions
                 (QAction, "actionLoadConfig", "load_configuration_action"),
@@ -92,7 +94,7 @@ class MainWindow:
                 (QPushButton, "checkDriver", "check_driver"),
             ]
         )
-        self._connect_signals(
+        self.connect_signals(
             [
                 # actions
                 ("save_configuration_action", "triggered", self.save_configuration),
@@ -104,7 +106,7 @@ class MainWindow:
             ]
         )
 
-        self._auto_connect_settings()
+        self.auto_connect_settings()
 
     # [SHOW WINDOW]
     ###########################################################################
@@ -123,15 +125,15 @@ class MainWindow:
                 getter = widget.value
 
         signal = getattr(widget, signal_name)
-        signal.connect(partial(self._update_single_setting, config_key, getter))
+        signal.connect(partial(self.update_single_setting, config_key, getter))
 
     # -------------------------------------------------------------------------
-    def _update_single_setting(self, config_key, getter, *args) -> None:
+    def update_single_setting(self, config_key, getter, *args) -> None:
         value = getter()
         self.config_manager.update_value(config_key, value)
 
     # -------------------------------------------------------------------------
-    def _auto_connect_settings(self) -> None:
+    def auto_connect_settings(self) -> None:
         connections = [
             ("headless", "toggled", "headless"),
             ("ignore_SSL", "toggled", "ignore_SSL"),
@@ -143,12 +145,12 @@ class MainWindow:
             self.connect_update_setting(widget, signal_name, config_key)
 
     # -------------------------------------------------------------------------
-    def _set_states(self) -> None:
+    def set_states(self) -> None:
         pass
 
     # -------------------------------------------------------------------------
-    def _connect_button(self, button_name: str, slot) -> None:
-        button: Optional[QPushButton] = self.main_win.findChild(
+    def connect_button(self, button_name: str, slot) -> None:
+        button: QPushButton | None = self.main_win.findChild(
             QPushButton, button_name
         )
         if button is None:
@@ -156,7 +158,7 @@ class MainWindow:
         button.clicked.connect(slot) if button else None
 
     # -------------------------------------------------------------------------
-    def _start_worker(
+    def start_worker(
         self, worker: Worker, on_finished : Callable, on_error : Callable, on_interrupted
     ) -> None:
         worker.signals.finished.connect(on_finished)
@@ -166,25 +168,25 @@ class MainWindow:
         self.worker_running = True
 
     # -------------------------------------------------------------------------
-    def _send_message(self, message) -> None:
+    def send_message(self, message) -> None:
         self.main_win.statusBar().showMessage(message)
 
     # [SETUP]
     ###########################################################################
-    def _setup_configuration(self, widget_defs) -> None:
+    def setup_configuration(self, widget_defs) -> None:
         for cls, name, attr in widget_defs:
             w = self.main_win.findChild(cls, name)
             setattr(self, attr, w)
             self.widgets[attr] = w
 
     # -------------------------------------------------------------------------
-    def _connect_signals(self, connections) -> None:
+    def connect_signals(self, connections) -> None:
         for attr, signal, slot in connections:
             widget = self.widgets[attr]
             getattr(widget, signal).connect(slot)
 
     # -------------------------------------------------------------------------
-    def _set_widgets_from_configuration(self) -> None:
+    def set_widgets_from_configuration(self) -> None:
         cfg = self.config_manager.get_configuration()
         for attr, widget in self.widgets.items():
             if attr not in cfg:
@@ -219,7 +221,7 @@ class MainWindow:
     def stop_running_worker(self) -> None:
         if self.worker is not None:
             self.worker.stop()
-        self._send_message("Interrupt requested. Waiting for threads to stop...")
+        self.send_message("Interrupt requested. Waiting for threads to stop...")
 
     # -------------------------------------------------------------------------
     # [ACTIONS]
@@ -231,7 +233,7 @@ class MainWindow:
             name = dialog.get_name()
             name = "default_config" if not name else name
             self.config_manager.save_configuration_to_json(name)
-            self._send_message(f"Configuration [{name}] has been saved")
+            self.send_message(f"Configuration [{name}] has been saved")
 
     # -------------------------------------------------------------------------
     @Slot()
@@ -241,8 +243,8 @@ class MainWindow:
             name = dialog.get_selected_config()
             if name:
                 self.config_manager.load_configuration_from_json(name)
-                self._set_widgets_from_configuration()
-                self._send_message(f"Loaded configuration [{name}]")
+                self.set_widgets_from_configuration()
+                self.send_message(f"Loaded configuration [{name}]")
 
     # -------------------------------------------------------------------------
     @Slot()
@@ -256,7 +258,7 @@ class MainWindow:
         self.worker = ThreadWorker(self.search_handler.search_using_webdriver)
 
         # start worker and inject signals
-        self._start_worker(
+        self.start_worker(
             self.worker,
             on_finished=self.on_search_finished,
             on_error=self.on_error,
@@ -287,7 +289,7 @@ class MainWindow:
         self.worker = Worker(self.search_handler.search_using_webdriver, drug_list)
 
         # start worker and inject signals
-        self._start_worker(
+        self.start_worker(
             self.worker,
             on_finished=self.on_search_finished,
             on_error=self.on_error,
@@ -316,7 +318,7 @@ class MainWindow:
     @Slot(object)
     def on_search_finished(self) -> None:
         message = "Search for drugs is finished, please check your downloads"
-        self._send_message(message)
+        self.send_message(message)
         if self.worker:
             self.worker = self.worker.cleanup() if self.worker else None
 
@@ -336,7 +338,7 @@ class MainWindow:
     # [INTERRUPTION HANDLERS]
     ###########################################################################
     def on_task_interrupted(self) -> None:
-        self._send_message("Current task has been interrupted by user")
+        self.send_message("Current task has been interrupted by user")
         logger.warning("Current task has been interrupted by user")
         if self.worker:
             self.worker = self.worker.cleanup() if self.worker else None
