@@ -23,6 +23,15 @@ class EMAWebPilot:
 
     # -------------------------------------------------------------------------
     def autoclick(self, string: str, mode: str = "XPATH") -> None:
+        """
+        Locate an element by selector and trigger a click once it is visible.
+
+        Keyword arguments:
+            string: Selector used to find the element on the page.
+            mode: Determines whether the selector is CSS or XPATH based.
+        Return value:
+            None
+        """
         wait = WebDriverWait(self.driver, self.wait_time)
         by_elem = By.CSS_SELECTOR if mode == "CSS" else By.XPATH
         page = wait.until(EC.visibility_of_element_located((by_elem, string)))
@@ -30,6 +39,14 @@ class EMAWebPilot:
 
     # -------------------------------------------------------------------------
     def drug_finder(self, name: str) -> None:
+        """
+        Open a new tab containing the ADR dashboard for the provided drug name.
+
+        Keyword arguments:
+            name: Drug name to locate using the partial link text strategy.
+        Return value:
+            None
+        """
         wait = WebDriverWait(self.driver, self.wait_time)
         item = wait.until(
             EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, name.upper()))
@@ -47,6 +64,14 @@ class EMAWebPilot:
 
     # -------------------------------------------------------------------------
     def click_and_download(self, current_page: bool = True) -> None:
+        """
+        Export the currently open ADR dashboard to Excel through the UI menu.
+
+        Keyword arguments:
+            current_page: When False, selects the option to export all pages.
+        Return value:
+            None
+        """
         flag = 1 if current_page else 2
         wait = WebDriverWait(self.driver, self.wait_time)
         xpath = '//*[@id="uberBar_dashboardpageoptions_image"]'
@@ -61,6 +86,14 @@ class EMAWebPilot:
 
     # -------------------------------------------------------------------------
     def check_DAP_filenames(self) -> None:
+        """
+        Poll the download directory until the Excel export is completed.
+
+        Keyword arguments:
+            None
+        Return value:
+            None
+        """
         while True:
             current_files = os.listdir(DOWNLOAD_PATH)
             DAP_files = [x for x in current_files if "DAP" in x]
@@ -74,6 +107,15 @@ class EMAWebPilot:
     def download_manager(
         self, grouped_drugs: dict[str, list[str]], **kwargs: Any
     ) -> None:
+        """
+        Iterate over grouped drug names and orchestrate dashboard downloads.
+
+        Keyword arguments:
+            grouped_drugs: Dictionary keyed by initial letter containing drug lists.
+            kwargs: Additional parameters forwarded to worker supervision logic.
+        Return value:
+            None
+        """
         for letter, drugs in grouped_drugs.items():
             self.driver.get(self.data_URL)
             letter_css = f"a[onclick=\"showSubstanceTable('{letter.lower()}')\"]"

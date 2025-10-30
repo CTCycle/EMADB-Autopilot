@@ -34,6 +34,14 @@ from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
 ###############################################################################
 def apply_style(app: QApplication) -> QApplication:
+    """
+    Configure the global Qt stylesheet with the preferred theme tweaks.
+
+    Keyword arguments:
+        app: Active QApplication instance that should receive the theme.
+    Return value:
+        QApplication: The themed application instance for fluent chaining.
+    """
     theme = "dark_yellow"
     extra = {"density_scale": "-1"}
     apply_stylesheet(app, theme=f"{theme}.xml", extra=extra)
@@ -118,6 +126,17 @@ class MainWindow:
     def connect_update_setting(
         self, widget, signal_name, config_key, getter=None
     ) -> None:
+        """
+        Bind a UI widget signal to propagate configuration updates.
+
+        Keyword arguments:
+            widget: The widget emitting changes for the tracked preference.
+            signal_name: Signal attribute name to connect against.
+            config_key: Configuration dictionary key to update.
+            getter: Optional callable used to read the widget value.
+        Return value:
+            None
+        """
         if getter is None:
             if isinstance(widget, (QCheckBox)):
                 getter = widget.isChecked
@@ -134,6 +153,14 @@ class MainWindow:
 
     # -------------------------------------------------------------------------
     def auto_connect_settings(self) -> None:
+        """
+        Register default signal bindings for frequently toggled settings.
+
+        Keyword arguments:
+            None
+        Return value:
+            None
+        """
         connections = [
             ("headless", "toggled", "headless"),
             ("ignore_SSL", "toggled", "ignore_SSL"),
@@ -159,8 +186,19 @@ class MainWindow:
 
     # -------------------------------------------------------------------------
     def start_worker(
-        self, worker: Worker, on_finished : Callable, on_error : Callable, on_interrupted
+        self, worker: Worker, on_finished: Callable, on_error: Callable, on_interrupted
     ) -> None:
+        """
+        Schedule a background worker and attach lifecycle callbacks.
+
+        Keyword arguments:
+            worker: Runnable performing the heavy lifting in a new thread.
+            on_finished: Slot invoked when the job completes successfully.
+            on_error: Slot invoked if the worker raises an exception.
+            on_interrupted: Slot invoked when the worker signals interruption.
+        Return value:
+            None
+        """
         worker.signals.finished.connect(on_finished)
         worker.signals.error.connect(on_error)
         worker.signals.interrupted.connect(on_interrupted)
@@ -249,6 +287,14 @@ class MainWindow:
     # -------------------------------------------------------------------------
     @Slot()
     def search_from_file(self) -> None:
+        """
+        Launch scraping flow using drug names sourced from the default file.
+
+        Keyword arguments:
+            None
+        Return value:
+            None
+        """
         if self.worker_running:
             return
 
@@ -268,6 +314,14 @@ class MainWindow:
     # -------------------------------------------------------------------------
     @Slot()
     def search_from_text(self) -> None:
+        """
+        Launch scraping flow using comma-separated drug names from the UI.
+
+        Keyword arguments:
+            None
+        Return value:
+            None
+        """
         if self.worker_running:
             return
 
@@ -299,6 +353,14 @@ class MainWindow:
     # -------------------------------------------------------------------------
     @Slot()
     def check_webdriver(self) -> None:
+        """
+        Inform the user about the availability and version of ChromeDriver.
+
+        Keyword arguments:
+            None
+        Return value:
+            None
+        """
         if self.webdriver.is_chromedriver_installed():
             version = self.webdriver.check_chrome_version()
             message = f"Chrome driver is installed, current version: {version}"
