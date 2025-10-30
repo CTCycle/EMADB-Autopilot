@@ -30,6 +30,15 @@ class SearchEvents:
     def search_using_webdriver(
         self, drug_list: list[str] | None = None, worker: Worker | None = None
     ) -> None:
+        """
+        Execute the end-to-end scraping pipeline for the provided drug list.
+
+        Keyword arguments:
+            drug_list: Optional custom list of drug identifiers to query.
+            worker: Running worker instance used for interruption signaling.
+        Return value:
+            None
+        """
         # check if files downloaded in the past are still present, then remove them
         # create a dictionary of drug names with their initial letter as key
         file_remover()

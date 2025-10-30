@@ -34,6 +34,14 @@ class WebDriverToolkit:
 
     # -------------------------------------------------------------------------
     def is_chromedriver_installed(self) -> str:
+        """
+        Validate that a ChromeDriver binary can be instantiated with options.
+
+        Keyword arguments:
+            None
+        Return value:
+            str: Success confirmation or formatted error message.
+        """
         try:
             driver = Chrome(options=self.options)
             driver.quit()
@@ -44,6 +52,14 @@ class WebDriverToolkit:
 
     # -------------------------------------------------------------------------
     def check_chrome_version(self) -> Any | Literal["Version not detected"]:
+        """
+        Retrieve the Chrome browser version reported by WebDriver capabilities.
+
+        Keyword arguments:
+            None
+        Return value:
+            Any | Literal["Version not detected"]: Detected version string or fallback label.
+        """
         try:
             driver = Chrome(options=self.options)
             version = driver.capabilities["browserVersion"]  # type: ignore
@@ -56,6 +72,14 @@ class WebDriverToolkit:
 
     # -------------------------------------------------------------------------
     def initialize_webdriver(self) -> Chrome:
+        """
+        Install ChromeDriver if needed and return a configured WebDriver instance.
+
+        Keyword arguments:
+            None
+        Return value:
+            Chrome: Ready-to-use Selenium WebDriver pointing to Chrome.
+        """
         self.path = ChromeDriverManager().install()
         driver = Chrome(options=self.options)
 
