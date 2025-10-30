@@ -26,7 +26,17 @@ class WorkerSignals(QObject):
 
 ###############################################################################
 class Worker(QRunnable):
-    def __init__(self, fn : Callable[[], None], *args : Any, **kwargs : Any) -> None:
+    def __init__(self, fn: Callable[[], None], *args: Any, **kwargs: Any) -> None:
+        """
+        Prepare a QRunnable with cooperative interruption and progress hooks.
+
+        Keyword arguments:
+            fn: Callable executed on the worker thread.
+            args: Positional arguments forwarded to the callable.
+            kwargs: Keyword arguments forwarded to the callable.
+        Return value:
+            None
+        """
         super().__init__()
         self.fn = fn
         self.args = args
@@ -66,6 +76,14 @@ class Worker(QRunnable):
     # -------------------------------------------------------------------------
     @Slot()
     def run(self) -> None:
+        """
+        Execute the target callable and emit lifecycle signals accordingly.
+
+        Keyword arguments:
+            None
+        Return value:
+            None
+        """
         try:
             # Remove progress_callback if not accepted by the function
             if (
