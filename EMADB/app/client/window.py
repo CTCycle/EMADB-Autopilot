@@ -2,10 +2,7 @@ from __future__ import annotations
 from typing import cast
 from collections.abc import Callable
 
-from EMADB.app.variables import EnvironmentVariables
-
-EV = EnvironmentVariables()
-
+from EMADB.app.utils.variables import env_variables
 from functools import partial
 
 from PySide6.QtCore import QFile, QIODevice, QThreadPool, Slot
@@ -27,8 +24,8 @@ from qt_material import apply_stylesheet
 from EMADB.app.client.dialogs import LoadConfigDialog, SaveConfigDialog
 from EMADB.app.client.events import SearchEvents
 from EMADB.app.client.workers import Worker
-from EMADB.app.configuration import Configuration
-from EMADB.app.logger import logger
+from EMADB.app.utils.configuration import Configuration
+from EMADB.app.utils.logger import logger
 from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
 

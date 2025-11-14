@@ -8,8 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from EMADB.app.client.workers import check_thread_status
-from EMADB.app.constants import DOWNLOAD_PATH
-from EMADB.app.logger import logger
+from EMADB.app.utils.constants import DOWNLOAD_PATH
+from EMADB.app.utils.logger import logger
 
 
 # [SCRAPER]

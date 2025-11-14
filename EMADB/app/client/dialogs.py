@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from EMADB.app.constants import CONFIG_PATH
+from EMADB.app.utils.constants import CONFIG_PATH
 
 
 ###############################################################################

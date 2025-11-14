@@ -6,7 +6,7 @@ from typing import Any
 
 from PySide6.QtCore import QObject, QRunnable, Signal, Slot
 
-from EMADB.app.logger import logger
+from EMADB.app.utils.logger import logger
 
 
 ###############################################################################
