@@ -9,7 +9,7 @@ warnings.simplefilter(action="ignore", category=Warning)
 
 # [IMPORT CUSTOM MODULES]
 from EMADB.app.client.window import MainWindow, apply_style
-from EMADB.app.constants import UI_PATH
+from EMADB.app.utils.constants import UI_PATH
 
 # [RUN MAIN]
 ###############################################################################

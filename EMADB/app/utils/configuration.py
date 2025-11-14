@@ -2,7 +2,7 @@ import json
 import os
 from typing import Any
 
-from EMADB.app.constants import CONFIG_PATH
+from EMADB.app.utils.constants import CONFIG_PATH
 
 
 ###############################################################################

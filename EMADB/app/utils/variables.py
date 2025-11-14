@@ -2,12 +2,15 @@ import os
 
 from dotenv import load_dotenv
 
-from EMADB.app.constants import PROJECT_DIR
-from EMADB.app.logger import logger
+
+from EMADB.app.utils.singleton import singleton
+from EMADB.app.utils.constants import PROJECT_DIR
+from EMADB.app.utils.logger import logger
 
 
-# [IMPORT CUSTOM MODULES]
+# [LOAD ENVIRONMENT VARIABLES]
 ###############################################################################
+@singleton
 class EnvironmentVariables:
     def __init__(self) -> None:
         self.env_path = os.path.join(PROJECT_DIR, "setup", ".env")
@@ -19,3 +22,6 @@ class EnvironmentVariables:
     # -------------------------------------------------------------------------
     def get(self, key: str, default: str | None = None) -> str | None:
         return os.getenv(key, default)
+
+
+env_variables = EnvironmentVariables()
