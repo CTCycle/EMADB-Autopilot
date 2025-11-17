@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import cast
 from collections.abc import Callable
 
-from EMADB.app.utils.variables import env_variables
 from functools import partial
 
 from PySide6.QtCore import QFile, QIODevice, QThreadPool, Slot
@@ -174,9 +173,7 @@ class MainWindow:
 
     # -------------------------------------------------------------------------
     def connect_button(self, button_name: str, slot) -> None:
-        button: QPushButton | None = self.main_win.findChild(
-            QPushButton, button_name
-        )
+        button: QPushButton | None = self.main_win.findChild(QPushButton, button_name)
         if button is None:
             raise LookupError(f"Button '{button_name}' not found.")
         button.clicked.connect(slot) if button else None
