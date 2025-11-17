@@ -1,11 +1,12 @@
 from __future__ import annotations
+
 import os
 from typing import Any
 
 from EMADB.app.client.workers import Worker, check_thread_status
+from EMADB.app.utils.components import drug_to_letter_aggregator, file_remover
 from EMADB.app.utils.constants import RSC_PATH
 from EMADB.app.utils.logger import logger
-from EMADB.app.utils.components import drug_to_letter_aggregator, file_remover
 from EMADB.app.utils.services.autopilot import EMAWebPilot
 from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
