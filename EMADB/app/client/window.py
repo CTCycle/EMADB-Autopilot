@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import cast
-from collections.abc import Callable
 
+from collections.abc import Callable
 from functools import partial
+from typing import cast
 
 from PySide6.QtCore import QFile, QIODevice, QThreadPool, Slot
 from PySide6.QtGui import QAction

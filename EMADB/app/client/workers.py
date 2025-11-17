@@ -1,7 +1,8 @@
 from __future__ import annotations
-from collections.abc import Callable
+
 import inspect
 import traceback
+from collections.abc import Callable
 from typing import Any
 
 from PySide6.QtCore import QObject, QRunnable, Signal, Slot

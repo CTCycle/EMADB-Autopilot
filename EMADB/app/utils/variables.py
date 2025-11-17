@@ -2,10 +2,9 @@ import os
 
 from dotenv import load_dotenv
 
-
-from EMADB.app.utils.singleton import singleton
 from EMADB.app.utils.constants import PROJECT_DIR
 from EMADB.app.utils.logger import logger
+from EMADB.app.utils.singleton import singleton
 
 
 # [LOAD ENVIRONMENT VARIABLES]
