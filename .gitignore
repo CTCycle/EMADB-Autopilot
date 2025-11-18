@@ -12,3 +12,5 @@ __pycache__
 *.venv
 *.egg-info
 !.gitkeep
+
+AGENTS.md

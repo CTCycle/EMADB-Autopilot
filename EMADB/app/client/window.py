@@ -1,12 +1,8 @@
 from __future__ import annotations
-from typing import cast
+
 from collections.abc import Callable
-
-from EMADB.app.variables import EnvironmentVariables
-
-EV = EnvironmentVariables()
-
 from functools import partial
+from typing import cast
 
 from PySide6.QtCore import QFile, QIODevice, QThreadPool, Slot
 from PySide6.QtGui import QAction
@@ -27,8 +23,8 @@ from qt_material import apply_stylesheet
 from EMADB.app.client.dialogs import LoadConfigDialog, SaveConfigDialog
 from EMADB.app.client.events import SearchEvents
 from EMADB.app.client.workers import Worker
-from EMADB.app.configuration import Configuration
-from EMADB.app.logger import logger
+from EMADB.app.utils.configuration import Configuration
+from EMADB.app.utils.logger import logger
 from EMADB.app.utils.services.toolkit import WebDriverToolkit
 
 
@@ -177,9 +173,7 @@ class MainWindow:
 
     # -------------------------------------------------------------------------
     def connect_button(self, button_name: str, slot) -> None:
-        button: QPushButton | None = self.main_win.findChild(
-            QPushButton, button_name
-        )
+        button: QPushButton | None = self.main_win.findChild(QPushButton, button_name)
         if button is None:
             raise LookupError(f"Button '{button_name}' not found.")
         button.clicked.connect(slot) if button else None
