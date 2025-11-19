@@ -7,10 +7,10 @@ EudraVigilance is a data processing network and management system for reporting 
 
 The script automates navigation to https://www.adrreports.eu/en/search.html, where it searches for target drugs specified in *resources/drugs_to_search.txt*. Upon locating the target drugs, the script downloads associated data reports in the form of Excel files. The implementation uses ChromeDriver to simulate user interaction with the browser, ensuring smooth and accurate navigation of the EMA database.
 
-![Homepage](EMADB/app/assets/figures/EUDRA_home.jpg)
+![Homepage](EMADB/assets/EUDRA_home.jpg)
 Search page at https://www.adrreports.eu/en/search.html#
 
-![Drug_report](EMADB/app/assets/figures/EUDRA_drug_page.jpg)
+![Drug_report](EMADB/assets/EUDRA_drug_page.jpg)
 The suspected adverse drug reaction report for Abasaglar
 
 ## 2. Installation
@@ -19,7 +19,7 @@ The installation process for Windows is fully automated. Simply run the script `
 ## 3. How to use
 On Windows, run `start_on_windows.bat` to launch the application. Please note that some antivirus software, such as Avast, may flag or quarantine python.exe when called by the .bat file. If you encounter unusual behavior, consider adding an exception in your antivirus settings.
 
-![main_UI](EMADB/app/assets/figures/main_UI_EMADB.png)
+![main_UI](EMADB/assets/main_UI_EMADB.png)
 
 The main UI allows you to either run a search from file or to use the input text box to insert drug names. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
