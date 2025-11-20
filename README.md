@@ -19,7 +19,7 @@ The installation process for Windows is fully automated. Simply run the script `
 ## 3. How to use
 On Windows, run `start_on_windows.bat` to launch the application. Please note that some antivirus software, such as Avast, may flag or quarantine python.exe when called by the .bat file. If you encounter unusual behavior, consider adding an exception in your antivirus settings.
 
-![main_UI](EMADB/assets/main_UI_EMADB.png)
+![main_UI](EMADB/assets/UI_EMADB.png)
 
 The main UI allows you to either run a search from file or to use the input text box to insert drug names. Since the script is based on Chromedriver, your need to have Google Chrome browser installed in your system! The correct driver version will be automatically installed, or loaded from the cache if present (default location is home/.wdm).
 
