@@ -13,4 +13,3 @@ LOGS_PATH = join(RSC_PATH, "logs")
 # [UI LAYOUT PATH]
 ###############################################################################
 UI_PATH = join(PROJECT_DIR, "app", "layout", "main_window.ui")
-
