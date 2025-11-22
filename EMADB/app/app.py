@@ -1,6 +1,5 @@
 import sys
 
-# [SETTING WARNINGS]
 import warnings
 
 from PySide6.QtWidgets import QApplication
@@ -8,6 +7,7 @@ from PySide6.QtWidgets import QApplication
 warnings.simplefilter(action="ignore", category=Warning)
 
 # [IMPORT CUSTOM MODULES]
+from EMADB.app.utils.variables import env_variables
 from EMADB.app.client.window import MainWindow, apply_style
 from EMADB.app.utils.constants import UI_PATH
 
