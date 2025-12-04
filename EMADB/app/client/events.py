@@ -5,7 +5,7 @@ from typing import Any
 
 from EMADB.app.client.workers import Worker, check_thread_status
 from EMADB.app.utils.components import drug_to_letter_aggregator, file_remover
-from EMADB.app.utils.constants import RSC_PATH
+from EMADB.app.utils.constants import RESOURCES_PATH
 from EMADB.app.utils.logger import logger
 from EMADB.app.utils.services.autopilot import EMAWebPilot
 from EMADB.app.utils.services.toolkit import WebDriverToolkit
@@ -21,7 +21,7 @@ class SearchEvents:
 
     # -------------------------------------------------------------------------
     def get_drugs_from_file(self) -> list[str]:
-        filepath = os.path.join(RSC_PATH, "drugs_to_search.txt")
+        filepath = os.path.join(RESOURCES_PATH, "drugs_to_search.txt")
         with open(filepath) as file:
             drug_list = [x.lower().strip() for x in file.readlines()]
 
