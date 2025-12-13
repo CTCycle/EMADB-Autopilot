@@ -7,10 +7,10 @@ __pycache__
 *.db
 *.log
 *.npy
-*.json
+
 *.lock
 *.venv
-*.egg-info
+
 !.gitkeep
 
 AGENTS.md
