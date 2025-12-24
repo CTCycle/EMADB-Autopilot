@@ -33,12 +33,6 @@ The main UI allows you to either run a search from file or to use the input text
 ### 3.1 Resources
 This folder is used to organize the main data for the project, including downloaded files saved in *resources/download* and the app logs located in *resources/logs*. The *resources/drugs_to_search.txt* file contains the names of the drugs you want to download the reports for.  
 
-**Environmental variables** are stored in the *app* folder (within the project folder). For security reasons, this file is typically not uploaded to GitHub. Instead, you must create this file manually by copying the template from *resources/templates/.env* and placing it in the *app* directory.
-
-| Variable              | Description                                              |
-|-----------------------|----------------------------------------------------------|
-| None                  | Placeholder for future environmental variables           |
-
 ## 4. License
 This project is licensed under the terms of the MIT license. See the LICENSE file for details.
 
