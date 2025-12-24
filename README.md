@@ -7,6 +7,8 @@ EudraVigilance is a data processing network and management system for reporting 
 
 The script automates navigation to https://www.adrreports.eu/en/search.html, where it searches for target drugs specified in *resources/drugs_to_search.txt*. Upon locating the target drugs, the script downloads associated data reports in the form of Excel files. The implementation uses ChromeDriver to simulate user interaction with the browser, ensuring smooth and accurate navigation of the EMA database.
 
+**Status:** This project is no longer maintained or updated, and it will not be updated in the future.
+
 ![Homepage](EMADB/assets/EUDRA_home.jpg)
 Search page at https://www.adrreports.eu/en/search.html#
 

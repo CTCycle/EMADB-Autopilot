@@ -16,7 +16,7 @@ class SearchEvents:
     def __init__(self, configuration: dict[str, Any]) -> None:
         self.configuration = configuration
         self.headless = configuration.get("headless", False)
-        self.ignore_SSL = configuration.get("ignore_SSL", False)
+        self.ignore_ssl = configuration.get("ignore_ssl", False)
         self.wait_time = configuration.get("wait_time", 0)
 
     # -------------------------------------------------------------------------
@@ -48,7 +48,7 @@ class SearchEvents:
             drug_list = self.get_drugs_from_file()
 
         # initialize webdriver and webscraper
-        self.toolkit = WebDriverToolkit(self.headless, self.ignore_SSL)
+        self.toolkit = WebDriverToolkit(self.headless, self.ignore_ssl)
         webdriver = self.toolkit.initialize_webdriver()
 
         # check for thread status and eventually stop it
