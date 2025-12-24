@@ -78,7 +78,7 @@ class MainWindow:
 
         # --- Create persistent handlers ---
         self.search_handler = SearchEvents(self.configuration)
-        self.webdriver = WebDriverToolkit(headless=True, ignore_SSL=False)
+        self.webdriver = WebDriverToolkit(headless=True, ignore_ssl=False)
 
         # setup UI elements
         self.set_states()
@@ -90,7 +90,7 @@ class MainWindow:
                 (QAction, "actionSaveConfig", "save_configuration_action"),
                 (QPushButton, "stopSearch", "stop_search"),
                 (QCheckBox, "headless", "headless"),
-                (QCheckBox, "IgnoreSSL", "ignore_SSL"),
+                (QCheckBox, "IgnoreSSL", "ignore_ssl"),
                 (QDoubleSpinBox, "waitTime", "wait_time"),
                 (QPlainTextEdit, "drugInputs", "text_drug_inputs"),
                 (QPushButton, "searchFromFile", "search_file"),
@@ -159,7 +159,7 @@ class MainWindow:
         """
         connections = [
             ("headless", "toggled", "headless"),
-            ("ignore_SSL", "toggled", "ignore_SSL"),
+            ("ignore_ssl", "toggled", "ignore_ssl"),
             ("wait_time", "valueChanged", "wait_time"),
         ]
 
@@ -223,25 +223,35 @@ class MainWindow:
         for attr, widget in self.widgets.items():
             if attr not in cfg:
                 continue
-            v = cfg[attr]
+            self.apply_widget_value(widget, cfg[attr])
 
-            if hasattr(widget, "setChecked") and isinstance(v, bool):
-                widget.setChecked(v)
-            elif hasattr(widget, "setValue") and isinstance(v, (int, float)):
-                widget.setValue(v)
-            elif hasattr(widget, "setPlainText") and isinstance(v, str):
-                widget.setPlainText(v)
-            elif hasattr(widget, "setText") and isinstance(v, str):
-                widget.setText(v)
-            elif isinstance(widget, QComboBox):
-                if isinstance(v, str):
-                    idx = widget.findText(v)
-                    if idx != -1:
-                        widget.setCurrentIndex(idx)
-                    elif widget.isEditable():
-                        widget.setEditText(v)
-                elif isinstance(v, int) and 0 <= v < widget.count():
-                    widget.setCurrentIndex(v)
+    # -------------------------------------------------------------------------
+    def apply_widget_value(self, widget, value) -> None:
+        if isinstance(widget, QComboBox):
+            self.set_combo_value(widget, value)
+            return
+
+        setter_map = [
+            ("setChecked", bool),
+            ("setValue", (int, float)),
+            ("setPlainText", str),
+            ("setText", str),
+        ]
+        for setter, value_type in setter_map:
+            if hasattr(widget, setter) and isinstance(value, value_type):
+                getattr(widget, setter)(value)
+                return
+
+    # -------------------------------------------------------------------------
+    def set_combo_value(self, widget: QComboBox, value) -> None:
+        if isinstance(value, str):
+            idx = widget.findText(value)
+            if idx != -1:
+                widget.setCurrentIndex(idx)
+            elif widget.isEditable():
+                widget.setEditText(value)
+        elif isinstance(value, int) and 0 <= value < widget.count():
+            widget.setCurrentIndex(value)
 
     # [SLOT]
     ###########################################################################
@@ -376,7 +386,7 @@ class MainWindow:
         message = "Search for drugs is finished, please check your downloads"
         self.send_message(message)
         if self.worker:
-            self.worker = self.worker.cleanup() if self.worker else None
+            self.worker = self.worker.cleanup()
 
     ###########################################################################
     # [NEGATIVE OUTCOME HANDLERS]
@@ -388,7 +398,7 @@ class MainWindow:
         message = "An error occurred during the operation. Check the logs for details."
         QMessageBox.critical(self.main_win, "Something went wrong!", message)
         if self.worker:
-            self.worker = self.worker.cleanup() if self.worker else None
+            self.worker = self.worker.cleanup()
 
     ###########################################################################
     # [INTERRUPTION HANDLERS]
@@ -397,4 +407,4 @@ class MainWindow:
         self.send_message("Current task has been interrupted by user")
         logger.warning("Current task has been interrupted by user")
         if self.worker:
-            self.worker = self.worker.cleanup() if self.worker else None
+            self.worker = self.worker.cleanup()

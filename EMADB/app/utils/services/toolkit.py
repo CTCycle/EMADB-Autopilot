@@ -10,11 +10,11 @@ from EMADB.app.utils.logger import logger
 # [WEBDRIVER]
 ###############################################################################
 class WebDriverToolkit:
-    def __init__(self, headless: bool = False, ignore_SSL: bool = True) -> None:
+    def __init__(self, headless: bool = False, ignore_ssl: bool = True) -> None:
         self.options = ChromeOptions()
         if headless:
             self.options.add_argument("--headless")
-        if ignore_SSL:
+        if ignore_ssl:
             self.options.add_argument("--ignore-ssl-errors=yes")
             self.options.add_argument("--ignore-certificate-errors")
 

@@ -10,7 +10,7 @@ class Configuration:
     def __init__(self) -> None:
         self.configuration: dict[str, Any] = {
             "headless": False,
-            "ignore_SSL": False,
+            "ignore_ssl": False,
             "wait_time": 5.0,
         }
 
@@ -33,3 +33,5 @@ class Configuration:
         full_path = os.path.join(CONFIG_PATH, name)
         with open(full_path) as f:
             self.configuration = json.load(f)
+        if "ignore_SSL" in self.configuration:
+            self.configuration["ignore_ssl"] = self.configuration.pop("ignore_SSL")
